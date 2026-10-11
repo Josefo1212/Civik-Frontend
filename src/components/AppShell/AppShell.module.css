@@ -1,0 +1,59 @@
+.shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.encabezado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-borde);
+  background: var(--color-superficie);
+}
+
+.marca {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--color-texto);
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.nav a {
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radio-borde);
+  color: var(--color-texto-suave);
+  text-decoration: none;
+}
+
+.nav a:hover {
+  background: var(--color-fondo);
+}
+
+.nav a.activo {
+  background: var(--color-primario);
+  color: #fff;
+}
+
+.contenido {
+  flex: 1;
+  padding: 1.5rem;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+@media (max-width: 640px) {
+  .contenido {
+    padding: 1rem;
+  }
+}

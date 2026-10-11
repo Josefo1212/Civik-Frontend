@@ -1,0 +1,37 @@
+.estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--color-texto-suave);
+}
+
+.punto {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  background: var(--color-texto-suave);
+}
+
+.estado.online .punto {
+  background: var(--color-ok);
+}
+
+.estado.offline .punto {
+  background: var(--color-error);
+}
+
+.estado.loading .punto {
+  background: var(--color-primario);
+  animation: parpadeo 1s ease-in-out infinite;
+}
+
+@keyframes parpadeo {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
