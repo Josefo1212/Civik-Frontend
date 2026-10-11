@@ -47,3 +47,8 @@ lo que ya no aporte. Si algo se vuelve regla permanente, se mueve a
 - tipo Seccion, constantes, api+hooks+componentes + página
 - baja/reactivar con deshacer en sesión (estado local)
 - build/lint/typecheck/tests verdes
+
+## 002-estudiantes (implementada)
+- dominio Estudiante, api, hooks, SelectorSeccion, FormularioEstudiante, TablaEstudiantes + toggle inactivos
+- page por sección (obligatorio); edición permite cambiar sección
+- build/lint/typecheck/tests verdes (34 tests)
