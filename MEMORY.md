@@ -38,9 +38,9 @@ lo que ya no aporte. Si algo se vuelve regla permanente, se mueve a
 ## Próximos pasos
 
 - Cerrar la validación visual de la Fase 0 (Chrome DevTools).
-- Fase 1: administración de secciones (001) implementada. Siguiente: 002
-  estudiantes (por sección; vista "todos juntos" pendiente hasta que el
-  backend exponga `GET /students` con `incluir_inactivas`).
+- Fase 1: administración de secciones (001) y estudiantes (002) implementadas.
+  Vista "todos juntos" de estudiantes pendiente hasta que el backend exponga
+  `GET /students` con `incluir_inactivas`.
 
 ## 001-secciones (implementada)
 - api/client ampliado (error del body, apiSend)
