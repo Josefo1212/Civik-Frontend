@@ -13,9 +13,9 @@ muestra tal cual la devuelve el backend.
 
 ### `src/domain/nota.ts` (nuevo)
 
-- `FilaNota = { id_student; first_name; last_name; nota: string | null }`.
-  Refleja `NotaDto` del backend. La nota es `string` (o `null`), no
-  `number`: no se parsea ni se reformatea.
+- `FilaNota = { id_student; first_name; last_name; nota: string | null;
+  es_override: boolean }`. Refleja `NotaDto` del backend. La nota es
+  `string` (o `null`), no `number`: no se parsea ni se reformatea.
 
 ### `src/features/notas/constants.ts` (nuevo)
 
@@ -44,9 +44,11 @@ muestra tal cual la devuelve el backend.
 
 - Props: `filas: FilaNota[]`.
 - Tabla: estudiante (`Apellido, Nombre`) y nota; `null` → "Sin nota"
-  (RF-4, RF-5). Estado vacío propio (RF-8).
+  (RF-4, RF-5). Si `es_override`, la nota lleva una marca de "editada
+  manualmente" (RF-10). Estado vacío propio (RF-8).
 - Test: una fila con nota, una con `null`; `null` muestra "Sin nota"; una
-  nota `"0.00"` no se confunde con "Sin nota".
+  nota `"0.00"` no se confunde con "Sin nota"; una fila con
+  `es_override: true` muestra la marca y una calculada no.
 
 ### `src/features/notas/components/AvisoNota.tsx` (nuevo) + test
 
@@ -86,5 +88,4 @@ muestra tal cual la devuelve el backend.
 
 ## Riesgos
 
-- El contrato no distingue override (ver dudas de la spec): no se
-  implementa esa marca; queda anotado.
+- (ninguno pendiente; el contrato ya expone `es_override`)

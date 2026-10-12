@@ -9,8 +9,10 @@ período. El backend (Fase 8) ya la calcula: cada `AUSENTE` descuenta un
 peso según el tipo de evento, con base 20, y admite un override manual.
 La consulta es por lapso y sección:
 `GET /lapses/{id_lapse}/sections/{id_section}/grades` devuelve, por
-estudiante, `{ id_student, first_name, last_name, nota }`, donde `nota` es
-un string (`"19.0"`, `"18.50"`) o `null` si no hay nada que calificar.
+estudiante, `{ id_student, first_name, last_name, nota, es_override }`,
+donde `nota` es un string (`"19.0"`, `"18.50"`) o `null` si no hay nada
+que calificar, y `es_override` indica si la nota proviene de un override
+manual.
 
 Esta fase construye **solo la vista**: elegir lapso y sección, pedir la
 nota al backend y mostrarla, comunicando que mientras el lapso no está
@@ -30,6 +32,8 @@ cerrado la nota es **provisional**. El front no calcula ni redondea nada
   definitiva.
 - HU-3. Como instructor, quiero distinguir "todavía sin nota" de una nota
   cero, para no confundir un dato faltante con un resultado.
+- HU-4. Como instructor, quiero saber cuándo una nota fue editada a mano,
+  para distinguirla del cálculo automático.
 
 ## Definiciones
 
@@ -41,7 +45,8 @@ cerrado la nota es **provisional**. El front no calcula ni redondea nada
 - **Sin nota**: el backend devuelve `nota: null` (no hay eventos elegibles
   y no hay override). No es 0.
 - **Override**: nota fijada a mano; el backend la devuelve con dos
-  decimales. El contrato **no** informa si un valor es override.
+  decimales y con `es_override: true`. El front la muestra marcada como
+  "editada manualmente", sin inferirlo del formato.
 
 ## Requisitos funcionales
 
@@ -65,6 +70,9 @@ cerrado la nota es **provisional**. El front no calcula ni redondea nada
   muestra un estado vacío que lo explique.
 - RF-9. MIENTRAS la consulta está en curso, EL SISTEMA muestra un
   indicador de carga; si falla por otro motivo, un error con reintento.
+- RF-10. SI un estudiante tiene `es_override: true`, ENTONCES EL SISTEMA
+  marca su nota como "editada manualmente", visualmente distinta de una
+  nota calculada.
 
 ## Requisitos no funcionales
 
@@ -82,6 +90,7 @@ cerrado la nota es **provisional**. El front no calcula ni redondea nada
 - Lapso sin eventos elegibles: todos los estudiantes salen "Sin nota".
 - Sección sin estudiantes: tabla vacía con mensaje.
 - Nota `0`: se muestra "0" (o "0.00"), nunca como "Sin nota".
+- Nota con override en `0`: se muestra "0.00" y marcada como editada.
 - Lapso `PLANNED` (aún no `ACTIVE`): se trata como provisional (no
   `CLOSED`).
 - Cambiar de lapso o de sección vuelve a consultar.
@@ -89,22 +98,13 @@ cerrado la nota es **provisional**. El front no calcula ni redondea nada
 ## Fuera de alcance
 
 - Escribir/editar overrides: el backend no expone esa ruta todavía.
-- Distinguir visualmente un override del cálculo automático: el contrato
-  no indica si un valor es override (ver dudas abiertas).
 - Nota final del año, promedio entre lapsos, exportar boletines.
 - Consulta individual de la nota de un estudiante.
 
 ## Criterios de finalización
 
-- RF-1 a RF-9 verificados: unitarios para la regla de provisional y la
-  tabla; la consulta real se prueba con la API mockeada.
+- RF-1 a RF-10 verificados: unitarios para la regla de provisional y la
+  tabla (incluida la marca de override); la consulta real se prueba con la
+  API mockeada.
 - `pnpm lint`, `pnpm typecheck`, `pnpm test:run` y `pnpm build` en verde.
 - Spec marcada `implementada`, `MEMORY.md` actualizado y commit de cierre.
-
-## Limitaciones conocidas
-
-- El contrato de `grades` no expone si una nota es un override. La skill
-  `civik-dominio-frontend` pide marcarlo como "editado manualmente", pero
-  con el endpoint actual solo se podría adivinar por los decimales. En
-  esta fase **no** se marca el override; requiere que el backend agregue
-  un campo (p. ej. `es_override`).

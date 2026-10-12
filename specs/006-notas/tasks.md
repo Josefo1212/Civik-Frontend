@@ -34,3 +34,12 @@
   - Marcar spec y tareas como implementadas; actualizar `MEMORY.md`.
   - Hecho cuando: los cuatro comandos están verdes y la spec quedó
     `implementada`.
+
+- [ ] **T6. Marcar el override.**
+  RF-10.
+  - `domain/nota.ts`: agregar `es_override: boolean` a `FilaNota`.
+  - `TablaNotas.tsx`: marcar "editada manualmente" cuando `es_override`.
+  - Tests de `TablaNotas` (marca presente/ausente) y fixtures de la
+    página (`es_override`).
+  - Hecho cuando: los tests pasan con la marca y la spec quedó sin
+    limitaciones pendientes.
