@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { listarPadron } from '../api'
+import { clavesCache, conRespaldo } from '../../../sync/cache'
 
 export const asistenciaQueryKeys = {
   todas: ['asistencia'] as const,
@@ -9,7 +10,8 @@ export const asistenciaQueryKeys = {
 export const usePadron = (eventoId: string | null) => {
   return useQuery({
     queryKey: asistenciaQueryKeys.porEvento(eventoId ?? undefined),
-    queryFn: () => listarPadron(eventoId ?? ''),
+    queryFn: () =>
+      conRespaldo(clavesCache.padron(eventoId ?? ''), () => listarPadron(eventoId ?? '')),
     enabled: eventoId !== null,
   })
 }
