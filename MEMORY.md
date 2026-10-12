@@ -8,13 +8,16 @@ lo que ya no aporte. Si algo se vuelve regla permanente, se mueve a
 
 - `Civik-Backend` tiene las fases 0–10 completas (todos los endpoints,
   incluido `/_health`); el front no debe asumir que falta API.
-- Fases 0–5 **implementadas**: bootstrap, secciones (001), estudiantes
+- Fases 0–6 **implementadas**: bootstrap, secciones (001), estudiantes
   (002), eventos + lapsos (003), asistencia online (004), PWA + offline
   (005) y notas (006). No quedan fases del "Orden de construcción".
-- Suite: 92 tests verdes; `pnpm lint`, `pnpm typecheck` y `pnpm build`
+- Suite: 95 tests verdes; `pnpm lint`, `pnpm typecheck` y `pnpm build`
   limpios (`build` genera `manifest.webmanifest` y `sw.js`).
-- Validación visual con Chrome DevTools **pendiente** (no había MCP) para
-  las fases 0–5.
+- Validación visual con Chrome DevTools **hecha** (fases 0–6) contra el
+  backend local + un proxy CORS (el backend no manda CORS). La emulación
+  "Offline" de DevTools da falsos negativos (cuelga el guardado); el
+  guardado offline real se valida forzando `navigator.onLine=false` con la
+  red arriba.
 
 ## Decisiones (y por qué)
 
@@ -49,10 +52,8 @@ lo que ya no aporte. Si algo se vuelve regla permanente, se mueve a
 
 ## Próximos pasos
 
-- Cerrar validación visual (Chrome DevTools) de las fases 0–5.
-- Limitación de notas: el contrato `grades` no indica si una nota es
-  override, así que no se marca "editado manualmente"; requiere que el
-  backend exponga un campo (p. ej. `es_override`).
+- Ninguna fase pendiente; validación visual cerrada. Próximos cambios de
+  requisitos van por SDD (spec → plan → tareas → código).
 
 ## Historial por fase
 
@@ -60,5 +61,7 @@ lo que ya no aporte. Si algo se vuelve regla permanente, se mueve a
   mínimo + crear/cancelar con motivo) · 004 asistencia online.
 - 005 PWA + offline: SW, caché de lectura, outbox con id de cliente, sync
   por evento con `cambio_en`, fusión padrón+pendientes y aviso de conflicto.
+  El contador de pendientes se mantiene en vivo con `liveQuery` (RF-12).
 - 006 notas: por lapso y sección, aviso provisional/definitiva, "sin nota"
-  ≠ 0.
+  ≠ 0, marca "Editada manualmente" cuando el backend devuelve
+  `es_override: true` (RF-10).

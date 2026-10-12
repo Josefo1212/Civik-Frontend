@@ -11,6 +11,7 @@ import {
   MENSAJE_CONFLICTO,
   agruparPorEvento,
   dividirPorResultado,
+  observarPendientes,
   obtenerEstado,
   sincronizar,
 } from './syncManager'
@@ -140,5 +141,21 @@ describe('sincronizar', () => {
 
     expect(await listarPendientes()).toHaveLength(1)
     expect(obtenerEstado().ultimoError).toContain('evento cancelado')
+  })
+})
+
+describe('observarPendientes', () => {
+  it('actualiza el contador al encolar sin sincronizar', async () => {
+    const desuscribir = observarPendientes()
+
+    await encolar([{ id_event: 'e1', id_student: 's1', state: 'PRESENTE' }])
+
+    await vi.waitFor(() => expect(obtenerEstado().pendientes).toBe(1))
+
+    await db.outbox.clear()
+
+    await vi.waitFor(() => expect(obtenerEstado().pendientes).toBe(0))
+
+    desuscribir()
   })
 })

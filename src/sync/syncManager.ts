@@ -1,3 +1,4 @@
+import { liveQuery } from 'dexie'
 import { ApiError } from '../api/client'
 import { sincronizarAsistencia } from '../features/asistencia/api'
 import type { FilaPadron, ItemResultadoSync, ItemSync } from '../domain/asistencia'
@@ -102,6 +103,14 @@ const setEstado = (parcial: Partial<SyncEstado>): void => {
 
 export const refrescarPendientes = async (): Promise<void> => {
   setEstado({ pendientes: await contarPendientes() })
+}
+
+export const observarPendientes = (): (() => void) => {
+  const suscripcion = liveQuery(() => contarPendientes()).subscribe({
+    next: (pendientes) => setEstado({ pendientes }),
+    error: () => undefined,
+  })
+  return () => suscripcion.unsubscribe()
 }
 
 export const setEnLinea = (enLinea: boolean): void => {

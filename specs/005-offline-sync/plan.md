@@ -1,6 +1,6 @@
 # Plan 005 — PWA y sincronización offline de asistencia
 
-Estado: aprobada
+Estado: implementada
 
 ## Resumen de la arquitectura
 

@@ -81,7 +81,7 @@
   - Hecho cuando: los cuatro comandos están verdes y la spec quedó
     `implementada`.
 
-- [ ] **T9. Contador de pendientes en vivo.**
+- [x] **T9. Contador de pendientes en vivo.**
   RF-12.
   - `sync/syncManager.ts`: `observarPendientes()` se suscribe a
     `contarPendientes()` con `liveQuery` y actualiza `pendientes`; devuelve

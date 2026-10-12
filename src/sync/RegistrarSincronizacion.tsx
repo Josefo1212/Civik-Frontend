@@ -1,14 +1,15 @@
 import { useEffect } from 'react'
 import { useSincronizar } from './useSincronizar'
-import { refrescarPendientes, setEnLinea } from './syncManager'
+import { observarPendientes, setEnLinea } from './syncManager'
 
 const RegistrarSincronizacion = () => {
   const sincronizar = useSincronizar()
 
   useEffect(() => {
     setEnLinea(navigator.onLine)
-    void refrescarPendientes()
     void sincronizar()
+
+    const desuscribirPendientes = observarPendientes()
 
     const alVolver = () => {
       setEnLinea(true)
@@ -21,6 +22,7 @@ const RegistrarSincronizacion = () => {
     return () => {
       window.removeEventListener('online', alVolver)
       window.removeEventListener('offline', alCaer)
+      desuscribirPendientes()
     }
   }, [sincronizar])
 
