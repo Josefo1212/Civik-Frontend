@@ -1,5 +1,12 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { crearEnSeccion, darDeBaja, editarEstudiante, listarPorSeccion, reactivar } from './api'
+import {
+  crearEnSeccion,
+  darDeBaja,
+  editarEstudiante,
+  listarPorSeccion,
+  listarTodos,
+  reactivar,
+} from './api'
 
 afterEach(() => {
   vi.unstubAllGlobals()
@@ -22,6 +29,24 @@ describe('listarPorSeccion', () => {
     await listarPorSeccion('sec1', true)
     const [url] = fetchMock.mock.calls[0]
     expect(url).toBe('/sections/sec1/students?incluir_inactivas=true')
+  })
+})
+
+describe('listarTodos', () => {
+  it('llama GET /students sin inactivas', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(respuestaOk([]))
+    vi.stubGlobal('fetch', fetchMock)
+    await listarTodos()
+    const [url, init] = fetchMock.mock.calls[0]
+    expect(url).toBe('/students')
+    expect(init.method).toBe('GET')
+  })
+  it('agrega query cuando incluirInactivas es true', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(respuestaOk([]))
+    vi.stubGlobal('fetch', fetchMock)
+    await listarTodos(true)
+    const [url] = fetchMock.mock.calls[0]
+    expect(url).toBe('/students?incluir_inactivas=true')
   })
 })
 

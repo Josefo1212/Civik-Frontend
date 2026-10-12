@@ -22,6 +22,11 @@ export const listarPorSeccion = async (
   return await apiSend<Estudiante[]>(`/sections/${seccionId}/students${params}`, 'GET')
 }
 
+export const listarTodos = async (incluirInactivas = false): Promise<Estudiante[]> => {
+  const params = incluirInactivas ? '?incluir_inactivas=true' : ''
+  return await apiSend<Estudiante[]>(`/students${params}`, 'GET')
+}
+
 export const crearEnSeccion = async (
   seccionId: string,
   payload: CrearEstudiantePayload,

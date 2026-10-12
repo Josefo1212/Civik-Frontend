@@ -1,10 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
-import { listarPorSeccion } from '../api'
+import { listarPorSeccion, listarTodos } from '../api'
 
 export const estudiantesQueryKeys = {
   todas: ['estudiantes'] as const,
   porSeccion: (seccionId: string, incluirInactivas: boolean) =>
     ['estudiantes', { seccionId, incluirInactivas }] as const,
+  global: (incluirInactivos: boolean) =>
+    ['estudiantes', 'todos', { incluirInactivos }] as const,
 }
 
 export const useEstudiantes = (seccionId: string | null, incluirInactivas: boolean) => {
@@ -15,5 +17,12 @@ export const useEstudiantes = (seccionId: string | null, incluirInactivas: boole
       return listarPorSeccion(seccionId, incluirInactivas)
     },
     enabled: seccionId !== null,
+  })
+}
+
+export const useEstudiantesGlobal = (incluirInactivos: boolean) => {
+  return useQuery({
+    queryKey: estudiantesQueryKeys.global(incluirInactivos),
+    queryFn: () => listarTodos(incluirInactivos),
   })
 }

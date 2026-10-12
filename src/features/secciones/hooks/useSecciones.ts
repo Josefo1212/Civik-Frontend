@@ -3,14 +3,15 @@ import { listarSecciones } from '../api'
 
 export const seccionesQueryKeys = {
   todas: ['secciones'] as const,
-  porGrado: (grado?: string) => ['secciones', { grado }] as const,
+  porGrado: (grado?: string, incluirInactivas = false) =>
+    ['secciones', { grado, incluirInactivas }] as const,
 }
 
 type GradoFiltro = string | undefined
 
-export const useSecciones = (grado: GradoFiltro) => {
+export const useSecciones = (grado: GradoFiltro, incluirInactivas = false) => {
   return useQuery({
-    queryKey: seccionesQueryKeys.porGrado(grado),
-    queryFn: () => listarSecciones(grado),
+    queryKey: seccionesQueryKeys.porGrado(grado, incluirInactivas),
+    queryFn: () => listarSecciones(grado, incluirInactivas),
   })
 }

@@ -22,7 +22,7 @@ filtra para presentar.
 
 ### `src/features/estudiantes/hooks/useEstudiantes.ts` (modificar)
 
-- `estudiantesQueryKeys.todos(incluirInactivos)` =
+- `estudiantesQueryKeys.global(incluirInactivos)` =
   `['estudiantes', 'todos', { incluirInactivos }]`.
 - `useEstudiantesGlobal(incluirInactivos)`: `useQuery` con esa key y
   `listarTodos`. TanStack Query maneja carga/error/reintento (RF-8).

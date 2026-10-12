@@ -15,9 +15,15 @@ const limpiarGrado = (grado?: string): string | undefined => {
   return grado
 }
 
-export const listarSecciones = async (grado?: string): Promise<Seccion[]> => {
+export const listarSecciones = async (
+  grado?: string,
+  incluirInactivas = false,
+): Promise<Seccion[]> => {
   const g = limpiarGrado(grado)
-  const params = g ? `?grado=${encodeURIComponent(g)}` : ''
+  const query: string[] = []
+  if (g) query.push(`grado=${encodeURIComponent(g)}`)
+  if (incluirInactivas) query.push('incluir_inactivas=true')
+  const params = query.length > 0 ? `?${query.join('&')}` : ''
   return await apiSend<Seccion[]>(`/sections${params}`, 'GET')
 }
 

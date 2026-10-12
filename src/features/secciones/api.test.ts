@@ -47,6 +47,26 @@ describe('listarSecciones', () => {
     const [url] = fetchMock.mock.calls[0]
     expect(url).toBe('/sections')
   })
+
+  it('agrega incluir_inactivas=true cuando se pide', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(respuestaOk([]))
+    vi.stubGlobal('fetch', fetchMock)
+
+    await listarSecciones(undefined, true)
+
+    const [url] = fetchMock.mock.calls[0]
+    expect(url).toBe('/sections?incluir_inactivas=true')
+  })
+
+  it('combina grado e incluir_inactivas', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(respuestaOk([]))
+    vi.stubGlobal('fetch', fetchMock)
+
+    await listarSecciones('1ro', true)
+
+    const [url] = fetchMock.mock.calls[0]
+    expect(url).toBe('/sections?grado=1ro&incluir_inactivas=true')
+  })
 })
 
 describe('crearSeccion', () => {
