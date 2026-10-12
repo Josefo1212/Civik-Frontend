@@ -5,13 +5,13 @@ permanente, va a `AGENTS.md` o a la skill `civik-dominio-frontend`.
 
 ## Estado actual
 
-- `Civik-Backend` tiene las fases 0–10 completas (todos los endpoints,
-  incluido `/_health`); el front no debe asumir que falta API.
+- `Civik-Backend` tiene las fases 0–11 completas (todos los endpoints,
+  incluidos `/_health` y el listado global `GET /students`).
 - Fases 0–6 **implementadas** (bootstrap 000, secciones 001, estudiantes
   002, eventos + lapsos 003, asistencia online 004, PWA + offline 005,
-  notas 006). No quedan fases del "Orden de construcción". Validación
-  visual con Chrome DevTools **hecha**; no hay trabajo pendiente.
-- Suite: 95 tests verdes; `pnpm lint`, `pnpm typecheck` y `pnpm build`
+  notas 006). No quedan fases del "Orden de construcción". Spec 007
+  (listado global de estudiantes + secciones dadas de baja) implementada.
+- Suite: 119 tests verdes; `pnpm lint`, `pnpm typecheck` y `pnpm build`
   limpios (`build` genera `manifest.webmanifest` y `sw.js`).
 
 ## Decisiones (y por qué)
@@ -53,3 +53,6 @@ permanente, va a `AGENTS.md` o a la skill `civik-dominio-frontend`.
   de pendientes en vivo con `liveQuery` (RF-12).
 - 006 notas: por lapso y sección, aviso provisional/definitiva, "sin nota"
   ≠ 0, marca "Editada manualmente" si `es_override` (RF-10).
+- 007 listado global: modo "Todos" en Estudiantes (`GET /students`), rótulo
+  derivado cruzando `id_section` con `/sections?incluir_inactivas`, buscador
+  de cliente, toggles de inactivos y de secciones dadas de baja (reactivar).
