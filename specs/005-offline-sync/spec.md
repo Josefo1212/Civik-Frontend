@@ -84,8 +84,11 @@ decisión viven en el backend).
   `navigator.storage.persist()` para reducir el riesgo de que el navegador
   purgue IndexedDB.
 - RF-14. SI el servidor rechaza el lote entero (evento cancelado, lapso
-  cerrado, estado inválido: `400`/`409`), ENTONCES EL SISTEMA mantiene los
-  ítems en el outbox y muestra el motivo, sin borrarlos.
+  cerrado, estado inválido: `4xx`), ENTONCES EL SISTEMA mantiene los ítems
+  en el outbox, marca cada ítem retenido como "error" (para que su fila lo
+  muestre, no "pendiente") y expone el motivo del servidor, sin borrarlos.
+  Un fallo de red no es un rechazo: en ese caso los ítems quedan
+  "pendiente" y se reintentan (RF-9).
 
 ## Requisitos no funcionales
 
@@ -150,3 +153,11 @@ Resueltas en la clarificación del 2026-10-12:
   `liveQuery` y actualiza el estado de forma reactiva. Alternativa
   descartada: refrescar el contador solo tras `encolar` en el hook de
   guardado, que deja fuera a cualquier otro escritor del outbox.
+
+- **Estado "error" por ítem en rechazo de lote (RF-14).** En la validación
+  se detectó que, ante un `409`, el motivo se mostraba en el encabezado
+  pero cada fila seguía diciendo "pendiente" (el `error` por ítem quedaba
+  nulo). Se precisó RF-14: los ítems retenidos se marcan "error" por fila.
+  Se distingue del fallo de red (RF-9), que deja los ítems "pendiente"
+  para reintentar. Implementación: `syncManager` reconoce el rechazo
+  (`ApiError` con `status` 4xx) y marca el grupo que falló con el motivo.

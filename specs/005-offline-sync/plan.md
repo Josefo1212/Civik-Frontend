@@ -68,8 +68,11 @@ Se reusa `features/asistencia` (padrón, lista) y `features/lapsos|eventos`
     `sincronizarAsistencia(id_event, items)` (`features/asistencia/api`),
     quita confirmados, marca conflictos, actualiza el cache del padrón con
     los `state`/`updated_at` devueltos y actualiza el estado observable.
-  - Manejo de `ApiError` 400/409: conserva todo el grupo y expone el
-    mensaje (RF-14); error de red: conserva todo (RF-9).
+  - Manejo del rechazo del lote (`ApiError` con `status` 4xx): conserva el
+    grupo, marca cada ítem con el motivo (`marcarError`) para que su fila
+    muestre "error" y corta el lote (RF-14); error de red: conserva todo
+    sin marcar (RF-9). `esRechazoDeLote(error)` es la función pura que
+    distingue ambos casos.
 - Estado observable mínimo (`pendientes`, `sincronizando`, `conflictos`,
   `ultimoError`, `enLinea`) con `suscribir`/`obtenerEstado` para
   `useSyncExternalStore`. Cubre RF-6, RF-7, RF-8, RF-9, RF-14.

@@ -92,3 +92,12 @@
     refleja el cambio.
   - Hecho cuando: el test pasa y el contador se actualiza con un guardado
     sin conexión (validación con Chrome DevTools).
+
+- [ ] **T10. Estado "error" por ítem en rechazo de lote.**
+  RF-14.
+  - `sync/syncManager.ts`: `esRechazoDeLote(error)` (pura); al fallar un
+    grupo por `ApiError` 4xx, marcar sus ítems con el motivo y cortar el
+    lote; el fallo de red no marca (RF-9).
+  - Test: un `409` deja el ítem en el outbox con `error` = motivo; un
+    fallo de red lo deja sin `error`.
+  - Hecho cuando: los tests de `syncManager` pasan.
