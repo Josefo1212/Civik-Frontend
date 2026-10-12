@@ -3,21 +3,57 @@ import type { Estudiante } from '../../domain/estudiante'
 import SelectorSeccion from '../../features/estudiantes/components/SelectorSeccion'
 import FormularioEstudiante, { type ValoresEstudiante } from '../../features/estudiantes/components/FormularioEstudiante'
 import TablaEstudiantes from '../../features/estudiantes/components/TablaEstudiantes'
+import TablaEstudiantesGlobal from '../../features/estudiantes/components/TablaEstudiantesGlobal'
+import ListaSeccionesInactivas from '../../features/secciones/components/ListaSeccionesInactivas'
 import { useSecciones } from '../../features/secciones/hooks/useSecciones'
-import { useEstudiantes } from '../../features/estudiantes/hooks/useEstudiantes'
+import { useSeccionMutations } from '../../features/secciones/hooks/useSeccionMutations'
+import { useEstudiantes, useEstudiantesGlobal } from '../../features/estudiantes/hooks/useEstudiantes'
 import { useEstudianteMutations } from '../../features/estudiantes/hooks/useEstudianteMutations'
+import { etiquetaSeccion } from '../../features/secciones/utils'
+import { filtrarEstudiantes } from '../../features/estudiantes/utils'
+
+type Modo = 'por-seccion' | 'todos'
+
+const celdaCheckbox = { display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' } as const
 
 const EstudiantesPage = () => {
+  const [modo, setModo] = useState<Modo>('por-seccion')
   const [seccionId, setSeccionId] = useState<string | null>(null)
   const [incluirInactivos, setIncluirInactivos] = useState(false)
+  const [incluirInactivosGlobal, setIncluirInactivosGlobal] = useState(false)
+  const [mostrarSeccionesBajas, setMostrarSeccionesBajas] = useState(false)
+  const [textoBusqueda, setTextoBusqueda] = useState('')
   const [estudianteEditando, setEstudianteEditando] = useState<Estudiante | null>(null)
   const [errorGeneral, setErrorGeneral] = useState<string | null>(null)
   const [operandoId, setOperandoId] = useState<string | null>(null)
+  const [operandoSeccionId, setOperandoSeccionId] = useState<string | null>(null)
   const [claveFormulario, setClaveFormulario] = useState(0)
 
   const { data: secciones = [], isLoading: cargandoSecciones } = useSecciones(undefined)
+  const { data: seccionesGlobal = [] } = useSecciones(undefined, true)
   const { data: estudiantes = [], isLoading, error, refetch } = useEstudiantes(seccionId, incluirInactivos)
+  const {
+    data: estudiantesGlobal = [],
+    isLoading: cargandoGlobal,
+    error: errorGlobal,
+    refetch: refetchGlobal,
+  } = useEstudiantesGlobal(incluirInactivosGlobal)
   const { crear, editar, baja, reactivar } = useEstudianteMutations()
+  const { reactivar: reactivarSeccion } = useSeccionMutations()
+
+  const mapaSecciones = useMemo(
+    () => new Map(seccionesGlobal.map((seccion) => [seccion.id, seccion])),
+    [seccionesGlobal],
+  )
+
+  const etiquetaPorSeccion = (idSeccion: string) => {
+    const seccion = mapaSecciones.get(idSeccion)
+    if (seccion === undefined || !seccion.active) return 'Sección dada de baja'
+    return etiquetaSeccion(seccion)
+  }
+
+  const seccionesInactivas = seccionesGlobal.filter((seccion) => !seccion.active)
+  const estudiantesFiltrados = filtrarEstudiantes(estudiantesGlobal, textoBusqueda)
 
   const valorInicial = useMemo<ValoresEstudiante | undefined>(() => {
     if (estudianteEditando === null) return undefined
@@ -58,9 +94,9 @@ const EstudiantesPage = () => {
       { seccionId, payload: { apellido: valores.apellido, nombre: valores.nombre, telefono } },
       {
         onSuccess: () => {
-            setEstudianteEditando(null)
-            setClaveFormulario((k) => k + 1)
-          },
+          setEstudianteEditando(null)
+          setClaveFormulario((k) => k + 1)
+        },
         onError: (e) => {
           setErrorGeneral(e instanceof Error ? e.message : 'No se pudo crear')
         },
@@ -92,61 +128,154 @@ const EstudiantesPage = () => {
     })
   }
 
+  const manejarReactivarSeccion = (id: string) => {
+    setErrorGeneral(null)
+    setOperandoSeccionId(id)
+    reactivarSeccion.mutate(id, {
+      onSuccess: () => setOperandoSeccionId(null),
+      onError: (e) => {
+        setOperandoSeccionId(null)
+        setErrorGeneral(e instanceof Error ? e.message : 'No se pudo reactivar la sección')
+      },
+    })
+  }
+
   const cancelarEdicion = () => setEstudianteEditando(null)
   const errorMensaje = error instanceof Error ? error.message : errorGeneral
+  const errorGlobalMensaje = errorGlobal instanceof Error ? errorGlobal.message : 'No se pudo cargar el padrón'
 
   return (
     <main style={{ padding: '16px', maxWidth: '1000px', margin: '0 auto' }}>
       <h1>Estudiantes</h1>
-      <section>
-        <h2>Seleccionar sección</h2>
-        <SelectorSeccion secciones={secciones} valor={seccionId} onCambiar={setSeccionId} cargando={cargandoSecciones} />
-      </section>
-      {seccionId !== null ? (
-        <section>
-          <h2>{estudianteEditando === null ? 'Alta de alumno' : 'Editar alumno'}</h2>
-          <FormularioEstudiante
-            key={estudianteEditando?.id ?? `nuevo-${claveFormulario}`}
-            secciones={secciones}
-            valorInicial={valorInicial}
-            enviando={crear.isPending || editar.isPending}
-            error={errorMensaje}
-            onSubmit={manejarSubmit}
-          />
-          {estudianteEditando !== null ? (
-            <button type='button' onClick={cancelarEdicion} style={{ marginBottom: '12px' }}>
-              Cancelar edición
-            </button>
+      <div role='group' aria-label='modo-listado' style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+        <button type='button' aria-pressed={modo === 'por-seccion'} onClick={() => setModo('por-seccion')}>
+          Por sección
+        </button>
+        <button type='button' aria-pressed={modo === 'todos'} onClick={() => setModo('todos')}>
+          Todos
+        </button>
+      </div>
+
+      {modo === 'por-seccion' ? (
+        <>
+          <section>
+            <h2>Seleccionar sección</h2>
+            <SelectorSeccion secciones={secciones} valor={seccionId} onCambiar={setSeccionId} cargando={cargandoSecciones} />
+          </section>
+          {seccionId !== null ? (
+            <section>
+              <h2>{estudianteEditando === null ? 'Alta de alumno' : 'Editar alumno'}</h2>
+              <FormularioEstudiante
+                key={estudianteEditando?.id ?? `nuevo-${claveFormulario}`}
+                secciones={secciones}
+                valorInicial={valorInicial}
+                enviando={crear.isPending || editar.isPending}
+                error={errorMensaje}
+                onSubmit={manejarSubmit}
+              />
+              {estudianteEditando !== null ? (
+                <button type='button' onClick={cancelarEdicion} style={{ marginBottom: '12px' }}>
+                  Cancelar edición
+                </button>
+              ) : null}
+              <div style={celdaCheckbox}>
+                <input
+                  type='checkbox'
+                  id='incluir-inactivos'
+                  checked={incluirInactivos}
+                  onChange={(e) => setIncluirInactivos(e.target.checked)}
+                />
+                <label htmlFor='incluir-inactivos'>Mostrar inactivos</label>
+              </div>
+              {isLoading ? <p>Cargando...</p> : null}
+              {error && !isLoading ? (
+                <div>
+                  <p style={{ color: '#dc2626' }}>{errorMensaje}</p>
+                  <button type='button' onClick={() => refetch()}>
+                    Reintentar
+                  </button>
+                </div>
+              ) : null}
+              {!isLoading && !error ? (
+                <TablaEstudiantes
+                  estudiantes={estudiantes}
+                  incluirInactivos={incluirInactivos}
+                  onDarDeBaja={manejarBaja}
+                  onReactivar={manejarReactivar}
+                  operandoId={operandoId}
+                />
+              ) : null}
+            </section>
           ) : null}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+        </>
+      ) : (
+        <section>
+          <h2>Todos los estudiantes</h2>
+          <div style={{ marginBottom: '12px', maxWidth: '320px' }}>
+            <input
+              type='search'
+              aria-label='buscar-estudiante'
+              placeholder='Buscar por nombre o apellido'
+              value={textoBusqueda}
+              onChange={(e) => setTextoBusqueda(e.target.value)}
+              style={{ width: '100%', padding: '6px' }}
+            />
+          </div>
+          <div style={celdaCheckbox}>
             <input
               type='checkbox'
-              id='incluir-inactivos'
-              checked={incluirInactivos}
-              onChange={(e) => setIncluirInactivos(e.target.checked)}
+              id='incluir-inactivos-global'
+              checked={incluirInactivosGlobal}
+              onChange={(e) => setIncluirInactivosGlobal(e.target.checked)}
             />
-            <label htmlFor='incluir-inactivos'>Mostrar inactivos</label>
+            <label htmlFor='incluir-inactivos-global'>Mostrar inactivos</label>
           </div>
-          {isLoading ? <p>Cargando...</p> : null}
-          {error && !isLoading ? (
+          <div style={celdaCheckbox}>
+            <input
+              type='checkbox'
+              id='mostrar-secciones-bajas'
+              checked={mostrarSeccionesBajas}
+              onChange={(e) => setMostrarSeccionesBajas(e.target.checked)}
+            />
+            <label htmlFor='mostrar-secciones-bajas'>Mostrar secciones dadas de baja</label>
+          </div>
+          {cargandoGlobal ? <p>Cargando...</p> : null}
+          {errorGlobal && !cargandoGlobal ? (
             <div>
-              <p style={{ color: '#dc2626' }}>{errorMensaje}</p>
-              <button type='button' onClick={() => refetch()}>
+              <p style={{ color: '#dc2626' }}>Error: {errorGlobalMensaje}</p>
+              <button type='button' onClick={() => refetchGlobal()}>
                 Reintentar
               </button>
             </div>
           ) : null}
-          {!isLoading && !error ? (
-            <TablaEstudiantes
-              estudiantes={estudiantes}
-              incluirInactivos={incluirInactivos}
-              onDarDeBaja={manejarBaja}
+          {errorGeneral !== null && errorGlobal === null ? (
+            <p style={{ color: '#dc2626' }}>{errorGeneral}</p>
+          ) : null}
+          {!cargandoGlobal && !errorGlobal ? (
+            <TablaEstudiantesGlobal
+              estudiantes={estudiantesFiltrados}
+              etiquetaPorSeccion={etiquetaPorSeccion}
+              incluirInactivos={incluirInactivosGlobal}
               onReactivar={manejarReactivar}
               operandoId={operandoId}
             />
           ) : null}
+          {mostrarSeccionesBajas ? (
+            <div style={{ marginTop: '24px' }}>
+              <h3>Secciones dadas de baja</h3>
+              {seccionesInactivas.length === 0 ? (
+                <p>No hay secciones dadas de baja.</p>
+              ) : (
+                <ListaSeccionesInactivas
+                  secciones={seccionesInactivas}
+                  onReactivar={manejarReactivarSeccion}
+                  operandoId={operandoSeccionId}
+                />
+              )}
+            </div>
+          ) : null}
         </section>
-      ) : null}
+      )}
     </main>
   )
 }

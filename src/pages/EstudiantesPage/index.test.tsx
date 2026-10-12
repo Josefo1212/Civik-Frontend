@@ -1,0 +1,178 @@
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import type { Estudiante } from '../../domain/estudiante'
+import type { Seccion } from '../../domain/seccion'
+import { useSecciones } from '../../features/secciones/hooks/useSecciones'
+import { useSeccionMutations } from '../../features/secciones/hooks/useSeccionMutations'
+import { useEstudiantes, useEstudiantesGlobal } from '../../features/estudiantes/hooks/useEstudiantes'
+import { useEstudianteMutations } from '../../features/estudiantes/hooks/useEstudianteMutations'
+import EstudiantesPage from './index'
+
+vi.mock('../../features/secciones/hooks/useSecciones', () => ({ useSecciones: vi.fn() }))
+vi.mock('../../features/secciones/hooks/useSeccionMutations', () => ({ useSeccionMutations: vi.fn() }))
+vi.mock('../../features/estudiantes/hooks/useEstudiantes', () => ({
+  useEstudiantes: vi.fn(),
+  useEstudiantesGlobal: vi.fn(),
+}))
+vi.mock('../../features/estudiantes/hooks/useEstudianteMutations', () => ({ useEstudianteMutations: vi.fn() }))
+
+const seccionActiva: Seccion = {
+  id: 'sec1',
+  grade_level: '1ro',
+  section: 'A',
+  shift: 'MATUTINO',
+  active: true,
+  created_at: '',
+  updated_at: '',
+}
+
+const seccionBaja: Seccion = {
+  id: 'sec2',
+  grade_level: '2do',
+  section: 'B',
+  shift: 'VESPERTINO',
+  active: false,
+  created_at: '',
+  updated_at: '',
+}
+
+const ana: Estudiante = {
+  id: 'ana',
+  id_section: 'sec1',
+  first_name: 'Ana',
+  last_name: 'López',
+  phone: null,
+  active: true,
+  created_at: '',
+  updated_at: '',
+}
+
+const luis: Estudiante = {
+  id: 'luis',
+  id_section: 'sec2',
+  first_name: 'Luis',
+  last_name: 'Pérez',
+  phone: null,
+  active: true,
+  created_at: '',
+  updated_at: '',
+}
+
+const beto: Estudiante = {
+  id: 'beto',
+  id_section: 'sec1',
+  first_name: 'Beto',
+  last_name: 'Gómez',
+  phone: null,
+  active: false,
+  created_at: '',
+  updated_at: '',
+}
+
+const reactivarEstudianteFn = vi.fn()
+const reactivarSeccionFn = vi.fn()
+
+const mutacion = (mutate = vi.fn()) => ({ mutate, isPending: false })
+
+beforeEach(() => {
+  vi.clearAllMocks()
+  vi.mocked(useSecciones).mockReturnValue({
+    data: [seccionActiva, seccionBaja],
+    isLoading: false,
+  } as unknown as ReturnType<typeof useSecciones>)
+  vi.mocked(useEstudiantes).mockReturnValue({
+    data: [],
+    isLoading: false,
+    error: null,
+    refetch: vi.fn(),
+  } as unknown as ReturnType<typeof useEstudiantes>)
+  vi.mocked(useEstudiantesGlobal).mockReturnValue({
+    data: [ana, luis, beto],
+    isLoading: false,
+    error: null,
+    refetch: vi.fn(),
+  } as unknown as ReturnType<typeof useEstudiantesGlobal>)
+  vi.mocked(useEstudianteMutations).mockReturnValue({
+    crear: mutacion(),
+    editar: mutacion(),
+    baja: mutacion(),
+    reactivar: mutacion(reactivarEstudianteFn),
+  } as unknown as ReturnType<typeof useEstudianteMutations>)
+  vi.mocked(useSeccionMutations).mockReturnValue({
+    reactivar: mutacion(reactivarSeccionFn),
+  } as unknown as ReturnType<typeof useSeccionMutations>)
+})
+
+const cambiarATodos = async (usuario: ReturnType<typeof userEvent.setup>) => {
+  await usuario.click(screen.getByRole('button', { name: 'Todos' }))
+}
+
+describe('EstudiantesPage', () => {
+  it('muestra el padrón global con el rótulo de sección al pasar a Todos', async () => {
+    const usuario = userEvent.setup()
+    render(<EstudiantesPage />)
+    await cambiarATodos(usuario)
+
+    expect(screen.getByText('Ana')).toBeInTheDocument()
+    expect(screen.getByText('1ro A — Matutino')).toBeInTheDocument()
+    expect(screen.getByText('Sección dada de baja')).toBeInTheDocument()
+    expect(screen.queryByText('Beto')).not.toBeInTheDocument()
+  })
+
+  it('incluye a los inactivos con el toggle', async () => {
+    const usuario = userEvent.setup()
+    render(<EstudiantesPage />)
+    await cambiarATodos(usuario)
+
+    await usuario.click(screen.getByLabelText('Mostrar inactivos'))
+    expect(screen.getByText('Beto')).toBeInTheDocument()
+  })
+
+  it('filtra con el buscador sin volver a pedir al backend', async () => {
+    const usuario = userEvent.setup()
+    render(<EstudiantesPage />)
+    await cambiarATodos(usuario)
+
+    await usuario.type(screen.getByLabelText('buscar-estudiante'), 'luis')
+    expect(screen.getByText('Luis')).toBeInTheDocument()
+    expect(screen.queryByText('Ana')).not.toBeInTheDocument()
+  })
+
+  it('muestra el error del listado global con reintento', async () => {
+    vi.mocked(useEstudiantesGlobal).mockReturnValue({
+      data: [],
+      isLoading: false,
+      error: new Error('sin conexión'),
+      refetch: vi.fn(),
+    } as unknown as ReturnType<typeof useEstudiantesGlobal>)
+    const usuario = userEvent.setup()
+    render(<EstudiantesPage />)
+    await cambiarATodos(usuario)
+
+    expect(screen.getByText('Error: sin conexión')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Reintentar' })).toBeInTheDocument()
+  })
+
+  it('reactiva a un estudiante inactivo', async () => {
+    const usuario = userEvent.setup()
+    render(<EstudiantesPage />)
+    await cambiarATodos(usuario)
+    await usuario.click(screen.getByLabelText('Mostrar inactivos'))
+
+    await usuario.click(screen.getByRole('button', { name: 'reactivar-estudiante-beto' }))
+    expect(reactivarEstudianteFn).toHaveBeenCalledWith('beto', expect.anything())
+  })
+
+  it('muestra y reactiva las secciones dadas de baja', async () => {
+    const usuario = userEvent.setup()
+    render(<EstudiantesPage />)
+    await cambiarATodos(usuario)
+
+    await usuario.click(screen.getByLabelText('Mostrar secciones dadas de baja'))
+    expect(screen.getByText('2do B — Vespertino')).toBeInTheDocument()
+
+    await usuario.click(screen.getByRole('button', { name: 'reactivar-seccion-sec2' }))
+    expect(reactivarSeccionFn).toHaveBeenCalledWith('sec2', expect.anything())
+  })
+})
