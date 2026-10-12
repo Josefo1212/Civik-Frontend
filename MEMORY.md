@@ -6,14 +6,15 @@ lo que ya no aporte. Si algo se vuelve regla permanente, se mueve a
 
 ## Estado actual
 
-- `Civik-Backend` tiene las fases 0–10 completas (todos los endpoints
-  listos, incluido `/_health`); el front no debe asumir que falta API.
-- Fases 0–3 **implementadas**: bootstrap, secciones (001), estudiantes
-  (002), eventos + lapsos mínimos (003) y asistencia online (004).
-- Suite: 57 tests verdes; `pnpm lint`, `pnpm typecheck` y `pnpm build`
-  limpios.
+- `Civik-Backend` tiene las fases 0–10 completas (todos los endpoints,
+  incluido `/_health`); el front no debe asumir que falta API.
+- Fases 0–4 **implementadas**: bootstrap, secciones (001), estudiantes
+  (002), eventos + lapsos (003), asistencia online (004) y PWA + offline
+  (005).
+- Suite: 81 tests verdes; `pnpm lint`, `pnpm typecheck` y `pnpm build`
+  limpios. `pnpm build` genera `manifest.webmanifest` y `sw.js`.
 - Validación visual con Chrome DevTools **pendiente** (no había MCP de
-  DevTools en la sesión) para las fases 0–3.
+  DevTools en la sesión) para las fases 0–4.
 
 ## Decisiones (y por qué)
 
@@ -22,39 +23,43 @@ lo que ya no aporte. Si algo se vuelve regla permanente, se mueve a
 - Tipos de dominio con el vocabulario del backend (español) para que el
   contrato de API no necesite traducción.
 - Stack: Vitest + Testing Library + jsdom; `VITE_API_URL` define la API
-  (local `http://localhost:3000`).
-- Gestión de lapsos vive dentro de `EventosPage` (no hay ruta nueva).
+  (local `http://localhost:3000`). Gestión de lapsos vive en `EventosPage`.
+- Offline: la escritura **siempre** pasa por el outbox y luego
+  `POST /events/{id}/attendance/sync` (con `cambio_en`), en línea y
+  offline: un solo camino con idempotencia y conflicto. El `POST
+  /attendance` de la Fase 3 quedó sin usar por la UI.
+- Lectura offline network-first con respaldo en Dexie (`conRespaldo`); el
+  cache solo se usa sin red, nunca pisa datos frescos. Se cachean
+  lapsos/eventos/padrón (decisión de alcance acordada con el usuario).
 
 ## Aprendizajes y errores a evitar
 
-- `import.meta.env.VITE_API_URL` se reemplaza estáticamente por Vite y no
-  se puede stubbear en tests; usar `import.meta.env['VITE_API_URL']`.
-- En TanStack Query v5 el `queryFn` no puede resolver `undefined`.
-- El `retry` del hook gana sobre el del QueryClient: en tests con fallo,
-  `retryDelay` corto (250 ms) evita que el `waitFor` expire.
-- `react-hooks/set-state-in-effect` está activo: para sincronizar un
-  formulario con `valorInicial` se usa `key` (remonte), no `useEffect`.
-- vitest sin `globals` no hace cleanup de Testing Library: `src/test/setup.ts`
-  lo hace con `afterEach(cleanup)`.
+- `import.meta.env.VITE_API_URL` es estático en Vite: usar
+  `import.meta.env['VITE_API_URL']` para poder stubbearlo.
+- El `queryFn` de TanStack Query v5 no puede resolver `undefined`; el
+  `retry` del hook gana sobre el del QueryClient (usar `retryDelay` corto
+  en tests con fallo).
+- `react-hooks/set-state-in-effect` activo: sincronizar un formulario con
+  `valorInicial` con `key` (remonte), no `useEffect`.
+- vitest sin `globals` no limpia Testing Library: `setup.ts` con
+  `afterEach(cleanup)`. `fake-indexeddb/auto` habilita Dexie en jsdom
+  (limpiar tablas en `beforeEach`).
+- vite-plugin-pwa declara `workbox-window`/`workbox-build` como **peers**:
+  instalarlos como devDependencies o `vite build` no resuelve
+  `virtual:pwa-register`; el plugin va `disable` con `mode === 'test'`.
 
 ## Próximos pasos
 
-- Cerrar validación visual (Chrome DevTools) de las fases 0–3.
-- Fase 4: PWA + offline (service worker, outbox Dexie, sincronización).
-  La Fase 9 del backend ya expone `POST /events/{id}/attendance/sync`.
+- Cerrar validación visual (Chrome DevTools) de las fases 0–4.
+- Fase 5: notas (vista por lapso y sección, con aviso de "provisional");
+  el backend ya expone las notas (spec 008).
 
 ## Historial por fase
 
-- 001 secciones: CRUD, filtro, baja/reactivar con deshacer en sesión.
-- 002 estudiantes: por sección (selector obligatorio), toggle inactivos,
-  alta/edición/baja/reactivar.
-- 003 eventos: lapsos mínimo (listar/crear/activar/cerrar) + eventos
-  (listar por lapso, crear manual, cancelar con motivo).
-- 004 asistencia online: padrón del evento, marcado masivo y guardado en
-  lote (upsert); "Sin marcar" ≠ ausente; sin offline todavía.
-
-## Correcciones aplicadas (Fase 1)
-
-- Los formularios usaban `value` con `onChange={() => {}}` (solo-lectura):
-  se les dio estado interno y `key` para remontar.
-- `src/test/setup.ts` hace `cleanup` en `afterEach`.
+- 001 secciones · 002 estudiantes (por sección, toggle inactivos) ·
+  003 eventos (lapsos mínimo + crear/cancelar con motivo).
+- 004 asistencia online: padrón por evento, marcado masivo en lote,
+  "Sin marcar" ≠ ausente.
+- 005 PWA + offline: service worker, caché de lectura, outbox con id de
+  cliente, sync por evento con `cambio_en`, fusión padrón+pendientes,
+  botón/contador de sincronización y aviso de conflicto.

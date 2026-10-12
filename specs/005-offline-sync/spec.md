@@ -1,6 +1,6 @@
 # Spec 005 — PWA y sincronización offline de asistencia
 
-Estado: borrador
+Estado: implementada
 
 ## Contexto y objetivo
 

@@ -1,6 +1,6 @@
 # Tareas 005 — PWA y sincronización offline de asistencia
 
-- [ ] **T1. Dependencias + base Dexie + caché de lectura.**
+- [x] **T1. Dependencias + base Dexie + caché de lectura.**
   RF-10.
   - Instalar `dexie`, `vite-plugin-pwa`, `fake-indexeddb`.
   - `src/sync/db.ts` (`outbox`, `cache`) y `src/sync/cache.ts`
@@ -10,7 +10,7 @@
     red, re-lanza si el cache está vacío.
   - Hecho cuando: `pnpm test:run` verde con los tests nuevos.
 
-- [ ] **T2. Outbox.**
+- [x] **T2. Outbox.**
   RF-2, RF-3, RF-4, RF-5, RF-7, RF-14.
   - `src/sync/outbox.ts` (`encolar`, `listarPendientes`,
     `listarPendientesDeEvento`, `eliminar`, `marcarError`,
@@ -20,7 +20,7 @@
     `contarPendientes`.
   - Hecho cuando: los tests del outbox pasan.
 
-- [ ] **T3. Contrato de sync + `syncManager`.**
+- [x] **T3. Contrato de sync + `syncManager`.**
   RF-6, RF-7, RF-8, RF-9, RF-14.
   - `domain/asistencia.ts`: `ResultadoSync`, `ItemResultadoSync`,
     `ItemSync`.
@@ -32,7 +32,7 @@
     el motivo.
   - Hecho cuando: los tests del manager pasan.
 
-- [ ] **T4. Lectura con respaldo en caché.**
+- [x] **T4. Lectura con respaldo en caché.**
   RF-10, RF-11.
   - Envolver `queryFn` de `useLapsos`, `useEventos` y `usePadron` con
     `conRespaldo` y su clave de cache.
@@ -40,7 +40,7 @@
     cacheado.
   - Hecho cuando: los tests de hooks pasan.
 
-- [ ] **T5. Escritura por outbox + fusión del padrón.**
+- [x] **T5. Escritura por outbox + fusión del padrón.**
   RF-2, RF-5, RF-11, RF-12.
   - `sync/fusionar.ts`: `fusionarPadron(filas, pendientes)`.
   - `useGuardarAsistencia` (en vez de `useRegistrarAsistencia`): encola y,
@@ -51,7 +51,7 @@
     pendiente) y `ListaAsistencia` con `estadoSync`.
   - Hecho cuando: los tests de fusión y de la lista pasan.
 
-- [ ] **T6. UI de sincronización + disparadores.**
+- [x] **T6. UI de sincronización + disparadores.**
   RF-6, RF-8, RF-12.
   - `sync/useSyncEstado.ts` (`useSyncExternalStore` sobre el manager).
   - `sync/SincronizarBoton.tsx`: contador de pendientes, botón manual,
@@ -64,7 +64,7 @@
     sincronizar.
   - Hecho cuando: los tests del botón pasan.
 
-- [ ] **T7. PWA instalable + persistencia de almacenamiento.**
+- [x] **T7. PWA instalable + persistencia de almacenamiento.**
   RF-1, RF-13.
   - `vite.config.ts` con `VitePWA` (manifest + Workbox precache) y
     `vite-env.d.ts` con los tipos de `virtual:pwa-register`.
@@ -74,7 +74,7 @@
     `pnpm build` (genera `manifest.webmanifest` y `sw.js`).
   - Hecho cuando: `pnpm build` genera la PWA y el typecheck pasa.
 
-- [ ] **T8. Cierre de la fase.**
+- [x] **T8. Cierre de la fase.**
   - Repaso RF por RF; `pnpm lint`, `pnpm typecheck`, `pnpm test:run`,
     `pnpm build` verdes.
   - Marcar spec y tareas como implementadas; actualizar `MEMORY.md`.
