@@ -1,6 +1,8 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { NAVEGACION_PRINCIPAL } from '../../constants/routes'
 import ServerStatus from '../ServerStatus/ServerStatus'
+import SincronizarBoton from '../../sync/SincronizarBoton'
+import RegistrarSincronizacion from '../../sync/RegistrarSincronizacion'
 import styles from './AppShell.module.css'
 
 const AppShell = () => (
@@ -18,7 +20,9 @@ const AppShell = () => (
           </NavLink>
         ))}
       </nav>
+      <SincronizarBoton />
       <ServerStatus />
+      <RegistrarSincronizacion />
     </header>
     <main className={styles.contenido}>
       <Outlet />
