@@ -16,15 +16,13 @@ lo que ya no aporte. Si algo se vuelve regla permanente, se mueve a
 - Validación visual con Chrome DevTools **hecha** (fases 0–6) contra el
   backend local + un proxy CORS (el backend no manda CORS). La emulación
   "Offline" de DevTools da falsos negativos (cuelga el guardado); el
-  guardado offline real se valida forzando `navigator.onLine=false` con la
-  red arriba.
+  guardado offline se valida forzando `navigator.onLine=false` con red.
 
 ## Decisiones (y por qué)
 
-- Sin negocio propio: toda regla de dominio se le pide al backend. Ver
-  `AGENTS.md` y la skill `civik-dominio-frontend`. Tipos de dominio con el
-  vocabulario del backend (español) para que el contrato no necesite capa
-  de traducción.
+- Sin negocio propio: toda regla de dominio se le pide al backend. Tipos
+  de dominio con el vocabulario del backend (español) para que el contrato
+  no necesite capa de traducción. Ver `AGENTS.md` y `civik-dominio-frontend`.
 - Stack: Vitest + Testing Library + jsdom; `VITE_API_URL` define la API
   (local `http://localhost:3000`). Gestión de lapsos vive en `EventosPage`.
 - Offline: la escritura **siempre** pasa por el outbox y luego `POST
@@ -32,14 +30,13 @@ lo que ya no aporte. Si algo se vuelve regla permanente, se mueve a
   solo camino con idempotencia y conflicto. El `POST /attendance` de la
   Fase 3 quedó sin usar por la UI.
 - Lectura offline network-first con respaldo en Dexie (`conRespaldo`); el
-  cache solo se usa sin red, nunca pisa datos frescos (lapsos/eventos/
-  padrón). La nota se muestra tal cual: no se recalcula ni formatea (#1).
+  cache solo se usa sin red, nunca pisa datos frescos. La nota se muestra
+  tal cual: no se recalcula ni formatea (#1).
 
 ## Aprendizajes y errores a evitar
 
-- `import.meta.env.VITE_API_URL` es estático en Vite: usar
-  `import.meta.env['VITE_API_URL']` para poder stubbearlo. El `queryFn` de
-  TanStack Query v5 no puede resolver `undefined`.
+- Usar `import.meta.env['VITE_API_URL']` (estático en Vite) para poder
+  stubbear; el `queryFn` de TanStack Query v5 no puede resolver `undefined`.
 - El `retry` del hook gana sobre el del QueryClient (usar `retryDelay`
   corto en tests con fallo).
 - `react-hooks/set-state-in-effect` activo: sincronizar un formulario con
@@ -47,21 +44,19 @@ lo que ya no aporte. Si algo se vuelve regla permanente, se mueve a
 - vitest sin `globals` no limpia Testing Library: `setup.ts` con
   `afterEach(cleanup)`. `fake-indexeddb/auto` habilita Dexie en jsdom.
 - vite-plugin-pwa declara `workbox-window`/`workbox-build` como **peers**:
-  instalarlos como devDependencies o `vite build` no resuelve
-  `virtual:pwa-register`; el plugin va `disable` con `mode === 'test'`.
+  instalarlos como devDependencies; el plugin va `disable` en `mode === 'test'`.
 
 ## Próximos pasos
 
-- Ninguna fase pendiente; validación visual cerrada. Próximos cambios de
-  requisitos van por SDD (spec → plan → tareas → código).
+- Ninguna fase pendiente; validación visual cerrada. Cambios de requisitos
+  van por SDD (spec → plan → tareas → código).
 
 ## Historial por fase
 
-- 001 secciones · 002 estudiantes (por sección) · 003 eventos (lapsos
-  mínimo + crear/cancelar con motivo) · 004 asistencia online.
+- 001 secciones · 002 estudiantes (por sección) · 003 eventos (lapsos +
+  crear/cancelar con motivo) · 004 asistencia online.
 - 005 PWA + offline: SW, caché de lectura, outbox con id de cliente, sync
-  por evento con `cambio_en`, fusión padrón+pendientes y aviso de conflicto.
-  El contador de pendientes se mantiene en vivo con `liveQuery` (RF-12).
+  con `cambio_en`, fusión padrón+pendientes, aviso de conflicto y contador
+  de pendientes en vivo con `liveQuery` (RF-12).
 - 006 notas: por lapso y sección, aviso provisional/definitiva, "sin nota"
-  ≠ 0, marca "Editada manualmente" cuando el backend devuelve
-  `es_override: true` (RF-10).
+  ≠ 0, marca "Editada manualmente" si `es_override` (RF-10).
