@@ -1,49 +1,45 @@
 import { useState } from 'react'
+import { useLiveQuery } from 'dexie-react-hooks'
 import SelectorLapso from '../../features/lapsos/components/SelectorLapso'
 import { useLapsos } from '../../features/lapsos/hooks/useLapsos'
 import SelectorEvento from '../../features/asistencia/components/SelectorEvento'
-import PadronAsistencia, { type ItemNuevo } from '../../features/asistencia/components/PadronAsistencia'
+import PadronAsistencia from '../../features/asistencia/components/PadronAsistencia'
+import type { CambioPadron } from '../../features/asistencia/components/PadronAsistencia'
 import { useEventos } from '../../features/eventos/hooks/useEventos'
 import { usePadron } from '../../features/asistencia/hooks/usePadron'
-import { useRegistrarAsistencia } from '../../features/asistencia/hooks/useRegistrarAsistencia'
+import { useGuardarAsistencia } from '../../features/asistencia/hooks/useGuardarAsistencia'
+import { fusionarPadron } from '../../sync/fusionar'
+import { listarPendientesDeEvento } from '../../sync/outbox'
 
 const AsistenciaPage = () => {
   const [lapsoId, setLapsoId] = useState<string | null>(null)
   const [eventoId, setEventoId] = useState<string | null>(null)
-  const [errorGeneral, setErrorGeneral] = useState<string | null>(null)
 
   const { data: lapsos = [], isLoading: cargandoLapsos } = useLapsos()
   const { data: eventos = [], isLoading: cargandoEventos, error: errorEventos } = useEventos(lapsoId)
   const { data: filas = [], isLoading: cargandoPadron, error: errorPadron, refetch: refetchPadron } =
     usePadron(eventoId)
-  const registrar = useRegistrarAsistencia()
+  const guardarAsistencia = useGuardarAsistencia()
+
+  const pendientes = useLiveQuery(
+    () => (eventoId === null ? Promise.resolve([]) : listarPendientesDeEvento(eventoId)),
+    [eventoId],
+  )
+  const filasFusionadas = fusionarPadron(filas, pendientes ?? [])
 
   const cambiarLapso = (id: string | null) => {
     setLapsoId(id)
     setEventoId(null)
-    setErrorGeneral(null)
   }
 
-  const cambiarEvento = (id: string | null) => {
-    setEventoId(id)
-    setErrorGeneral(null)
-  }
-
-  const guardar = (items: ItemNuevo[]) => {
+  const guardar = (cambios: CambioPadron[]) => {
     if (eventoId === null) return
-    setErrorGeneral(null)
-    registrar.mutate(
-      { eventoId, items },
-      {
-        onError: (e) => {
-          setErrorGeneral(e instanceof Error ? e.message : 'No se pudo guardar la asistencia')
-        },
-      },
-    )
+    guardarAsistencia.mutate(cambios.map((cambio) => ({ ...cambio, id_event: eventoId })))
   }
 
-  const errorEventosMensaje = errorEventos instanceof Error ? errorEventos.message : errorGeneral
-  const errorPadronMensaje = errorPadron instanceof Error ? errorPadron.message : errorGeneral
+  const errorEventosMensaje = errorEventos instanceof Error ? errorEventos.message : null
+  const errorPadronMensaje = errorPadron instanceof Error ? errorPadron.message : null
+  const errorGuardar = guardarAsistencia.error instanceof Error ? guardarAsistencia.error.message : null
 
   return (
     <main style={{ padding: '16px', maxWidth: '1000px', margin: '0 auto' }}>
@@ -71,7 +67,7 @@ const AsistenciaPage = () => {
             <p aria-live='polite'>Este lapso no tiene eventos. Creá uno en la pantalla de Eventos.</p>
           ) : null}
           {!cargandoEventos && !errorEventos && eventos.length > 0 ? (
-            <SelectorEvento eventos={eventos} valor={eventoId} onCambiar={cambiarEvento} />
+            <SelectorEvento eventos={eventos} valor={eventoId} onCambiar={setEventoId} />
           ) : null}
         </section>
       ) : null}
@@ -90,9 +86,9 @@ const AsistenciaPage = () => {
           {!cargandoPadron && !errorPadron ? (
             <PadronAsistencia
               key={eventoId}
-              filas={filas}
-              enviando={registrar.isPending}
-              error={errorGeneral}
+              filas={filasFusionadas}
+              enviando={guardarAsistencia.isPending}
+              error={errorGuardar}
               onGuardar={guardar}
             />
           ) : null}

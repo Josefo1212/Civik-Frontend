@@ -1,8 +1,9 @@
-import type { EstadoAsistencia, FilaPadron } from '../../../domain/asistencia'
-import { ESTADOS_ASISTENCIA, ETIQUETAS_ESTADO_ASISTENCIA, SIN_MARCAR } from '../constants'
+import type { EstadoAsistencia } from '../../../domain/asistencia'
+import type { FilaConSync } from '../../../sync/fusionar'
+import { SIN_MARCAR, ESTADOS_ASISTENCIA, ETIQUETAS_ESTADO_ASISTENCIA } from '../constants'
 
 export type PropsListaAsistencia = {
-  filas: FilaPadron[]
+  filas: FilaConSync[]
   estados: Record<string, EstadoAsistencia | null>
   onCambiar: (idStudent: string, estado: EstadoAsistencia) => void
 }
@@ -37,7 +38,21 @@ const ListaAsistencia = ({ filas, estados, onCambiar }: PropsListaAsistencia) =>
                 <td style={celda}>
                   {fila.last_name}, {fila.first_name}
                 </td>
-                <td style={celda}>{actual ? ETIQUETAS_ESTADO_ASISTENCIA[actual] : SIN_MARCAR}</td>
+                <td style={celda}>
+                  {actual ? ETIQUETAS_ESTADO_ASISTENCIA[actual] : SIN_MARCAR}
+                  {fila.estadoSync ? (
+                    <span
+                      role='status'
+                      style={{
+                        marginLeft: '8px',
+                        fontSize: '0.75rem',
+                        color: fila.estadoSync === 'error' ? '#dc2626' : '#b45309',
+                      }}
+                    >
+                      {fila.estadoSync === 'error' ? 'error' : 'pendiente'}
+                    </span>
+                  ) : null}
+                </td>
                 <td style={celda}>
                   <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                     {ESTADOS_ASISTENCIA.map((estado) => (

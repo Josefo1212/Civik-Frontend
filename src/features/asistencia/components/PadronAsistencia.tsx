@@ -1,20 +1,21 @@
 import { useState } from 'react'
-import type { EstadoAsistencia, FilaPadron } from '../../../domain/asistencia'
+import type { EstadoAsistencia } from '../../../domain/asistencia'
+import type { FilaConSync } from '../../../sync/fusionar'
 import ListaAsistencia from './ListaAsistencia'
 
-export type ItemNuevo = {
+export type CambioPadron = {
   id_student: string
-  state: string
+  state: EstadoAsistencia
 }
 
 export type PropsPadronAsistencia = {
-  filas: FilaPadron[]
+  filas: FilaConSync[]
   enviando: boolean
   error?: string | null
-  onGuardar: (items: ItemNuevo[]) => void
+  onGuardar: (cambios: CambioPadron[]) => void
 }
 
-const construirIniciales = (filas: FilaPadron[]): Record<string, EstadoAsistencia | null> => {
+const construirIniciales = (filas: FilaConSync[]): Record<string, EstadoAsistencia | null> => {
   return Object.fromEntries(filas.map((fila) => [fila.id_student, fila.state]))
 }
 
@@ -30,9 +31,9 @@ const PadronAsistencia = ({ filas, enviando, error, onGuardar }: PropsPadronAsis
   const originalDe = (idStudent: string): EstadoAsistencia | null =>
     filas.find((fila) => fila.id_student === idStudent)?.state ?? null
 
-  const cambios: ItemNuevo[] = Object.entries(estados)
+  const cambios: CambioPadron[] = Object.entries(estados)
     .filter(([id, estado]) => estado !== null && estado !== originalDe(id))
-    .map(([id, estado]) => ({ id_student: id, state: estado as string }))
+    .map(([id, estado]) => ({ id_student: id, state: estado as EstadoAsistencia }))
 
   const hayCambios = cambios.length > 0
 

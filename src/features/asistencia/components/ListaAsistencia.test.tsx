@@ -27,4 +27,20 @@ describe('ListaAsistencia', () => {
 
     expect(onCambiar).toHaveBeenCalledWith('s1', 'AUSENTE')
   })
+
+  it('señala las filas pendientes y con error', () => {
+    render(
+      <ListaAsistencia
+        filas={[
+          { ...filas[0], estadoSync: 'pendiente' },
+          { ...filas[1], estadoSync: 'error' },
+        ]}
+        estados={{ s1: 'PRESENTE', s2: 'AUSENTE' }}
+        onCambiar={() => {}}
+      />,
+    )
+
+    expect(screen.getByText('pendiente')).toBeInTheDocument()
+    expect(screen.getByText('error')).toBeInTheDocument()
+  })
 })
