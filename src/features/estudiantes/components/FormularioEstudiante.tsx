@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { FormEvent } from 'react'
 import type { Seccion } from '../../../domain/seccion'
 
@@ -24,8 +25,12 @@ const VACIO: ValoresEstudiante = {
 }
 
 const FormularioEstudiante = ({ secciones, valorInicial, enviando, error, onSubmit }: PropsFormularioEst) => {
-  const valores = valorInicial ?? VACIO
+  const [valores, setValores] = useState<ValoresEstudiante>(valorInicial ?? VACIO)
   const activas = secciones.filter((s) => s.active)
+
+  const actualizar = (campo: keyof ValoresEstudiante, valor: string) => {
+    setValores((previos) => ({ ...previos, [campo]: valor }))
+  }
 
   const enviar = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -59,7 +64,7 @@ const FormularioEstudiante = ({ secciones, valorInicial, enviando, error, onSubm
           id='est-id-seccion'
           aria-label='est-id-seccion'
           value={valores.id_seccion}
-          onChange={() => {}}
+          onChange={(e) => actualizar('id_seccion', e.target.value)}
           disabled={enviando}
           required
         >
@@ -75,15 +80,15 @@ const FormularioEstudiante = ({ secciones, valorInicial, enviando, error, onSubm
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
         <label htmlFor='est-apellido'>Apellido</label>
-        <input id='est-apellido' aria-label='est-apellido' value={valores.apellido} onChange={() => {}} disabled={enviando} required />
+        <input id='est-apellido' aria-label='est-apellido' value={valores.apellido} onChange={(e) => actualizar('apellido', e.target.value)} disabled={enviando} required />
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
         <label htmlFor='est-nombre'>Nombre</label>
-        <input id='est-nombre' aria-label='est-nombre' value={valores.nombre} onChange={() => {}} disabled={enviando} required />
+        <input id='est-nombre' aria-label='est-nombre' value={valores.nombre} onChange={(e) => actualizar('nombre', e.target.value)} disabled={enviando} required />
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
         <label htmlFor='est-telefono'>Teléfono (opcional)</label>
-        <input id='est-telefono' aria-label='est-telefono' value={valores.telefono} onChange={() => {}} disabled={enviando} />
+        <input id='est-telefono' aria-label='est-telefono' value={valores.telefono} onChange={(e) => actualizar('telefono', e.target.value)} disabled={enviando} />
       </div>
       <div style={{ gridColumn: '1 / -1' }}>
         <button type='submit' aria-label='guardar-estudiante' disabled={enviando || invalido}>

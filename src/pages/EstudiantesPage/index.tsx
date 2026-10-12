@@ -13,6 +13,7 @@ const EstudiantesPage = () => {
   const [estudianteEditando, setEstudianteEditando] = useState<Estudiante | null>(null)
   const [errorGeneral, setErrorGeneral] = useState<string | null>(null)
   const [operandoId, setOperandoId] = useState<string | null>(null)
+  const [claveFormulario, setClaveFormulario] = useState(0)
 
   const { data: secciones = [], isLoading: cargandoSecciones } = useSecciones(undefined)
   const { data: estudiantes = [], isLoading, error, refetch } = useEstudiantes(seccionId, incluirInactivos)
@@ -57,8 +58,9 @@ const EstudiantesPage = () => {
       { seccionId, payload: { apellido: valores.apellido, nombre: valores.nombre, telefono } },
       {
         onSuccess: () => {
-          setEstudianteEditando(null)
-        },
+            setEstudianteEditando(null)
+            setClaveFormulario((k) => k + 1)
+          },
         onError: (e) => {
           setErrorGeneral(e instanceof Error ? e.message : 'No se pudo crear')
         },
@@ -104,6 +106,7 @@ const EstudiantesPage = () => {
         <section>
           <h2>{estudianteEditando === null ? 'Alta de alumno' : 'Editar alumno'}</h2>
           <FormularioEstudiante
+            key={estudianteEditando?.id ?? `nuevo-${claveFormulario}`}
             secciones={secciones}
             valorInicial={valorInicial}
             enviando={crear.isPending || editar.isPending}

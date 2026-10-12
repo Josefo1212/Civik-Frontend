@@ -20,4 +20,17 @@ describe('FormularioEstudiante', () => {
     const botones = screen.getAllByRole('button', { name: 'guardar-estudiante' })
     expect(botones.some((b) => b.hasAttribute('disabled'))).toBe(true)
   })
+
+  it('permite escribir los campos y envía lo escrito', async () => {
+    const usuario = userEvent.setup()
+    const onSubmit = vi.fn()
+    render(<FormularioEstudiante secciones={secciones} enviando={false} onSubmit={onSubmit} />)
+
+    await usuario.selectOptions(screen.getByRole('combobox', { name: 'est-id-seccion' }), 'sec1')
+    await usuario.type(screen.getByRole('textbox', { name: 'est-apellido' }), 'Pérez')
+    await usuario.type(screen.getByRole('textbox', { name: 'est-nombre' }), 'Luis')
+    await usuario.click(screen.getByRole('button', { name: 'guardar-estudiante' }))
+
+    expect(onSubmit).toHaveBeenCalledWith({ id_seccion: 'sec1', apellido: 'Pérez', nombre: 'Luis', telefono: '' })
+  })
 })

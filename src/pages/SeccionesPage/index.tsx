@@ -132,6 +132,7 @@ const SeccionesPage = () => {
       <section>
         <h2>{seccionEditando === null ? 'Crear sección' : 'Editar sección'}</h2>
         <FormularioSeccion
+          key={seccionEditando?.id ?? 'nueva'}
           valorInicial={valorInicialFormulario}
           enviando={crear.isPending || editar.isPending}
           error={errorMensaje}

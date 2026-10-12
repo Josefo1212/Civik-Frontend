@@ -45,4 +45,17 @@ describe('FormularioSeccion', () => {
     const botones = screen.getAllByRole('button', { name: 'guardar-seccion' })
     expect(botones.some((b) => b.hasAttribute('disabled'))).toBe(true)
   })
+
+  it('permite escribir los campos y envía lo escrito', async () => {
+    const usuario = userEvent.setup()
+    const onSubmit = vi.fn()
+    render(<FormularioSeccion enviando={false} onSubmit={onSubmit} />)
+
+    await usuario.selectOptions(screen.getByRole('combobox', { name: 'grado' }), '2do')
+    await usuario.type(screen.getByRole('textbox', { name: 'seccion' }), 'B')
+    await usuario.selectOptions(screen.getByRole('combobox', { name: 'turno' }), 'VESPERTINO')
+    await usuario.click(screen.getByRole('button', { name: 'guardar-seccion' }))
+
+    expect(onSubmit).toHaveBeenCalledWith({ grade_level: '2do', section: 'B', shift: 'VESPERTINO' })
+  })
 })

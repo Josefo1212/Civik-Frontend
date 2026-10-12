@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { GRADOS, TURNOS } from '../constants'
 
@@ -30,7 +31,11 @@ const FormularioSeccion = ({
   error,
   onSubmit,
 }: PropsFormulario) => {
-  const valores = valorInicial ?? FORMULARIO_VACIO
+  const [valores, setValores] = useState<ValoresFormulario>(valorInicial ?? FORMULARIO_VACIO)
+
+  const actualizar = (campo: keyof ValoresFormulario, valor: string) => {
+    setValores((previos) => ({ ...previos, [campo]: valor }))
+  }
 
   const enviar = (evento: FormEvent<HTMLFormElement>) => {
     evento.preventDefault()
@@ -61,7 +66,7 @@ const FormularioSeccion = ({
           id='grado'
           name='grado'
           value={valores.grade_level}
-          onChange={() => {}}
+          onChange={(e) => actualizar('grade_level', e.target.value)}
           disabled={enviando}
           required
           aria-label='grado'
@@ -84,7 +89,7 @@ const FormularioSeccion = ({
           name='seccion'
           type='text'
           value={valores.section}
-          onChange={() => {}}
+          onChange={(e) => actualizar('section', e.target.value)}
           disabled={enviando}
           required
           aria-label='seccion'
@@ -98,7 +103,7 @@ const FormularioSeccion = ({
           id='turno'
           name='turno'
           value={valores.shift}
-          onChange={() => {}}
+          onChange={(e) => actualizar('shift', e.target.value)}
           disabled={enviando}
           required
           aria-label='turno'
