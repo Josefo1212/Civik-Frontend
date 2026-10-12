@@ -1,4 +1,4 @@
-import type { FilaPadron } from '../../domain/asistencia'
+import type { FilaPadron, ItemResultadoSync, ItemSync } from '../../domain/asistencia'
 import { apiSend } from '../../api/client'
 
 export type ItemAsistencia = {
@@ -15,4 +15,13 @@ export const registrarAsistencia = async (
   items: ItemAsistencia[],
 ): Promise<FilaPadron[]> => {
   return await apiSend<FilaPadron[]>(`/events/${eventoId}/attendance`, 'POST', { items })
+}
+
+export const sincronizarAsistencia = async (
+  eventoId: string,
+  items: ItemSync[],
+): Promise<ItemResultadoSync[]> => {
+  return await apiSend<ItemResultadoSync[]>(`/events/${eventoId}/attendance/sync`, 'POST', {
+    items,
+  })
 }
