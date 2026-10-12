@@ -1,6 +1,6 @@
 # Spec 006 — Notas
 
-Estado: borrador
+Estado: implementada
 
 ## Contexto y objetivo
 
@@ -101,10 +101,10 @@ cerrado la nota es **provisional**. El front no calcula ni redondea nada
 - `pnpm lint`, `pnpm typecheck`, `pnpm test:run` y `pnpm build` en verde.
 - Spec marcada `implementada`, `MEMORY.md` actualizado y commit de cierre.
 
-## Dudas abiertas
+## Limitaciones conocidas
 
-- [NECESITA ACLARACIÓN] El contrato de `grades` no expone si una nota es
-  un override. La skill `civik-dominio-frontend` pide marcarlo como
-  "editado manualmente", pero con el endpoint actual no se puede saber sin
-  adivinarlo por los decimales. En esta fase **no** se marca el override;
-  requiere que el backend agregue un campo (p. ej. `es_override`).
+- El contrato de `grades` no expone si una nota es un override. La skill
+  `civik-dominio-frontend` pide marcarlo como "editado manualmente", pero
+  con el endpoint actual solo se podría adivinar por los decimales. En
+  esta fase **no** se marca el override; requiere que el backend agregue
+  un campo (p. ej. `es_override`).

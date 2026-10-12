@@ -8,13 +8,13 @@ lo que ya no aporte. Si algo se vuelve regla permanente, se mueve a
 
 - `Civik-Backend` tiene las fases 0–10 completas (todos los endpoints,
   incluido `/_health`); el front no debe asumir que falta API.
-- Fases 0–4 **implementadas**: bootstrap, secciones (001), estudiantes
-  (002), eventos + lapsos (003), asistencia online (004) y PWA + offline
-  (005).
-- Suite: 81 tests verdes; `pnpm lint`, `pnpm typecheck` y `pnpm build`
+- Fases 0–5 **implementadas**: bootstrap, secciones (001), estudiantes
+  (002), eventos + lapsos (003), asistencia online (004), PWA + offline
+  (005) y notas (006).
+- Suite: 92 tests verdes; `pnpm lint`, `pnpm typecheck` y `pnpm build`
   limpios. `pnpm build` genera `manifest.webmanifest` y `sw.js`.
 - Validación visual con Chrome DevTools **pendiente** (no había MCP de
-  DevTools en la sesión) para las fases 0–4.
+  DevTools en la sesión) para las fases 0–5.
 
 ## Decisiones (y por qué)
 
@@ -50,9 +50,11 @@ lo que ya no aporte. Si algo se vuelve regla permanente, se mueve a
 
 ## Próximos pasos
 
-- Cerrar validación visual (Chrome DevTools) de las fases 0–4.
-- Fase 5: notas (vista por lapso y sección, con aviso de "provisional");
-  el backend ya expone las notas (spec 008).
+- Cerrar validación visual (Chrome DevTools) de las fases 0–5.
+- Notas quedó con una limitación: el contrato `grades` no indica si una
+  nota es override, así que no se marca "editado manualmente". Si se
+  quiere, el backend debe exponer un campo (p. ej. `es_override`).
+- No quedan fases del "Orden de construcción" de `AGENTS.md`.
 
 ## Historial por fase
 
@@ -63,3 +65,5 @@ lo que ya no aporte. Si algo se vuelve regla permanente, se mueve a
 - 005 PWA + offline: service worker, caché de lectura, outbox con id de
   cliente, sync por evento con `cambio_en`, fusión padrón+pendientes,
   botón/contador de sincronización y aviso de conflicto.
+- 006 notas: vista por lapso y sección, aviso provisional/definitiva,
+  "sin nota" ≠ 0; la nota se muestra tal cual (no se recalcula).

@@ -1,6 +1,6 @@
 # Plan 006 — Notas
 
-Estado: borrador
+Estado: implementada
 
 ## Resumen
 
