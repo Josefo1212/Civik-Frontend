@@ -11,6 +11,7 @@ import {
   MENSAJE_CONFLICTO,
   agruparPorEvento,
   dividirPorResultado,
+  esRechazoDeLote,
   observarPendientes,
   obtenerEstado,
   sincronizar,
@@ -121,26 +122,47 @@ describe('sincronizar', () => {
     expect(items[0].cambio_en).toEqual(expect.any(String))
   })
 
-  it('conserva todo si falla la red', async () => {
+  it('conserva todo sin marcar error por ítem si falla la red', async () => {
     await encolar([{ id_event: 'e1', id_student: 's1', state: 'PRESENTE' }])
     sincronizarMock.mockRejectedValue(new ApiError('No se pudo conectar con el servidor', null))
 
     await sincronizar()
 
-    expect(await listarPendientes()).toHaveLength(1)
+    const pendientes = await listarPendientes()
+    expect(pendientes).toHaveLength(1)
+    expect(pendientes[0].error).toBeNull()
     expect(obtenerEstado().ultimoError).toBe('No se pudo conectar con el servidor')
   })
 
-  it('conserva todo si el servidor rechaza el lote', async () => {
-    await encolar([{ id_event: 'e1', id_student: 's1', state: 'PRESENTE' }])
+  it('conserva el lote y marca error por ítem si el servidor lo rechaza', async () => {
+    await encolar([
+      { id_event: 'e1', id_student: 's1', state: 'PRESENTE' },
+      { id_event: 'e1', id_student: 's2', state: 'AUSENTE' },
+    ])
     sincronizarMock.mockRejectedValue(
       new ApiError('No se puede registrar asistencia en un evento cancelado', 409),
     )
 
     await sincronizar()
 
-    expect(await listarPendientes()).toHaveLength(1)
+    const pendientes = await listarPendientes()
+    expect(pendientes).toHaveLength(2)
+    expect(
+      pendientes.every(
+        (item) => item.error === 'No se puede registrar asistencia en un evento cancelado',
+      ),
+    ).toBe(true)
     expect(obtenerEstado().ultimoError).toContain('evento cancelado')
+  })
+})
+
+describe('esRechazoDeLote', () => {
+  it('distingue el rechazo del servidor del fallo de red', () => {
+    expect(esRechazoDeLote(new ApiError('inválido', 400))).toBe(true)
+    expect(esRechazoDeLote(new ApiError('cancelado', 409))).toBe(true)
+    expect(esRechazoDeLote(new ApiError('sin red', null))).toBe(false)
+    expect(esRechazoDeLote(new ApiError('servidor caído', 500))).toBe(false)
+    expect(esRechazoDeLote(new Error('otro'))).toBe(false)
   })
 })
 

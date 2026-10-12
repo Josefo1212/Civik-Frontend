@@ -24,6 +24,9 @@ export const aItemSync = (item: ItemOutbox): ItemSync => ({
   cambio_en: item.cambio_en,
 })
 
+export const esRechazoDeLote = (error: unknown): boolean =>
+  error instanceof ApiError && error.status !== null && error.status < 500
+
 export type Division = {
   confirmados: ItemOutbox[]
   conflictos: ItemOutbox[]
@@ -129,22 +132,30 @@ const ejecutar = async (): Promise<void> => {
 
   try {
     for (const [id_event, grupo] of agruparPorEvento(items)) {
-      const resultados = await sincronizarAsistencia(id_event, grupo.map(aItemSync))
-      const division = dividirPorResultado(grupo, resultados)
+      try {
+        const resultados = await sincronizarAsistencia(id_event, grupo.map(aItemSync))
+        const division = dividirPorResultado(grupo, resultados)
 
-      if (division.confirmados.length > 0) {
-        await eliminar(division.confirmados.map((item) => item.id))
+        if (division.confirmados.length > 0) {
+          await eliminar(division.confirmados.map((item) => item.id))
+        }
+        for (const item of division.conflictos) {
+          await marcarError(item.id, MENSAJE_CONFLICTO)
+        }
+        conflictos += division.conflictos.length
+        await aplicarAlCache(id_event, resultados)
+      } catch (error) {
+        const mensaje = error instanceof ApiError ? error.message : 'No se pudo sincronizar'
+        if (esRechazoDeLote(error)) {
+          for (const item of grupo) {
+            await marcarError(item.id, mensaje)
+          }
+        }
+        setEstado({ ultimoError: mensaje })
+        break
       }
-      for (const item of division.conflictos) {
-        await marcarError(item.id, MENSAJE_CONFLICTO)
-      }
-      conflictos += division.conflictos.length
-      await aplicarAlCache(id_event, resultados)
     }
     setEstado({ conflictos })
-  } catch (error) {
-    const mensaje = error instanceof ApiError ? error.message : 'No se pudo sincronizar'
-    setEstado({ ultimoError: mensaje })
   } finally {
     setEstado({ sincronizando: false })
     await refrescarPendientes()
