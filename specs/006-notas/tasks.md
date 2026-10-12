@@ -35,7 +35,7 @@
   - Hecho cuando: los cuatro comandos están verdes y la spec quedó
     `implementada`.
 
-- [ ] **T6. Marcar el override.**
+- [x] **T6. Marcar el override.**
   RF-10.
   - `domain/nota.ts`: agregar `es_override: boolean` a `FilaNota`.
   - `TablaNotas.tsx`: marcar "editada manualmente" cuando `es_override`.

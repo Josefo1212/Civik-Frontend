@@ -36,8 +36,8 @@ const seccion: Seccion = {
 }
 
 const filas: FilaNota[] = [
-  { id_student: 's1', first_name: 'Ana', last_name: 'López', nota: '19.5' },
-  { id_student: 's2', first_name: 'Luis', last_name: 'Pérez', nota: null },
+  { id_student: 's1', first_name: 'Ana', last_name: 'López', nota: '19.5', es_override: false },
+  { id_student: 's2', first_name: 'Luis', last_name: 'Pérez', nota: null, es_override: false },
 ]
 
 const memoLapsos = (data: Lapso[]) =>

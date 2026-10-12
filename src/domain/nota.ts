@@ -3,4 +3,5 @@ export type FilaNota = {
   first_name: string
   last_name: string
   nota: string | null
+  es_override: boolean
 }

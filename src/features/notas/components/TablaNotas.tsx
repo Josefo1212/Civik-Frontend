@@ -1,5 +1,5 @@
 import type { FilaNota } from '../../../domain/nota'
-import { SIN_NOTA } from '../constants'
+import { MARCA_OVERRIDE, SIN_NOTA } from '../constants'
 
 export type PropsTablaNotas = {
   filas: FilaNota[]
@@ -33,6 +33,20 @@ const TablaNotas = ({ filas }: PropsTablaNotas) => {
               </td>
               <td style={{ ...celda, color: fila.nota === null ? '#94a3b8' : undefined }}>
                 {fila.nota ?? SIN_NOTA}
+                {fila.es_override ? (
+                  <span
+                    style={{
+                      marginLeft: '8px',
+                      fontSize: '0.75rem',
+                      padding: '1px 6px',
+                      borderRadius: '9999px',
+                      backgroundColor: '#ede9fe',
+                      color: '#6d28d9',
+                    }}
+                  >
+                    {MARCA_OVERRIDE}
+                  </span>
+                ) : null}
               </td>
             </tr>
           ))}
