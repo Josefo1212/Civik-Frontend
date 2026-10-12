@@ -80,3 +80,15 @@
   - Marcar spec y tareas como implementadas; actualizar `MEMORY.md`.
   - Hecho cuando: los cuatro comandos están verdes y la spec quedó
     `implementada`.
+
+- [ ] **T9. Contador de pendientes en vivo.**
+  RF-12.
+  - `sync/syncManager.ts`: `observarPendientes()` se suscribe a
+    `contarPendientes()` con `liveQuery` y actualiza `pendientes`; devuelve
+    el `unsubscribe`.
+  - `sync/RegistrarSincronizacion.tsx`: suscribe `observarPendientes()` al
+    montar y lo limpia al desmontar.
+  - Test: tras `encolar` sin sincronizar, `obtenerEstado().pendientes`
+    refleja el cambio.
+  - Hecho cuando: el test pasa y el contador se actualiza con un guardado
+    sin conexión (validación con Chrome DevTools).

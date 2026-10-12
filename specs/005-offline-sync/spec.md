@@ -1,6 +1,6 @@
 # Spec 005 — PWA y sincronización offline de asistencia
 
-Estado: implementada
+Estado: aprobada
 
 ## Contexto y objetivo
 
@@ -76,7 +76,10 @@ decisión viven en el backend).
 - RF-11. CUANDO el usuario ve un padrón sin conexión, EL SISTEMA muestra
   el padrón cacheado con sus pendientes aplicados y avisa que está offline.
 - RF-12. EL SISTEMA muestra el estado de sincronización de cada estudiante
-  (pendiente / error) y un contador de cambios pendientes.
+  (pendiente / error) y un contador de cambios pendientes que refleja el
+  outbox **en vivo**: se actualiza apenas se encola, se confirma o falla un
+  cambio, sin esperar a una sincronización ni a recargar la app (incluye el
+  guardado sin conexión, cuando no se dispara ningún envío).
 - RF-13. CUANDO se instala la PWA, EL SISTEMA solicita
   `navigator.storage.persist()` para reducir el riesgo de que el navegador
   purgue IndexedDB.
@@ -107,6 +110,10 @@ decisión viven en el backend).
 - Lote mixto: los ítems aplicables se quitan, el conflicto queda.
 - Marcar sin conexión un evento cancelado o en lapso cerrado: el lote se
   rechaza y los ítems se conservan con el motivo.
+- Marcar sin conexión: el contador de pendientes sube al instante aunque
+  no haya conexión ni envío.
+- Cambiar el outbox fuera de una sincronización (encolar sin red): el
+  contador refleja el nuevo total sin recargar.
 - IndexedDB no disponible: la app funciona en línea; guardar sin conexión
   informa que no se pudo guardar localmente (no falla en silencio).
 
@@ -134,3 +141,12 @@ Resueltas en la clarificación del 2026-10-12:
   vistos, para poder abrir y tomar asistencia sin conexión aunque se
   recargue la app. Alternativa descartada: solo shell + outbox, que dejaba
   la pantalla sin datos tras una recarga offline.
+
+- **Contador de pendientes en vivo (RF-12).** En la validación visual se
+  detectó que el contador solo se actualizaba al arrancar, al volver la
+  conexión o al sincronizar; tras un guardado sin conexión (que no dispara
+  envío) quedaba desactualizado. Se precisó RF-12: el contador refleja el
+  outbox en vivo. Implementación: `syncManager` observa la tabla con
+  `liveQuery` y actualiza el estado de forma reactiva. Alternativa
+  descartada: refrescar el contador solo tras `encolar` en el hook de
+  guardado, que deja fuera a cualquier otro escritor del outbox.

@@ -1,6 +1,6 @@
 # Plan 005 — PWA y sincronización offline de asistencia
 
-Estado: implementada
+Estado: aprobada
 
 ## Resumen de la arquitectura
 
@@ -73,6 +73,11 @@ Se reusa `features/asistencia` (padrón, lista) y `features/lapsos|eventos`
 - Estado observable mínimo (`pendientes`, `sincronizando`, `conflictos`,
   `ultimoError`, `enLinea`) con `suscribir`/`obtenerEstado` para
   `useSyncExternalStore`. Cubre RF-6, RF-7, RF-8, RF-9, RF-14.
+- `observarPendientes()`: se suscribe a `contarPendientes()` con
+  `liveQuery` de Dexie y actualiza `pendientes` ante cualquier cambio del
+  outbox (encolar, eliminar, marcar error), sin depender de que haya una
+  sincronización en curso. Devuelve la función para desuscribir. Cubre
+  RF-12.
 
 ### `features/asistencia/api.ts` (modificar)
 
@@ -116,8 +121,9 @@ Se reusa `features/asistencia` (padrón, lista) y `features/lapsos|eventos`
 - `sync/SincronizarBoton.tsx` (nuevo): botón manual + contador + aviso de
   conflicto/offline. RF-6, RF-8, RF-12.
 - `sync/RegistrarSincronizacion.tsx` (nuevo): en `useEffect`, dispara el
-  sync al arrancar y escucha `online`; limpia el listener al desmontar.
-  RF-6.
+  sync al arrancar, escucha `online` y se suscribe a `observarPendientes()`
+  para mantener el contador en vivo (`RF-12`); limpia el listener y la
+  suscripción al desmontar. RF-6, RF-12.
 - `components/AppShell/AppShell.tsx`: incorpora `SincronizarBoton` y
   `RegistrarSincronizacion`. RF-12.
 - `app/queryClient.ts` (nuevo): mueve el `QueryClient` para que el manager
@@ -152,6 +158,8 @@ Se reusa `features/asistencia` (padrón, lista) y `features/lapsos|eventos`
   `conflictosDe`, `conRespaldo`.
 - Integración ligera: `syncManager.sincronizar` con la API mockeada
   (éxito parcial con conflicto, error de red, `409`).
+- `observarPendientes` con `fake-indexeddb`: al encolar sin sincronizar,
+  el estado `pendientes` del manager se actualiza solo (RF-12).
 - `fake-indexeddb` en `src/test/setup.ts` para que Dexie funcione en
   jsdom.
 - Componente: `ListaAsistencia` con `estadoSync`, `SincronizarBoton`
