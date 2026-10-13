@@ -1,6 +1,6 @@
 # Plan 007 — Listado global de estudiantes y secciones dadas de baja
 
-Estado: implementada
+Estado: aprobada (revisión en curso)
 
 ## Resumen
 
@@ -59,12 +59,15 @@ filtra para presentar.
 
 - Props: `estudiantes: Estudiante[]`,
   `etiquetaPorSeccion: (id: string) => string`, `incluirInactivos: boolean`,
-  `onReactivar: (id: string) => void`, `operandoId?: string | null`.
+  `onReactivar: (id: string) => void`, `mensajeVacio: string`,
+  `operandoId?: string | null`.
 - Columnas: Apellido, Nombre, Teléfono, Sección (rótulo o respaldo de
-  RF-2), Estado, Acciones (Reactivar si inactivo). Estado vacío propio
-  (RF-7). Deshabilita el control mientras opera (RF-9).
+  RF-2), Estado, Acciones (Reactivar si inactivo). Sin filas visibles,
+  muestra `mensajeVacio` (RF-7, RF-10). Deshabilita el control mientras
+  opera (RF-9).
 - Test: fila activa e inactiva; el inactivo muestra "Reactivar" y dispara
-  `onReactivar`; sección no resuelta muestra el rótulo de respaldo; vacío.
+  `onReactivar`; sección no resuelta muestra el rótulo de respaldo; el
+  estado vacío muestra el `mensajeVacio` recibido.
 
 ### `src/features/secciones/components/ListaSeccionesInactivas.tsx` (nuevo) + test
 
@@ -85,16 +88,24 @@ filtra para presentar.
   inactivas), `useEstudianteMutations().reactivar`,
   `useSeccionMutations().reactivar`. Buscador + toggle inactivos +
   `TablaEstudiantesGlobal` + `ListaSeccionesInactivas`.
+- Error de la vista global: si falla el padrón **o** el listado de
+  secciones, la página muestra el mensaje del backend y "Reintentar"
+  reintenta ambas lecturas (`refetchGlobal()` + `refetch` de la query de
+  secciones), para que el rótulo vuelva a resolverse (RF-8).
+- `mensajeVacio` que recibe la tabla: se deriva del buscador — texto vacío
+  → "No hay estudiantes para mostrar." (RF-7); texto sin coincidencias →
+  "Sin coincidencias para «<texto>»." (RF-10).
 - El modo "Por sección" queda igual que hoy (spec 002).
-- RF-1 a RF-9.
+- RF-1 a RF-10.
 
 ### Tests de página
 
-- Con `vi.mock` de `features/estudiantes/api` y `features/secciones/api`:
-  cambiar a "Todos" muestra el padrón global con el rótulo de sección;
-  el toggle de inactivos incluye al dado de baja; el buscador filtra;
-  el error de la consulta muestra el reintento; reactivar un estudiante
-  o una sección llama a la API.
+- Con `vi.mock` de los hooks de `features/*`: cambiar a "Todos" muestra el
+  padrón global con el rótulo de sección; el toggle de inactivos incluye al
+  dado de baja; el buscador filtra y su estado vacío es distinto del de
+  padrón vacío; "Reintentar" reintenta ambas lecturas cuando falla el
+  padrón o las secciones; reactivar un estudiante o una sección llama a la
+  API.
 
 ## Llamadas a `api/*`
 
@@ -127,13 +138,23 @@ filtra para presentar.
   solo al activar el toggle (dejaría rótulos sin resolver).
 - **`incluirInactivas` opcional** en `listarSecciones`/`useSecciones`:
   no rompe a los llamadores actuales.
+- **Reintento acoplado de las dos lecturas (RF-8)**: el rótulo de sección
+  no se resuelve sin la query de secciones; como TanStack Query no la
+  reintenta sola si quedó en error mientras la vista sigue montada, el
+  botón reintenta explícitamente ambas. Alternativa descartada: reintentar
+  solo el padrón (deja rótulos mal hasta recargar — el bug detectado en la
+  validación visual).
+- **Estado vacío con `mensajeVacio`** en la tabla en vez de derivarlo
+  adentro: la página es la que conoce el texto del buscador (estado local,
+  RNF-4); la tabla solo pinta el mensaje que recibe.
 
 ## Estrategia de tests
 
 - Puras: `etiquetaSeccion`, `normalizar`/`filtrarEstudiantes`.
 - Componentes: `TablaEstudiantesGlobal`, `ListaSeccionesInactivas`.
-- Página: con la API mockeada, el camino feliz, el toggle de inactivos, el
-  buscador, el error y la reactivación.
+- Página: con los hooks mockeados, el camino feliz, el toggle de inactivos,
+  el buscador (con su estado vacío distinto), el error con reintento de
+  ambas lecturas y la reactivación.
 
 ## Riesgos
 

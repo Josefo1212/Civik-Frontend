@@ -43,3 +43,32 @@
   - Marcar spec y tareas como implementadas; actualizar `MEMORY.md`.
   - Hecho cuando: los cuatro comandos están verdes y la spec quedó
     `implementada`.
+
+## Revisión (2026-10-13, hallazgos de la validación visual)
+
+- [ ] **T7. Reintento cubre padrón y secciones.** RF-8.
+  - `pages/EstudiantesPage/index.tsx`: tomar `error` y `refetch` de
+    `useSecciones(undefined, true)`; tratar el error de cualquiera de las
+    dos lecturas como el error de la vista; "Reintentar" reintenta ambas
+    (`refetchGlobal()` + el de secciones).
+  - Test de página: padrón en error → "Reintentar" llama a ambos refetch;
+    secciones en error → la vista muestra el mensaje y el botón.
+  - Hecho cuando: los tests de la página pasan.
+
+- [ ] **T8. Estado vacío distinto para el buscador.** RF-7, RF-10.
+  - `features/estudiantes/components/TablaEstudiantesGlobal.tsx`: prop
+    `mensajeVacio: string` en vez del texto fijo.
+  - `pages/EstudiantesPage/index.tsx`: deriva `mensajeVacio` del buscador
+    ("no hay estudiantes" vs. "sin coincidencias para «<texto>»").
+  - Tests: la tabla muestra el `mensajeVacio` recibido; la página muestra
+    cada mensaje en su caso.
+  - Hecho cuando: los tests de la tabla y de la página pasan.
+
+- [ ] **T9. Cierre de la revisión.**
+  - Validación visual con Chrome DevTools: reintento tras un corte deja el
+    rótulo correcto sin recargar; el estado vacío del buscador es distinto
+    del de padrón vacío.
+  - `pnpm lint`, `pnpm typecheck`, `pnpm test:run` y `pnpm build` verdes;
+    spec, plan y tareas vuelven a `implementada`; actualizar `MEMORY.md`.
+  - Hecho cuando: los cuatro comandos están verdes y la validación quedó
+    registrada.

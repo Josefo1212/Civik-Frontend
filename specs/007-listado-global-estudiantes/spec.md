@@ -1,6 +1,6 @@
 # Spec 007 — Listado global de estudiantes y secciones dadas de baja
 
-Estado: implementada
+Estado: aprobada (revisión en curso)
 
 ## Contexto y objetivo
 
@@ -64,14 +64,19 @@ de baja.
 - RF-6: CUANDO el instructor activa "Mostrar secciones dadas de baja", EL
   SISTEMA muestra también las secciones inactivas (dadas de baja), con su
   acción de reactivar.
-- RF-7: SI el listado global está vacío (o el filtro del buscador no
-  encuentra nada), ENTONCES EL SISTEMA muestra un estado vacío explícito,
-  no un error.
-- RF-8: MIENTRAS el listado global carga, EL SISTEMA muestra un indicador;
-  SI la llamada falla, EL SISTEMA muestra el mensaje del backend y un botón
-  para reintentar.
+- RF-7: SI el padrón global no tiene estudiantes, ENTONCES EL SISTEMA
+  muestra un estado vacío explícito, no un error.
+- RF-8: MIENTRAS el padrón global carga, EL SISTEMA muestra un indicador;
+  SI cualquiera de las lecturas que alimentan la vista (el padrón de
+  estudiantes o el listado de secciones) falla, EL SISTEMA muestra el
+  mensaje del backend y un botón que reintenta **todas** esas lecturas, de
+  modo que el rótulo de sección vuelva a quedar bien resuelto.
 - RF-9: MIENTRAS una operación de escritura (reactivar estudiante o
   sección) está en curso, EL SISTEMA deshabilita el control que la dispara.
+- RF-10: SI el buscador no encuentra coincidencias en el padrón cargado,
+  ENTONCES EL SISTEMA muestra un estado vacío distinto del de RF-7, que
+  deje claro que el filtro no encontró nada (p. ej. "Sin coincidencias para
+  «<texto>»"), no un error.
 
 ## Requisitos no funcionales
 
@@ -95,7 +100,8 @@ de baja.
   "Sección dada de baja".
 - Dos secciones con el mismo grado y letra pero distinto turno: el rótulo
   incluye el turno para distinguirlas.
-- Buscador sin resultados: estado vacío distinto del "no hay estudiantes".
+- Buscador sin resultados: estado vacío distinto del de RF-7 (buscador
+  sin coincidencias vs. padrón vacío); ver RF-10.
 - Incluir inactivos combinado con el buscador: el filtro aplica sobre el
   listado ya incluido.
 - Un listado global sin estudiantes (base vacía): estado vacío, no error.
@@ -122,6 +128,15 @@ de baja.
   con el resultado registrado.
 - `pnpm lint`, `pnpm typecheck`, `pnpm test:run` y `pnpm build` en verde.
 - `MEMORY.md` actualizado al cerrar la fase.
+
+## Historial de revisión
+
+- 2026-10-13 (validación visual con Chrome DevTools): RF-8 pasa a exigir
+  el reintento de **todas** las lecturas que alimentan la vista; antes solo
+  se reintentaba el padrón y, si la query de secciones había fallado, todos
+  los rótulos quedaban en "Sección dada de baja" hasta recargar. Se separa
+  el estado vacío del buscador (RF-10) del de padrón vacío (RF-7), que
+  compartían el mismo mensaje.
 
 ## Dudas abiertas
 
