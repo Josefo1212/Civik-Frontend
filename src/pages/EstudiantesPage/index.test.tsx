@@ -72,6 +72,8 @@ const beto: Estudiante = {
 
 const reactivarEstudianteFn = vi.fn()
 const reactivarSeccionFn = vi.fn()
+const refetchGlobalFn = vi.fn()
+const refetchSeccionesFn = vi.fn()
 
 const mutacion = (mutate = vi.fn()) => ({ mutate, isPending: false })
 
@@ -80,6 +82,8 @@ beforeEach(() => {
   vi.mocked(useSecciones).mockReturnValue({
     data: [seccionActiva, seccionBaja],
     isLoading: false,
+    error: null,
+    refetch: refetchSeccionesFn,
   } as unknown as ReturnType<typeof useSecciones>)
   vi.mocked(useEstudiantes).mockReturnValue({
     data: [],
@@ -91,7 +95,7 @@ beforeEach(() => {
     data: [ana, luis, beto],
     isLoading: false,
     error: null,
-    refetch: vi.fn(),
+    refetch: refetchGlobalFn,
   } as unknown as ReturnType<typeof useEstudiantesGlobal>)
   vi.mocked(useEstudianteMutations).mockReturnValue({
     crear: mutacion(),
@@ -144,13 +148,44 @@ describe('EstudiantesPage', () => {
       data: [],
       isLoading: false,
       error: new Error('sin conexión'),
-      refetch: vi.fn(),
+      refetch: refetchGlobalFn,
     } as unknown as ReturnType<typeof useEstudiantesGlobal>)
     const usuario = userEvent.setup()
     render(<EstudiantesPage />)
     await cambiarATodos(usuario)
 
     expect(screen.getByText('Error: sin conexión')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Reintentar' })).toBeInTheDocument()
+  })
+
+  it('reintentar el padrón reintenta también las secciones', async () => {
+    vi.mocked(useEstudiantesGlobal).mockReturnValue({
+      data: [],
+      isLoading: false,
+      error: new Error('sin conexión'),
+      refetch: refetchGlobalFn,
+    } as unknown as ReturnType<typeof useEstudiantesGlobal>)
+    const usuario = userEvent.setup()
+    render(<EstudiantesPage />)
+    await cambiarATodos(usuario)
+
+    await usuario.click(screen.getByRole('button', { name: 'Reintentar' }))
+    expect(refetchGlobalFn).toHaveBeenCalled()
+    expect(refetchSeccionesFn).toHaveBeenCalled()
+  })
+
+  it('muestra el error si falla la query de secciones', async () => {
+    vi.mocked(useSecciones).mockReturnValue({
+      data: [],
+      isLoading: false,
+      error: new Error('sin secciones'),
+      refetch: refetchSeccionesFn,
+    } as unknown as ReturnType<typeof useSecciones>)
+    const usuario = userEvent.setup()
+    render(<EstudiantesPage />)
+    await cambiarATodos(usuario)
+
+    expect(screen.getByText('Error: sin secciones')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Reintentar' })).toBeInTheDocument()
   })
 

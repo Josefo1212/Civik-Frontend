@@ -30,7 +30,11 @@ const EstudiantesPage = () => {
   const [claveFormulario, setClaveFormulario] = useState(0)
 
   const { data: secciones = [], isLoading: cargandoSecciones } = useSecciones(undefined)
-  const { data: seccionesGlobal = [] } = useSecciones(undefined, true)
+  const {
+    data: seccionesGlobal = [],
+    error: errorSeccionesGlobal,
+    refetch: refetchSeccionesGlobal,
+  } = useSecciones(undefined, true)
   const { data: estudiantes = [], isLoading, error, refetch } = useEstudiantes(seccionId, incluirInactivos)
   const {
     data: estudiantesGlobal = [],
@@ -142,7 +146,13 @@ const EstudiantesPage = () => {
 
   const cancelarEdicion = () => setEstudianteEditando(null)
   const errorMensaje = error instanceof Error ? error.message : errorGeneral
-  const errorGlobalMensaje = errorGlobal instanceof Error ? errorGlobal.message : 'No se pudo cargar el padrón'
+  const errorPadron = errorGlobal ?? errorSeccionesGlobal
+  const hayErrorPadron = errorPadron != null
+  const errorGlobalMensaje = errorPadron instanceof Error ? errorPadron.message : 'No se pudo cargar el padrón'
+  const reintentarGlobal = () => {
+    refetchGlobal()
+    refetchSeccionesGlobal()
+  }
 
   return (
     <main style={{ padding: '16px', maxWidth: '1000px', margin: '0 auto' }}>
@@ -240,18 +250,18 @@ const EstudiantesPage = () => {
             <label htmlFor='mostrar-secciones-bajas'>Mostrar secciones dadas de baja</label>
           </div>
           {cargandoGlobal ? <p>Cargando...</p> : null}
-          {errorGlobal && !cargandoGlobal ? (
+          {hayErrorPadron && !cargandoGlobal ? (
             <div>
               <p style={{ color: '#dc2626' }}>Error: {errorGlobalMensaje}</p>
-              <button type='button' onClick={() => refetchGlobal()}>
+              <button type='button' onClick={reintentarGlobal}>
                 Reintentar
               </button>
             </div>
           ) : null}
-          {errorGeneral !== null && errorGlobal === null ? (
+          {errorGeneral !== null && !hayErrorPadron ? (
             <p style={{ color: '#dc2626' }}>{errorGeneral}</p>
           ) : null}
-          {!cargandoGlobal && !errorGlobal ? (
+          {!cargandoGlobal && !hayErrorPadron ? (
             <TablaEstudiantesGlobal
               estudiantes={estudiantesFiltrados}
               etiquetaPorSeccion={etiquetaPorSeccion}
@@ -260,7 +270,7 @@ const EstudiantesPage = () => {
               operandoId={operandoId}
             />
           ) : null}
-          {mostrarSeccionesBajas ? (
+          {mostrarSeccionesBajas && !hayErrorPadron ? (
             <div style={{ marginTop: '24px' }}>
               <h3>Secciones dadas de baja</h3>
               {seccionesInactivas.length === 0 ? (
