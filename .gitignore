@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# graphify — grafo de conocimiento generado (se actualiza solo con el hook post-commit)
+graphify-out/

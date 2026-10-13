@@ -166,3 +166,18 @@ entrada si algo va a ser compartido.
 
 No construyas una pantalla de algo que el backend todavía no expone —
 confirmá contra el estado real de `Civik-Backend` antes de cada fase.
+
+## Grafo del proyecto (graphify)
+
+Antes de explorar archivos a mano para preguntas de arquitectura,
+relaciones entre módulos o "cómo funciona X", **usá el grafo primero**:
+si existe `graphify-out/graph.json`, cargá la skill `graphify` y corré
+`graphify query "<pregunta>"`; `graphify-out/GRAPH_REPORT.md` tiene el
+mapa de comunidades y los nodos centrales. Ubica el código más rápido
+que leer archivo por archivo.
+
+El grafo se mantiene fresco solo: un hook `post-commit` re-extrae el
+código cambiado en cada commit. Los cambios que solo tocan docs o
+`specs/` no los toma el hook — refrescá con `graphify --update` tras
+ediciones grandes de documentación. `graphify-out/` está en
+`.gitignore` (es salida generada, no se versiona).
