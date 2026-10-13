@@ -1,6 +1,6 @@
 # Spec 000 — Bootstrap
 
-Estado: aprobada
+Estado: implementada
 
 ## Contexto y objetivo
 

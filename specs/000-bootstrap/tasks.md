@@ -40,7 +40,7 @@ verde, `pnpm lint` sin warnings, marcar y **PARAR**.
     del template; `index.html` tiene `lang="es"`, título y viewport;
     `pnpm lint` y `pnpm typecheck` sin errores.
 
-- [ ] **T8. Validación y cierre.** RF-1…RF-7, RNF-1, RNF-2
+- [x] **T8. Validación y cierre.** RF-1…RF-7, RNF-1, RNF-2
   - Hecho cuando: con Chrome DevTools se navega entre las 5 rutas y la
     404 (URL actualizada, sin errores en consola), se ve el estado del
     servidor con el backend caído y luego levantado, se comprueba la vista
