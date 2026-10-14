@@ -1,6 +1,6 @@
 # Plan 007 — Listado global de estudiantes y secciones dadas de baja
 
-Estado: aprobada (revisión en curso)
+Estado: implementada
 
 ## Resumen
 

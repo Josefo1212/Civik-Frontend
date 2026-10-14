@@ -46,7 +46,7 @@
 
 ## Revisión (2026-10-13, hallazgos de la validación visual)
 
-- [ ] **T7. Reintento cubre padrón y secciones.** RF-8.
+- [x] **T7. Reintento cubre padrón y secciones.** RF-8.
   - `pages/EstudiantesPage/index.tsx`: tomar `error` y `refetch` de
     `useSecciones(undefined, true)`; tratar el error de cualquiera de las
     dos lecturas como el error de la vista; "Reintentar" reintenta ambas
@@ -55,7 +55,7 @@
     secciones en error → la vista muestra el mensaje y el botón.
   - Hecho cuando: los tests de la página pasan.
 
-- [ ] **T8. Estado vacío distinto para el buscador.** RF-7, RF-10.
+- [x] **T8. Estado vacío distinto para el buscador.** RF-7, RF-10.
   - `features/estudiantes/components/TablaEstudiantesGlobal.tsx`: prop
     `mensajeVacio: string` en vez del texto fijo.
   - `pages/EstudiantesPage/index.tsx`: deriva `mensajeVacio` del buscador
@@ -64,7 +64,7 @@
     cada mensaje en su caso.
   - Hecho cuando: los tests de la tabla y de la página pasan.
 
-- [ ] **T9. Cierre de la revisión.**
+- [x] **T9. Cierre de la revisión.**
   - Validación visual con Chrome DevTools: reintento tras un corte deja el
     rótulo correcto sin recargar; el estado vacío del buscador es distinto
     del de padrón vacío.

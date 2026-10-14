@@ -1,6 +1,6 @@
 # Spec 007 — Listado global de estudiantes y secciones dadas de baja
 
-Estado: aprobada (revisión en curso)
+Estado: implementada
 
 ## Contexto y objetivo
 
@@ -137,6 +137,11 @@ de baja.
   los rótulos quedaban en "Sección dada de baja" hasta recargar. Se separa
   el estado vacío del buscador (RF-10) del de padrón vacío (RF-7), que
   compartían el mismo mensaje.
+- 2026-10-13 (implementada y validada): T7/T8 aplicadas con tests. Validado
+  con Chrome DevTools: tras un corte, "Reintentar" deja los rótulos
+  correctos sin recargar y el vacío del buscador es distinto del de padrón
+  vacío. `pnpm lint`, `pnpm typecheck`, `pnpm test:run` (125) y `pnpm build`
+  verdes.
 
 ## Dudas abiertas
 

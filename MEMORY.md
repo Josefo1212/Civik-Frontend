@@ -10,8 +10,9 @@ permanente, va a `AGENTS.md` o a la skill `civik-dominio-frontend`.
 - Fases 0–6 **implementadas** (bootstrap 000, secciones 001, estudiantes
   002, eventos + lapsos 003, asistencia online 004, PWA + offline 005,
   notas 006). No quedan fases del "Orden de construcción". Spec 007
-  (listado global de estudiantes + secciones dadas de baja) implementada.
-- Suite: 119 tests verdes; `pnpm lint`, `pnpm typecheck` y `pnpm build`
+  (listado global de estudiantes + secciones dadas de baja) implementada
+  (revisión 2026-10-13 aplicada).
+- Suite: 125 tests verdes; `pnpm lint`, `pnpm typecheck` y `pnpm build`
   limpios (`build` genera `manifest.webmanifest` y `sw.js`).
 
 ## Decisiones (y por qué)
@@ -43,6 +44,9 @@ permanente, va a `AGENTS.md` o a la skill `civik-dominio-frontend`.
   instalarlos como devDependencies; el plugin va `disable` en `mode === 'test'`.
 - La emulación "Offline" de Chrome DevTools da falsos negativos (cuelga el
   guardado): validar offline forzando `navigator.onLine=false` con red.
+- Si una vista depende de dos queries (padrón + secciones), el "Reintentar"
+  debe refrescar **ambas**: una query secundaria en error es silenciosa y
+  deja datos derivados (el rótulo) mal hasta una recarga completa.
 
 ## Historial por fase
 
@@ -56,3 +60,5 @@ permanente, va a `AGENTS.md` o a la skill `civik-dominio-frontend`.
 - 007 listado global: modo "Todos" en Estudiantes (`GET /students`), rótulo
   derivado cruzando `id_section` con `/sections?incluir_inactivas`, buscador
   de cliente, toggles de inactivos y de secciones dadas de baja (reactivar).
+  Revisión 2026-10-13: "Reintentar" reintenta padrón **y** secciones, y el
+  vacío del buscador ("sin coincidencias") es distinto del de padrón vacío.
