@@ -1,48 +1,199 @@
 :root {
-  --color-primario: #1d4ed8;
-  --color-fondo: #f8fafc;
+  color-scheme: light;
+
+  --color-primario: #2563eb;
+  --color-primario-fuerte: #1d4ed8;
+  --color-primario-suave: #dbeafe;
+  --color-primario-contraste: #ffffff;
+
+  --color-fondo: #f4f6fb;
   --color-superficie: #ffffff;
+  --color-superficie-2: #f8fafc;
   --color-borde: #e2e8f0;
+  --color-borde-fuerte: #cbd5e1;
+
   --color-texto: #0f172a;
-  --color-texto-suave: #64748b;
-  --color-ok: #16a34a;
+  --color-texto-suave: #556072;
+  --color-texto-tenue: #94a3b8;
+
+  --color-ok: #15803d;
+  --color-ok-suave: #dcfce7;
   --color-error: #dc2626;
-  --radio-borde: 0.5rem;
-  font-family:
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
+  --color-error-suave: #fee2e2;
+  --color-aviso: #b45309;
+  --color-aviso-suave: #fef3c7;
+  --color-info: #2563eb;
+  --color-info-suave: #dbeafe;
+
+  --radio-sm: 0.5rem;
+  --radio: 0.75rem;
+  --radio-lg: 1rem;
+  --radio-full: 999px;
+  --radio-borde: 0.75rem;
+
+  --esp-1: 0.25rem;
+  --esp-2: 0.5rem;
+  --esp-3: 0.75rem;
+  --esp-4: 1rem;
+  --esp-5: 1.5rem;
+  --esp-6: 2rem;
+  --esp-7: 3rem;
+
+  --fuente:
+    system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --texto-xs: 0.75rem;
+  --texto-sm: 0.875rem;
+  --texto-base: 1rem;
+  --texto-lg: 1.125rem;
+  --texto-xl: 1.375rem;
+  --texto-2xl: 1.75rem;
+
+  --sombra-1:
+    0 1px 2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.08);
+  --sombra-2: 0 4px 14px rgba(15, 23, 42, 0.08);
+  --sombra-3: 0 14px 34px rgba(15, 23, 42, 0.14);
+
+  --trans-rapida: 120ms;
+  --trans: 180ms;
+  --trans-lenta: 300ms;
+  --curva: cubic-bezier(0.2, 0, 0, 1);
+
+  --anillo-foco: 0 0 0 3px
+    color-mix(in srgb, var(--color-primario) 35%, transparent);
+
+  font-family: var(--fuente);
 }
 
-* {
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-primario: #6098ff;
+  --color-primario-fuerte: #7aa9ff;
+  --color-primario-suave: #1b2a4a;
+  --color-primario-contraste: #08122a;
+
+  --color-fondo: #0b1020;
+  --color-superficie: #141a2e;
+  --color-superficie-2: #1b2238;
+  --color-borde: #27324d;
+  --color-borde-fuerte: #3a4766;
+
+  --color-texto: #e7ecf5;
+  --color-texto-suave: #a3afc6;
+  --color-texto-tenue: #6b7893;
+
+  --color-ok: #4ade80;
+  --color-ok-suave: #10331f;
+  --color-error: #f87171;
+  --color-error-suave: #3a1414;
+  --color-aviso: #fbbf24;
+  --color-aviso-suave: #3a2a10;
+  --color-info: #6098ff;
+  --color-info-suave: #16264a;
+
+  --sombra-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --sombra-2: 0 6px 18px rgba(0, 0, 0, 0.45);
+  --sombra-3: 0 16px 40px rgba(0, 0, 0, 0.55);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+
+    --color-primario: #6098ff;
+    --color-primario-fuerte: #7aa9ff;
+    --color-primario-suave: #1b2a4a;
+    --color-primario-contraste: #08122a;
+
+    --color-fondo: #0b1020;
+    --color-superficie: #141a2e;
+    --color-superficie-2: #1b2238;
+    --color-borde: #27324d;
+    --color-borde-fuerte: #3a4766;
+
+    --color-texto: #e7ecf5;
+    --color-texto-suave: #a3afc6;
+    --color-texto-tenue: #6b7893;
+
+    --color-ok: #4ade80;
+    --color-ok-suave: #10331f;
+    --color-error: #f87171;
+    --color-error-suave: #3a1414;
+    --color-aviso: #fbbf24;
+    --color-aviso-suave: #3a2a10;
+    --color-info: #6098ff;
+    --color-info-suave: #16264a;
+  }
+}
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
+  min-height: 100vh;
   background: var(--color-fondo);
   color: var(--color-texto);
+  font-family: var(--fuente);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color var(--trans) var(--curva),
+    color var(--trans) var(--curva);
 }
 
 h1,
 h2,
 h3,
+h4,
 p {
   margin-top: 0;
 }
 
-h1 {
-  font-size: 1.5rem;
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+  line-height: 1.2;
 }
 
 a {
   color: var(--color-primario);
 }
 
-button {
+button,
+input,
+select,
+textarea {
   font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primario);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--color-primario-suave);
+  color: var(--color-texto);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
