@@ -4,8 +4,23 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#1d4ed8" />
+    <meta name="theme-color" content="#2563eb" />
     <title>Civik — Asistencia</title>
+    <script>
+      ;(() => {
+        try {
+          const guardado = localStorage.getItem('civik-tema')
+          const sistemaOscuro = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const oscuro = guardado === 'oscuro' || (guardado !== 'claro' && sistemaOscuro)
+          const tema = oscuro ? 'dark' : 'light'
+          document.documentElement.dataset.theme = tema
+          const meta = document.querySelector('meta[name="theme-color"]')
+          if (meta) meta.setAttribute('content', oscuro ? '#0b1020' : '#2563eb')
+        } catch {
+          /* sin preferencias: se usa el tema claro */
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>
