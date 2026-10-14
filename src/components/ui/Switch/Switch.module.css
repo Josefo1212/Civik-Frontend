@@ -1,0 +1,66 @@
+.switch {
+  display: inline-flex;
+  align-items: center;
+}
+
+.input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.control {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-3);
+  cursor: pointer;
+  user-select: none;
+  font-size: var(--texto-sm);
+  color: var(--color-texto);
+}
+
+.pista {
+  position: relative;
+  width: 2.5rem;
+  height: 1.4rem;
+  border-radius: var(--radio-full);
+  background: var(--color-borde-fuerte);
+  transition: background-color var(--trans) var(--curva);
+  flex: none;
+}
+
+.thumb {
+  position: absolute;
+  top: 0.2rem;
+  left: 0.2rem;
+  width: 1rem;
+  height: 1rem;
+  border-radius: var(--radio-full);
+  background: #fff;
+  box-shadow: var(--sombra-1);
+  transition: transform var(--trans) var(--curva);
+}
+
+.input:checked + .control .pista {
+  background: var(--color-primario);
+}
+
+.input:checked + .control .thumb {
+  transform: translateX(1.1rem);
+}
+
+.input:focus-visible + .control .pista {
+  box-shadow: var(--anillo-foco);
+}
+
+.input:disabled + .control {
+  opacity: 0.55;
+  cursor: not-allowed;
+}

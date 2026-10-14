@@ -1,0 +1,37 @@
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.etiqueta {
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+.control {
+  width: 100%;
+  padding: 0.5rem 2rem 0.5rem 0.7rem;
+  background-color: var(--color-superficie);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%236b7893' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round' d='M2.5 4.5 6 8l3.5-3.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  border: 1px solid var(--color-borde-fuerte);
+  border-radius: var(--radio);
+  font-size: var(--texto-sm);
+  appearance: none;
+  transition:
+    border-color var(--trans) var(--curva),
+    box-shadow var(--trans) var(--curva);
+}
+
+.control:hover {
+  border-color: var(--color-texto-tenue);
+}
+
+.control:focus-visible {
+  outline: none;
+  border-color: var(--color-primario);
+  box-shadow: var(--anillo-foco);
+}

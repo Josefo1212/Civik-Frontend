@@ -1,0 +1,54 @@
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.etiqueta {
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+.control {
+  width: 100%;
+  padding: 0.5rem 0.7rem;
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde-fuerte);
+  border-radius: var(--radio);
+  font-size: var(--texto-sm);
+  transition:
+    border-color var(--trans) var(--curva),
+    box-shadow var(--trans) var(--curva);
+}
+
+.control:hover {
+  border-color: var(--color-texto-tenue);
+}
+
+.control:focus-visible {
+  outline: none;
+  border-color: var(--color-primario);
+  box-shadow: var(--anillo-foco);
+}
+
+.control::placeholder {
+  color: var(--color-texto-tenue);
+}
+
+.conError {
+  border-color: var(--color-error);
+}
+
+.ayuda {
+  margin: 0;
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+}
+
+.error {
+  margin: 0;
+  font-size: var(--texto-xs);
+  font-weight: 500;
+  color: var(--color-error);
+}

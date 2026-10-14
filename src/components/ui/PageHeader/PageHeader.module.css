@@ -1,0 +1,46 @@
+.pagina {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--esp-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--esp-5);
+  animation: aparecer var(--trans-lenta) var(--curva);
+}
+
+.textos {
+  min-width: 0;
+}
+
+.titulo {
+  margin: 0;
+  font-size: var(--texto-2xl);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.subtitulo {
+  margin: 0.3rem 0 0;
+  max-width: 60ch;
+  font-size: var(--texto-sm);
+  color: var(--color-texto-suave);
+}
+
+.acciones {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  flex-wrap: wrap;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

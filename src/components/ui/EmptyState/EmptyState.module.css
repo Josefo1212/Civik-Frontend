@@ -1,0 +1,31 @@
+.vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--esp-2);
+  padding: var(--esp-6) var(--esp-4);
+  text-align: center;
+  color: var(--color-texto-suave);
+}
+
+.icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--radio-full);
+  background: var(--color-superficie-2);
+  color: var(--color-texto-tenue);
+  font-size: var(--texto-xl);
+}
+
+.mensaje {
+  margin: 0;
+  max-width: 32ch;
+}
+
+.acciones {
+  display: flex;
+  gap: var(--esp-2);
+}

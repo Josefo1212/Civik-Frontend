@@ -1,0 +1,89 @@
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-2);
+  border: 1px solid transparent;
+  border-radius: var(--radio);
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  transition:
+    background-color var(--trans) var(--curva),
+    border-color var(--trans) var(--curva),
+    color var(--trans) var(--curva),
+    box-shadow var(--trans) var(--curva),
+    transform var(--trans-rapida) var(--curva);
+}
+
+.boton:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.boton:focus-visible {
+  outline: none;
+  box-shadow: var(--anillo-foco);
+}
+
+.boton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.md {
+  padding: 0.5rem 0.9rem;
+  font-size: var(--texto-sm);
+}
+
+.sm {
+  padding: 0.3rem 0.6rem;
+  font-size: var(--texto-xs);
+}
+
+.primary {
+  background: var(--color-primario);
+  color: var(--color-primario-contraste);
+  box-shadow: var(--sombra-1);
+}
+
+.primary:hover:not(:disabled) {
+  background: var(--color-primario-fuerte);
+}
+
+.secondary {
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  border-color: var(--color-borde-fuerte);
+}
+
+.secondary:hover:not(:disabled) {
+  background: var(--color-superficie-2);
+  border-color: var(--color-primario);
+  color: var(--color-primario);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--color-texto-suave);
+}
+
+.ghost:hover:not(:disabled) {
+  background: var(--color-superficie-2);
+  color: var(--color-texto);
+}
+
+.danger {
+  background: transparent;
+  color: var(--color-error);
+  border-color: color-mix(in srgb, var(--color-error) 40%, transparent);
+}
+
+.danger:hover:not(:disabled) {
+  background: var(--color-error-suave);
+}
+
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+}
