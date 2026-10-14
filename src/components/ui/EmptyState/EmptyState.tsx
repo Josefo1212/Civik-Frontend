@@ -14,7 +14,7 @@ const EmptyState = ({ children, icono, acciones }: Props) => (
         {icono}
       </div>
     ) : null}
-    <p className={styles.mensaje}>{children}</p>
+    <div className={styles.mensaje}>{children}</div>
     {acciones !== undefined ? <div className={styles.acciones}>{acciones}</div> : null}
   </div>
 )

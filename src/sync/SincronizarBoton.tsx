@@ -1,5 +1,8 @@
+import Badge from '../components/ui/Badge/Badge'
+import Button from '../components/ui/Button/Button'
 import { useSincronizar } from './useSincronizar'
 import { useSyncEstado } from './useSyncEstado'
+import styles from './SincronizarBoton.module.css'
 
 const SincronizarBoton = () => {
   const { pendientes, sincronizando, conflictos, ultimoError, enLinea } = useSyncEstado()
@@ -12,32 +15,24 @@ const SincronizarBoton = () => {
       : 'Sincronizar'
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-      <button
-        type='button'
-        aria-label='sincronizar'
+    <div className={styles.grupo}>
+      <Button
+        variante="secondary"
+        tamano="sm"
+        aria-label="sincronizar"
+        cargando={sincronizando}
+        disabled={pendientes === 0}
         onClick={() => {
           void sincronizar()
         }}
-        disabled={sincronizando || pendientes === 0}
       >
         {etiqueta}
-      </button>
-      {!enLinea ? (
-        <span role='status' style={{ color: '#b45309', fontSize: '0.85rem' }}>
-          Sin conexión
-        </span>
-      ) : null}
+      </Button>
+      {!enLinea ? <Badge variante="neutral">Sin conexión</Badge> : null}
       {conflictos > 0 ? (
-        <span role='status' style={{ color: '#dc2626', fontSize: '0.85rem' }}>
-          {conflictos} en conflicto — refrescá para verlos
-        </span>
+        <Badge variante="danger">{conflictos} en conflicto — refrescá para verlos</Badge>
       ) : null}
-      {ultimoError ? (
-        <span role='status' style={{ color: '#dc2626', fontSize: '0.85rem' }}>
-          {ultimoError}
-        </span>
-      ) : null}
+      {ultimoError ? <Badge variante="danger">{ultimoError}</Badge> : null}
     </div>
   )
 }

@@ -1,24 +1,33 @@
 .estado {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
+  gap: var(--esp-2);
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-full);
+  background: var(--color-superficie-2);
+  font-size: var(--texto-xs);
+  font-weight: 600;
   color: var(--color-texto-suave);
+  white-space: nowrap;
 }
 
 .punto {
-  width: 0.625rem;
-  height: 0.625rem;
-  border-radius: 50%;
-  background: var(--color-texto-suave);
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: var(--radio-full);
+  background: var(--color-texto-tenue);
+  flex: none;
 }
 
 .estado.online .punto {
   background: var(--color-ok);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-ok) 20%, transparent);
 }
 
 .estado.offline .punto {
   background: var(--color-error);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-error) 20%, transparent);
 }
 
 .estado.loading .punto {
@@ -31,7 +40,16 @@
   100% {
     opacity: 1;
   }
+
   50% {
-    opacity: 0.4;
+    opacity: 0.35;
+  }
+}
+
+@media (max-width: 640px) {
+  .estado {
+    font-size: 0;
+    gap: 0;
+    padding: 0.45rem;
   }
 }
