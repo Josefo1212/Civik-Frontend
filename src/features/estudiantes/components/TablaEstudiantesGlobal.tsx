@@ -5,6 +5,7 @@ export type PropsTablaEstudiantesGlobal = {
   etiquetaPorSeccion: (idSeccion: string) => string
   incluirInactivos: boolean
   onReactivar: (id: string) => void
+  mensajeVacio: string
   operandoId?: string | null
 }
 
@@ -15,6 +16,7 @@ const TablaEstudiantesGlobal = ({
   etiquetaPorSeccion,
   incluirInactivos,
   onReactivar,
+  mensajeVacio,
   operandoId,
 }: PropsTablaEstudiantesGlobal) => {
   const filas = incluirInactivos ? estudiantes : estudiantes.filter((e) => e.active)
@@ -22,7 +24,7 @@ const TablaEstudiantesGlobal = ({
   if (filas.length === 0) {
     return (
       <p style={{ padding: '12px' }} aria-live='polite'>
-        No hay estudiantes para mostrar.
+        {mensajeVacio}
       </p>
     )
   }

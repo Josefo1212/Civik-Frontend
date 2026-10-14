@@ -18,12 +18,15 @@ const alumno = (over: Partial<Estudiante> = {}): Estudiante => ({
 
 const etiquetaPorSeccion = (id: string) => (id === 's1' ? '1ro A — Matutino' : 'Sección dada de baja')
 
+const mensajeVacio = 'No hay estudiantes para mostrar.'
+
 describe('TablaEstudiantesGlobal', () => {
   it('muestra el rótulo de sección de cada fila', () => {
     render(
       <TablaEstudiantesGlobal
         estudiantes={[alumno()]}
         etiquetaPorSeccion={etiquetaPorSeccion}
+        mensajeVacio={mensajeVacio}
         incluirInactivos={false}
         onReactivar={() => {}}
       />,
@@ -36,6 +39,7 @@ describe('TablaEstudiantesGlobal', () => {
       <TablaEstudiantesGlobal
         estudiantes={[alumno({ id_section: 'x' })]}
         etiquetaPorSeccion={etiquetaPorSeccion}
+        mensajeVacio={mensajeVacio}
         incluirInactivos={false}
         onReactivar={() => {}}
       />,
@@ -48,12 +52,13 @@ describe('TablaEstudiantesGlobal', () => {
       <TablaEstudiantesGlobal
         estudiantes={[alumno({ id: 'baja', active: false })]}
         etiquetaPorSeccion={etiquetaPorSeccion}
+        mensajeVacio={mensajeVacio}
         incluirInactivos={false}
         onReactivar={() => {}}
       />,
     )
     expect(screen.queryByRole('button', { name: /reactivar-estudiante/ })).not.toBeInTheDocument()
-    expect(screen.getByText('No hay estudiantes para mostrar.')).toBeInTheDocument()
+    expect(screen.getByText(mensajeVacio)).toBeInTheDocument()
   })
 
   it('muestra y reactiva a un inactivo', async () => {
@@ -63,11 +68,25 @@ describe('TablaEstudiantesGlobal', () => {
       <TablaEstudiantesGlobal
         estudiantes={[alumno({ id: 'baja', active: false })]}
         etiquetaPorSeccion={etiquetaPorSeccion}
+        mensajeVacio={mensajeVacio}
         incluirInactivos
         onReactivar={onReactivar}
       />,
     )
     await usuario.click(screen.getByRole('button', { name: 'reactivar-estudiante-baja' }))
     expect(onReactivar).toHaveBeenCalledWith('baja')
+  })
+
+  it('muestra el mensaje vacío que recibe', () => {
+    render(
+      <TablaEstudiantesGlobal
+        estudiantes={[]}
+        etiquetaPorSeccion={etiquetaPorSeccion}
+        mensajeVacio='Sin coincidencias para «zzz».'
+        incluirInactivos={false}
+        onReactivar={() => {}}
+      />,
+    )
+    expect(screen.getByText('Sin coincidencias para «zzz».')).toBeInTheDocument()
   })
 })

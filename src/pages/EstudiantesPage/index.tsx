@@ -58,6 +58,10 @@ const EstudiantesPage = () => {
 
   const seccionesInactivas = seccionesGlobal.filter((seccion) => !seccion.active)
   const estudiantesFiltrados = filtrarEstudiantes(estudiantesGlobal, textoBusqueda)
+  const mensajeVacio =
+    textoBusqueda.trim() === ''
+      ? 'No hay estudiantes para mostrar.'
+      : `Sin coincidencias para «${textoBusqueda.trim()}».`
 
   const valorInicial = useMemo<ValoresEstudiante | undefined>(() => {
     if (estudianteEditando === null) return undefined
@@ -267,6 +271,7 @@ const EstudiantesPage = () => {
               etiquetaPorSeccion={etiquetaPorSeccion}
               incluirInactivos={incluirInactivosGlobal}
               onReactivar={manejarReactivar}
+              mensajeVacio={mensajeVacio}
               operandoId={operandoId}
             />
           ) : null}

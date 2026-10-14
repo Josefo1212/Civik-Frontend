@@ -143,6 +143,30 @@ describe('EstudiantesPage', () => {
     expect(screen.queryByText('Ana')).not.toBeInTheDocument()
   })
 
+  it('muestra un estado vacío propio cuando el padrón está vacío', async () => {
+    vi.mocked(useEstudiantesGlobal).mockReturnValue({
+      data: [],
+      isLoading: false,
+      error: null,
+      refetch: refetchGlobalFn,
+    } as unknown as ReturnType<typeof useEstudiantesGlobal>)
+    const usuario = userEvent.setup()
+    render(<EstudiantesPage />)
+    await cambiarATodos(usuario)
+
+    expect(screen.getByText('No hay estudiantes para mostrar.')).toBeInTheDocument()
+  })
+
+  it('distingue el vacío del buscador del de padrón vacío', async () => {
+    const usuario = userEvent.setup()
+    render(<EstudiantesPage />)
+    await cambiarATodos(usuario)
+
+    await usuario.type(screen.getByLabelText('buscar-estudiante'), 'zzz')
+    expect(screen.getByText('Sin coincidencias para «zzz».')).toBeInTheDocument()
+    expect(screen.queryByText('No hay estudiantes para mostrar.')).not.toBeInTheDocument()
+  })
+
   it('muestra el error del listado global con reintento', async () => {
     vi.mocked(useEstudiantesGlobal).mockReturnValue({
       data: [],
