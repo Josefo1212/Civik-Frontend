@@ -1,6 +1,6 @@
 # Spec 008 — Sistema de diseño y rediseño de la interfaz
 
-Estado: aprobada
+Estado: implementada
 
 ## Contexto y objetivo
 

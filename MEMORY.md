@@ -11,8 +11,10 @@ permanente, va a `AGENTS.md` o a la skill `civik-dominio-frontend`.
   002, eventos + lapsos 003, asistencia online 004, PWA + offline 005,
   notas 006). No quedan fases del "Orden de construcción". Spec 007
   (listado global de estudiantes + secciones dadas de baja) implementada
-  (revisión 2026-10-13 aplicada).
-- Suite: 125 tests verdes; `pnpm lint`, `pnpm typecheck` y `pnpm build`
+  (revisión 2026-10-13 aplicada). Spec 008 (sistema de diseño: tokens, UI
+  kit, tema claro/oscuro, AppShell y pantalla Estudiantes de referencia)
+  implementada; el resto de pantallas se migra reusando el sistema.
+- Suite: 135 tests verdes; `pnpm lint`, `pnpm typecheck` y `pnpm build`
   limpios (`build` genera `manifest.webmanifest` y `sw.js`).
 
 ## Decisiones (y por qué)
@@ -47,6 +49,16 @@ permanente, va a `AGENTS.md` o a la skill `civik-dominio-frontend`.
 - Si una vista depende de dos queries (padrón + secciones), el "Reintentar"
   debe refrescar **ambas**: una query secundaria en error es silenciosa y
   deja datos derivados (el rótulo) mal hasta una recarga completa.
+- Tema: `data-theme` (`light`/`dark`) en `<html>` + `prefers-color-scheme`
+  cuando no hay override; tokens con `color-mix` para anillos de foco y
+  variantes suaves; `[data-theme]` y el bloque `prefers-reduced-motion` en
+  `global.css`. Persistencia en `localStorage` (`civik-tema`).
+- `backdrop-filter` en un ancestro crea containing block para `position:
+  fixed`: en móvil la nav inferior se escapaba del viewport. Se desactiva
+  el `backdrop-filter` en `≤640px`.
+- CSS Modules + tokens (sin dependencias nuevas). Los componentes del
+  sistema usan inputs sr-only (visibles por label): automatizar el click
+  en el label, no en el input.
 
 ## Historial por fase
 
@@ -62,3 +74,7 @@ permanente, va a `AGENTS.md` o a la skill `civik-dominio-frontend`.
   de cliente, toggles de inactivos y de secciones dadas de baja (reactivar).
   Revisión 2026-10-13: "Reintentar" reintenta padrón **y** secciones, y el
   vacío del buscador ("sin coincidencias") es distinto del de padrón vacío.
+- 008 sistema de diseño: tokens claro/oscuro, UI kit (`components/ui/`),
+  tema persistido + toggle, AppShell con nav inferior móvil, NotFound y
+  Estudiantes rediseñada (labels/roles/textos preservados). Validado en
+  Chrome DevTools: claro y oscuro escritorio, móvil 375 px, consola limpia.
