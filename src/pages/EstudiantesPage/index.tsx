@@ -11,10 +11,22 @@ import { useEstudiantes, useEstudiantesGlobal } from '../../features/estudiantes
 import { useEstudianteMutations } from '../../features/estudiantes/hooks/useEstudianteMutations'
 import { etiquetaSeccion } from '../../features/secciones/utils'
 import { filtrarEstudiantes } from '../../features/estudiantes/utils'
+import Alert from '../../components/ui/Alert/Alert'
+import Button from '../../components/ui/Button/Button'
+import Card from '../../components/ui/Card/Card'
+import PageHeader from '../../components/ui/PageHeader/PageHeader'
+import SegmentedControl from '../../components/ui/SegmentedControl/SegmentedControl'
+import Spinner from '../../components/ui/Spinner/Spinner'
+import Switch from '../../components/ui/Switch/Switch'
+import TextField from '../../components/ui/TextField/TextField'
+import styles from './EstudiantesPage.module.css'
 
 type Modo = 'por-seccion' | 'todos'
 
-const celdaCheckbox = { display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' } as const
+const OPCIONES_MODO = [
+  { valor: 'por-seccion', etiqueta: 'Por sección' },
+  { valor: 'todos', etiqueta: 'Todos' },
+] as const
 
 const EstudiantesPage = () => {
   const [modo, setModo] = useState<Modo>('por-seccion')
@@ -159,26 +171,37 @@ const EstudiantesPage = () => {
   }
 
   return (
-    <main style={{ padding: '16px', maxWidth: '1000px', margin: '0 auto' }}>
-      <h1>Estudiantes</h1>
-      <div role='group' aria-label='modo-listado' style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
-        <button type='button' aria-pressed={modo === 'por-seccion'} onClick={() => setModo('por-seccion')}>
-          Por sección
-        </button>
-        <button type='button' aria-pressed={modo === 'todos'} onClick={() => setModo('todos')}>
-          Todos
-        </button>
-      </div>
+    <>
+      <PageHeader
+        titulo="Estudiantes"
+        subtitulo="Alta, edición, baja y reactivación del padrón."
+        acciones={
+          <SegmentedControl
+            etiquetaGrupo="modo-listado"
+            opciones={OPCIONES_MODO}
+            valor={modo}
+            onCambiar={setModo}
+          />
+        }
+      />
 
       {modo === 'por-seccion' ? (
-        <>
-          <section>
-            <h2>Seleccionar sección</h2>
+        <div className={styles.pila}>
+          <Card titulo="Seleccionar sección">
             <SelectorSeccion secciones={secciones} valor={seccionId} onCambiar={setSeccionId} cargando={cargandoSecciones} />
-          </section>
+          </Card>
+
           {seccionId !== null ? (
-            <section>
-              <h2>{estudianteEditando === null ? 'Alta de alumno' : 'Editar alumno'}</h2>
+            <Card
+              titulo={estudianteEditando === null ? 'Alta de alumno' : 'Editar alumno'}
+              acciones={
+                estudianteEditando !== null ? (
+                  <Button variante="ghost" tamano="sm" onClick={cancelarEdicion}>
+                    Cancelar edición
+                  </Button>
+                ) : undefined
+              }
+            >
               <FormularioEstudiante
                 key={estudianteEditando?.id ?? `nuevo-${claveFormulario}`}
                 secciones={secciones}
@@ -187,28 +210,27 @@ const EstudiantesPage = () => {
                 error={errorMensaje}
                 onSubmit={manejarSubmit}
               />
-              {estudianteEditando !== null ? (
-                <button type='button' onClick={cancelarEdicion} style={{ marginBottom: '12px' }}>
-                  Cancelar edición
-                </button>
-              ) : null}
-              <div style={celdaCheckbox}>
-                <input
-                  type='checkbox'
-                  id='incluir-inactivos'
-                  checked={incluirInactivos}
-                  onChange={(e) => setIncluirInactivos(e.target.checked)}
-                />
-                <label htmlFor='incluir-inactivos'>Mostrar inactivos</label>
+              <div className={styles.switchFila}>
+                <Switch id="incluir-inactivos" checked={incluirInactivos} onChange={setIncluirInactivos}>
+                  Mostrar inactivos
+                </Switch>
               </div>
-              {isLoading ? <p>Cargando...</p> : null}
+              {isLoading ? (
+                <p className={styles.cargando}>
+                  <Spinner /> Cargando…
+                </p>
+              ) : null}
               {error && !isLoading ? (
-                <div>
-                  <p style={{ color: '#dc2626' }}>{errorMensaje}</p>
-                  <button type='button' onClick={() => refetch()}>
-                    Reintentar
-                  </button>
-                </div>
+                <Alert
+                  variante="error"
+                  acciones={
+                    <Button variante="secondary" tamano="sm" onClick={() => refetch()}>
+                      Reintentar
+                    </Button>
+                  }
+                >
+                  {errorMensaje}
+                </Alert>
               ) : null}
               {!isLoading && !error ? (
                 <TablaEstudiantes
@@ -219,52 +241,47 @@ const EstudiantesPage = () => {
                   operandoId={operandoId}
                 />
               ) : null}
-            </section>
+            </Card>
           ) : null}
-        </>
+        </div>
       ) : (
-        <section>
-          <h2>Todos los estudiantes</h2>
-          <div style={{ marginBottom: '12px', maxWidth: '320px' }}>
-            <input
-              type='search'
-              aria-label='buscar-estudiante'
-              placeholder='Buscar por nombre o apellido'
+        <Card titulo="Todos los estudiantes">
+          <div className={styles.busqueda}>
+            <TextField
+              id="buscar-estudiante"
+              type="search"
+              aria-label="buscar-estudiante"
+              placeholder="Buscar por nombre o apellido"
               value={textoBusqueda}
-              onChange={(e) => setTextoBusqueda(e.target.value)}
-              style={{ width: '100%', padding: '6px' }}
+              onChange={(evento) => setTextoBusqueda(evento.target.value)}
             />
           </div>
-          <div style={celdaCheckbox}>
-            <input
-              type='checkbox'
-              id='incluir-inactivos-global'
-              checked={incluirInactivosGlobal}
-              onChange={(e) => setIncluirInactivosGlobal(e.target.checked)}
-            />
-            <label htmlFor='incluir-inactivos-global'>Mostrar inactivos</label>
+          <div className={styles.controles}>
+            <Switch id="incluir-inactivos-global" checked={incluirInactivosGlobal} onChange={setIncluirInactivosGlobal}>
+              Mostrar inactivos
+            </Switch>
+            <Switch id="mostrar-secciones-bajas" checked={mostrarSeccionesBajas} onChange={setMostrarSeccionesBajas}>
+              Mostrar secciones dadas de baja
+            </Switch>
           </div>
-          <div style={celdaCheckbox}>
-            <input
-              type='checkbox'
-              id='mostrar-secciones-bajas'
-              checked={mostrarSeccionesBajas}
-              onChange={(e) => setMostrarSeccionesBajas(e.target.checked)}
-            />
-            <label htmlFor='mostrar-secciones-bajas'>Mostrar secciones dadas de baja</label>
-          </div>
-          {cargandoGlobal ? <p>Cargando...</p> : null}
+          {cargandoGlobal ? (
+            <p className={styles.cargando}>
+              <Spinner /> Cargando…
+            </p>
+          ) : null}
           {hayErrorPadron && !cargandoGlobal ? (
-            <div>
-              <p style={{ color: '#dc2626' }}>Error: {errorGlobalMensaje}</p>
-              <button type='button' onClick={reintentarGlobal}>
-                Reintentar
-              </button>
-            </div>
+            <Alert
+              variante="error"
+              acciones={
+                <Button variante="secondary" tamano="sm" onClick={reintentarGlobal}>
+                  Reintentar
+                </Button>
+              }
+            >
+              Error: {errorGlobalMensaje}
+            </Alert>
           ) : null}
-          {errorGeneral !== null && !hayErrorPadron ? (
-            <p style={{ color: '#dc2626' }}>{errorGeneral}</p>
-          ) : null}
+          {errorGeneral !== null && !hayErrorPadron ? <Alert variante="error">{errorGeneral}</Alert> : null}
           {!cargandoGlobal && !hayErrorPadron ? (
             <TablaEstudiantesGlobal
               estudiantes={estudiantesFiltrados}
@@ -276,8 +293,8 @@ const EstudiantesPage = () => {
             />
           ) : null}
           {mostrarSeccionesBajas && !hayErrorPadron ? (
-            <div style={{ marginTop: '24px' }}>
-              <h3>Secciones dadas de baja</h3>
+            <div className={styles.bajas}>
+              <h3 className={styles.bajasTitulo}>Secciones dadas de baja</h3>
               {seccionesInactivas.length === 0 ? (
                 <p>No hay secciones dadas de baja.</p>
               ) : (
@@ -289,9 +306,9 @@ const EstudiantesPage = () => {
               )}
             </div>
           ) : null}
-        </section>
+        </Card>
       )}
-    </main>
+    </>
   )
 }
 

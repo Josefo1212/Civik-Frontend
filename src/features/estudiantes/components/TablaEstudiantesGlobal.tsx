@@ -1,4 +1,9 @@
 import type { Estudiante } from '../../../domain/estudiante'
+import Badge from '../../../components/ui/Badge/Badge'
+import Button from '../../../components/ui/Button/Button'
+import EmptyState from '../../../components/ui/EmptyState/EmptyState'
+import Table from '../../../components/ui/Table/Table'
+import styles from './TablaEstudiantesGlobal.module.css'
 
 export type PropsTablaEstudiantesGlobal = {
   estudiantes: Estudiante[]
@@ -8,8 +13,6 @@ export type PropsTablaEstudiantesGlobal = {
   mensajeVacio: string
   operandoId?: string | null
 }
-
-const celda = { padding: '8px', borderBottom: '1px solid #f1f5f9' } as const
 
 const TablaEstudiantesGlobal = ({
   estudiantes,
@@ -23,53 +26,58 @@ const TablaEstudiantesGlobal = ({
 
   if (filas.length === 0) {
     return (
-      <p style={{ padding: '12px' }} aria-live='polite'>
-        {mensajeVacio}
-      </p>
+      <div aria-live="polite">
+        <EmptyState>{mensajeVacio}</EmptyState>
+      </div>
     )
   }
 
   return (
-    <div style={{ overflowX: 'auto' }}>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Apellido</th>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Nombre</th>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Teléfono</th>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Sección</th>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Estado</th>
-            <th style={{ textAlign: 'right', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filas.map((estudiante) => {
-            const operando = operandoId === estudiante.id
-            return (
-              <tr key={estudiante.id}>
-                <td style={celda}>{estudiante.last_name}</td>
-                <td style={celda}>{estudiante.first_name}</td>
-                <td style={celda}>{estudiante.phone ?? ''}</td>
-                <td style={celda}>{etiquetaPorSeccion(estudiante.id_section)}</td>
-                <td style={celda}>{estudiante.active ? 'Activo' : 'Dado de baja'}</td>
-                <td style={{ ...celda, textAlign: 'right' }}>
-                  {estudiante.active ? null : (
-                    <button
-                      type='button'
-                      aria-label={`reactivar-estudiante-${estudiante.id}`}
-                      onClick={() => onReactivar(estudiante.id)}
-                      disabled={operando}
-                    >
-                      Reactivar
-                    </button>
-                  )}
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-    </div>
+    <Table>
+      <thead>
+        <tr>
+          <th>Apellido</th>
+          <th>Nombre</th>
+          <th>Teléfono</th>
+          <th>Sección</th>
+          <th>Estado</th>
+          <th className={styles.acciones}>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {filas.map((estudiante) => {
+          const operando = operandoId === estudiante.id
+          return (
+            <tr key={estudiante.id}>
+              <td>{estudiante.last_name}</td>
+              <td>{estudiante.first_name}</td>
+              <td>{estudiante.phone ?? ''}</td>
+              <td>{etiquetaPorSeccion(estudiante.id_section)}</td>
+              <td>
+                {estudiante.active ? (
+                  <Badge variante="ok">Activo</Badge>
+                ) : (
+                  <Badge variante="danger">Dado de baja</Badge>
+                )}
+              </td>
+              <td className={styles.acciones}>
+                {estudiante.active ? null : (
+                  <Button
+                    variante="secondary"
+                    tamano="sm"
+                    aria-label={`reactivar-estudiante-${estudiante.id}`}
+                    onClick={() => onReactivar(estudiante.id)}
+                    disabled={operando}
+                  >
+                    Reactivar
+                  </Button>
+                )}
+              </td>
+            </tr>
+          )
+        })}
+      </tbody>
+    </Table>
   )
 }
 

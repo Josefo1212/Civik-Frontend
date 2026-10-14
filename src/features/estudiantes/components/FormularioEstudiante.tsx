@@ -1,6 +1,11 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import type { Seccion } from '../../../domain/seccion'
+import Alert from '../../../components/ui/Alert/Alert'
+import Button from '../../../components/ui/Button/Button'
+import SelectField from '../../../components/ui/SelectField/SelectField'
+import TextField from '../../../components/ui/TextField/TextField'
+import styles from './FormularioEstudiante.module.css'
 
 export type ValoresEstudiante = {
   id_seccion: string
@@ -45,60 +50,56 @@ const FormularioEstudiante = ({ secciones, valorInicial, enviando, error, onSubm
   const invalido = valores.id_seccion === '' || valores.apellido.trim() === '' || valores.nombre.trim() === ''
 
   return (
-    <form
-      aria-label='formulario-estudiante'
-      onSubmit={enviar}
-      style={{
-        display: 'grid',
-        gap: '12px',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        padding: '16px',
-        border: '1px solid #e2e8f0',
-        borderRadius: '8px',
-        marginBottom: '16px',
-      }}
-    >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-        <label htmlFor='est-id-seccion'>Sección</label>
-        <select
-          id='est-id-seccion'
-          aria-label='est-id-seccion'
-          value={valores.id_seccion}
-          onChange={(e) => actualizar('id_seccion', e.target.value)}
-          disabled={enviando}
-          required
-        >
-          <option value='' disabled>
-            Selecciona una sección
+    <form aria-label="formulario-estudiante" onSubmit={enviar} className={styles.formulario}>
+      <SelectField
+        id="est-id-seccion"
+        aria-label="est-id-seccion"
+        etiqueta="Sección"
+        value={valores.id_seccion}
+        onChange={(evento) => actualizar('id_seccion', evento.target.value)}
+        disabled={enviando}
+        required
+      >
+        <option value="" disabled>
+          Selecciona una sección
+        </option>
+        {activas.map((s) => (
+          <option key={s.id} value={s.id}>
+            {s.grade_level} - {s.section} ({s.shift})
           </option>
-          {activas.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.grade_level} - {s.section} ({s.shift})
-            </option>
-          ))}
-        </select>
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-        <label htmlFor='est-apellido'>Apellido</label>
-        <input id='est-apellido' aria-label='est-apellido' value={valores.apellido} onChange={(e) => actualizar('apellido', e.target.value)} disabled={enviando} required />
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-        <label htmlFor='est-nombre'>Nombre</label>
-        <input id='est-nombre' aria-label='est-nombre' value={valores.nombre} onChange={(e) => actualizar('nombre', e.target.value)} disabled={enviando} required />
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-        <label htmlFor='est-telefono'>Teléfono (opcional)</label>
-        <input id='est-telefono' aria-label='est-telefono' value={valores.telefono} onChange={(e) => actualizar('telefono', e.target.value)} disabled={enviando} />
-      </div>
-      <div style={{ gridColumn: '1 / -1' }}>
-        <button type='submit' aria-label='guardar-estudiante' disabled={enviando || invalido}>
+        ))}
+      </SelectField>
+      <TextField
+        id="est-apellido"
+        aria-label="est-apellido"
+        etiqueta="Apellido"
+        value={valores.apellido}
+        onChange={(evento) => actualizar('apellido', evento.target.value)}
+        disabled={enviando}
+        required
+      />
+      <TextField
+        id="est-nombre"
+        aria-label="est-nombre"
+        etiqueta="Nombre"
+        value={valores.nombre}
+        onChange={(evento) => actualizar('nombre', evento.target.value)}
+        disabled={enviando}
+        required
+      />
+      <TextField
+        id="est-telefono"
+        aria-label="est-telefono"
+        etiqueta="Teléfono (opcional)"
+        value={valores.telefono}
+        onChange={(evento) => actualizar('telefono', evento.target.value)}
+        disabled={enviando}
+      />
+      <div className={styles.acciones}>
+        <Button type="submit" aria-label="guardar-estudiante" disabled={enviando || invalido} cargando={enviando}>
           {enviando ? 'Guardando...' : 'Guardar'}
-        </button>
-        {error ? (
-          <p role='alert' style={{ color: '#dc2626' }}>
-            {error}
-          </p>
-        ) : null}
+        </Button>
+        {error ? <Alert variante="error">{error}</Alert> : null}
       </div>
     </form>
   )

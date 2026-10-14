@@ -1,4 +1,6 @@
 import type { Seccion } from '../../../domain/seccion'
+import SelectField from '../../../components/ui/SelectField/SelectField'
+import styles from './SelectorSeccion.module.css'
 
 export type PropsSelector = {
   secciones: Seccion[]
@@ -11,25 +13,25 @@ const SelectorSeccion = ({ secciones, valor, onCambiar, cargando = false }: Prop
   const activas = secciones.filter((s) => s.active)
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '12px', maxWidth: '320px' }}>
-      <label htmlFor='selector-seccion'>Sección</label>
-      <select
-        id='selector-seccion'
-        aria-label='selector-seccion'
+    <div className={styles.selector}>
+      <SelectField
+        id="selector-seccion"
+        aria-label="selector-seccion"
+        etiqueta="Sección"
         value={valor ?? ''}
-        onChange={(e) => {
-          const v = e.target.value
+        onChange={(evento) => {
+          const v = evento.target.value
           onCambiar(v === '' ? null : v)
         }}
         disabled={cargando}
       >
-        <option value=''>Selecciona una sección</option>
+        <option value="">Selecciona una sección</option>
         {activas.map((s) => (
           <option key={s.id} value={s.id}>
             {s.grade_level} - {s.section} ({s.shift})
           </option>
         ))}
-      </select>
+      </SelectField>
     </div>
   )
 }
