@@ -8,7 +8,7 @@ export type PropsTablaLapsos = {
   operandoId?: string | null
 }
 
-const celda = { padding: '8px', borderBottom: '1px solid #f1f5f9' } as const
+const celda = { padding: '8px', borderBottom: '1px solid var(--vidrio-borde)' } as const
 
 const TablaLapsos = ({ lapsos, onActivar, onCerrar, operandoId }: PropsTablaLapsos) => {
   if (lapsos.length === 0) {
@@ -24,12 +24,12 @@ const TablaLapsos = ({ lapsos, onActivar, onCerrar, operandoId }: PropsTablaLaps
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Año</th>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Número</th>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Fechas</th>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Día de práctica</th>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Estado</th>
-            <th style={{ textAlign: 'right', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Acciones</th>
+            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid var(--color-borde-fuerte)' }}>Año</th>
+            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid var(--color-borde-fuerte)' }}>Número</th>
+            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid var(--color-borde-fuerte)' }}>Fechas</th>
+            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid var(--color-borde-fuerte)' }}>Día de práctica</th>
+            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid var(--color-borde-fuerte)' }}>Estado</th>
+            <th style={{ textAlign: 'right', padding: '8px', borderBottom: '1px solid var(--color-borde-fuerte)' }}>Acciones</th>
           </tr>
         </thead>
         <tbody>

@@ -8,6 +8,8 @@ import FormularioEvento, { type ValoresEvento } from '../../features/eventos/com
 import ListaEventos from '../../features/eventos/components/ListaEventos'
 import { useEventos } from '../../features/eventos/hooks/useEventos'
 import { useEventoMutations } from '../../features/eventos/hooks/useEventoMutations'
+import Alert from '../../components/ui/Alert/Alert'
+import Button from '../../components/ui/Button/Button'
 
 const EventosPage = () => {
   const [lapsoId, setLapsoId] = useState<string | null>(null)
@@ -103,12 +105,16 @@ const EventosPage = () => {
         <h2>Lapsos</h2>
         {cargandoLapsos ? <p>Cargando lapsos...</p> : null}
         {errorLapsos && !cargandoLapsos ? (
-          <div style={{ marginBottom: '12px' }}>
-            <p style={{ color: '#dc2626' }}>Error: {errorLapsosMensaje}</p>
-            <button type='button' onClick={() => refetchLapsos()}>
-              Reintentar
-            </button>
-          </div>
+          <Alert
+            variante="error"
+            acciones={
+              <Button variante="secondary" tamano="sm" onClick={() => refetchLapsos()}>
+                Reintentar
+              </Button>
+            }
+          >
+            Error: {errorLapsosMensaje}
+          </Alert>
         ) : null}
         {sinLapsos ? (
           <p aria-live='polite'>
@@ -150,12 +156,16 @@ const EventosPage = () => {
               />
               {cargandoEventos ? <p>Cargando eventos...</p> : null}
               {errorEventos && !cargandoEventos ? (
-                <div style={{ marginBottom: '12px' }}>
-                  <p style={{ color: '#dc2626' }}>Error: {errorEventosMensaje}</p>
-                  <button type='button' onClick={() => refetchEventos()}>
-                    Reintentar
-                  </button>
-                </div>
+                <Alert
+                  variante="error"
+                  acciones={
+                    <Button variante="secondary" tamano="sm" onClick={() => refetchEventos()}>
+                      Reintentar
+                    </Button>
+                  }
+                >
+                  Error: {errorEventosMensaje}
+                </Alert>
               ) : null}
               {!cargandoEventos && !errorEventos ? (
                 <ListaEventos

@@ -1,3 +1,4 @@
+import { useIndicadorDeslizante } from '../../../hooks/useIndicadorDeslizante'
 import styles from './SegmentedControl.module.css'
 
 interface Opcion<T extends string> {
@@ -17,22 +18,37 @@ const SegmentedControl = <T extends string>({
   valor,
   onCambiar,
   etiquetaGrupo,
-}: Props<T>) => (
-  <div className={styles.grupo} role="group" aria-label={etiquetaGrupo}>
-    {opciones.map((opcion) => (
-      <button
-        key={opcion.valor}
-        type="button"
-        aria-pressed={opcion.valor === valor}
-        className={[styles.opcion, opcion.valor === valor ? styles.activa : '']
-          .filter(Boolean)
-          .join(' ')}
-        onClick={() => onCambiar(opcion.valor)}
-      >
-        {opcion.etiqueta}
-      </button>
-    ))}
-  </div>
-)
+}: Props<T>) => {
+  const { contenedorRef, indicadorRef } = useIndicadorDeslizante<HTMLDivElement>(
+    valor,
+    '[data-activo="true"]',
+  )
+
+  return (
+    <div
+      ref={contenedorRef}
+      className={styles.grupo}
+      role="group"
+      aria-label={etiquetaGrupo}
+    >
+      <span ref={indicadorRef} className={styles.indicador} aria-hidden="true" />
+      {opciones.map((opcion) => {
+        const activa = opcion.valor === valor
+        return (
+          <button
+            key={opcion.valor}
+            type="button"
+            aria-pressed={activa}
+            data-activo={activa ? 'true' : undefined}
+            className={[styles.opcion, activa ? styles.activa : ''].filter(Boolean).join(' ')}
+            onClick={() => onCambiar(opcion.valor)}
+          >
+            {opcion.etiqueta}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
 
 export default SegmentedControl

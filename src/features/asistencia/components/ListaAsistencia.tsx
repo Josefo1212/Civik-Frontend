@@ -8,7 +8,7 @@ export type PropsListaAsistencia = {
   onCambiar: (idStudent: string, estado: EstadoAsistencia) => void
 }
 
-const celda = { padding: '10px 8px', borderBottom: '1px solid #f1f5f9', verticalAlign: 'middle' } as const
+const celda = { padding: '10px 8px', borderBottom: '1px solid var(--vidrio-borde)', verticalAlign: 'middle' } as const
 
 const ListaAsistencia = ({ filas, estados, onCambiar }: PropsListaAsistencia) => {
   if (filas.length === 0) {
@@ -24,9 +24,9 @@ const ListaAsistencia = ({ filas, estados, onCambiar }: PropsListaAsistencia) =>
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Estudiante</th>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Estado</th>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Marcar</th>
+            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid var(--color-borde-fuerte)' }}>Estudiante</th>
+            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid var(--color-borde-fuerte)' }}>Estado</th>
+            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid var(--color-borde-fuerte)' }}>Marcar</th>
           </tr>
         </thead>
         <tbody>
@@ -46,7 +46,7 @@ const ListaAsistencia = ({ filas, estados, onCambiar }: PropsListaAsistencia) =>
                       style={{
                         marginLeft: '8px',
                         fontSize: '0.75rem',
-                        color: fila.estadoSync === 'error' ? '#dc2626' : '#b45309',
+                        color: fila.estadoSync === 'error' ? 'var(--color-error)' : 'var(--color-aviso)',
                       }}
                     >
                       {fila.estadoSync === 'error' ? 'error' : 'pendiente'}

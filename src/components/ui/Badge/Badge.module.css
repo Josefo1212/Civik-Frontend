@@ -36,9 +36,9 @@
 }
 
 .info {
-  background: rgba(122, 169, 255, 0.16);
+  background: rgba(var(--primario-rgb), 0.16);
   color: var(--color-info);
-  border-color: rgba(122, 169, 255, 0.32);
+  border-color: rgba(var(--primario-rgb), 0.32);
   backdrop-filter: var(--vidrio-filtro);
   -webkit-backdrop-filter: var(--vidrio-filtro);
 }

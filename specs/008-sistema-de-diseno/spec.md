@@ -164,3 +164,42 @@ Restricciones del cambio:
 Criterios de finalización del cambio: los cuatro comandos verdes,
 validación visual en escritorio y móvil (375 px), consola sin errores y
 `MEMORY.md` actualizado.
+
+## Cambio 2026-10-14 (c) — Paleta negro+morado, tabs deslizantes, inputs y errores
+
+Aprobado por el usuario ("usa una paleta negro y morado", "cada input,
+cada lista desplegable, mejor acabado", "que pasar entre pestañas sea un
+componente tab y que el indicador se deslice suave", "mejorá mostrar
+errores"). Suma RF-12 a RF-15.
+
+- RF-12: EL SISTEMA usa una paleta negro + morado. El color primario es
+  morado (token `--primario-rgb`), el fondo es negro violáceo y la aurora
+  es morada/fucsia/índigo (sin azul ni cian). El color de error pasa a
+  rosa-violeta (`--color-error`).
+- RF-13: TODOS los controles de formulario (inputs, selects, textareas),
+  incluso los que no usan un componente del UI kit, tienen el mismo
+  acabado de vidrio (fondo translúcido, borde, relieve, foco morado con
+  resplandor). Los selects llevan chevron propio.
+- RF-14: EL SISTEMA tiene un componente de pestañas con indicador
+  deslizante: la cápsula activa se **desplaza** suavemente entre pestañas
+  (no aparece/desaparece). Se aplica al `SegmentedControl` y a la
+  navegación principal.
+- RF-15: EL SISTEMA muestra los errores con ícono, barra de acento
+  lateral y entrada animada; los errores de campo llevan ícono propio.
+  `Alert` pasa a ser `role="alert"` con contenido legible.
+
+Restricciones del cambio:
+
+- Se preservan los contratos accesibles existentes (`role="group"` +
+  `aria-pressed` del `SegmentedControl`; `role="alert"` de `Alert`; los
+  `aria-label` de todos los campos).
+- El indicador deslizante mide el elemento activo con
+  `getBoundingClientRect`, se reposiciona con `ResizeObserver`, al
+  redimensionar y cuando cargan las fuentes; en móvil se oculta. En
+  `jsdom` (tests) no rompe: si no hay `ResizeObserver`, no lo usa.
+- Los colores en línea de las pantallas aún no migradas se mapean a los
+  tokens (sin cambiar la estructura ni los textos).
+
+Criterios de finalización del cambio: los cuatro comandos verdes,
+validación visual en escritorio y móvil (375 px), consola sin errores y
+`MEMORY.md` actualizado.

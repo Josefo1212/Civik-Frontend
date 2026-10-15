@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
+import Alert from '../../../components/ui/Alert/Alert'
 import { GRADOS, TURNOS } from '../constants'
 
 export type ValoresFormulario = {
@@ -55,7 +56,7 @@ const FormularioSeccion = ({
         gap: '12px',
         gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
         padding: '16px',
-        border: '1px solid #e2e8f0',
+        border: '1px solid var(--color-borde-fuerte)',
         borderRadius: '8px',
         marginBottom: '16px',
       }}
@@ -124,9 +125,7 @@ const FormularioSeccion = ({
           {enviando ? 'Guardando...' : 'Guardar'}
         </button>
         {error ? (
-          <p style={{ color: '#dc2626', fontSize: '0.9rem' }} role='alert'>
-            {error}
-          </p>
+          <Alert variante="error">{error}</Alert>
         ) : null}
       </div>
     </form>

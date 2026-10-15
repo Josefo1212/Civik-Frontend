@@ -10,6 +10,8 @@ import { usePadron } from '../../features/asistencia/hooks/usePadron'
 import { useGuardarAsistencia } from '../../features/asistencia/hooks/useGuardarAsistencia'
 import { fusionarPadron } from '../../sync/fusionar'
 import { listarPendientesDeEvento } from '../../sync/outbox'
+import Alert from '../../components/ui/Alert/Alert'
+import Button from '../../components/ui/Button/Button'
 
 const AsistenciaPage = () => {
   const [lapsoId, setLapsoId] = useState<string | null>(null)
@@ -59,9 +61,7 @@ const AsistenciaPage = () => {
         <section>
           {cargandoEventos ? <p>Cargando eventos...</p> : null}
           {errorEventos && !cargandoEventos ? (
-            <div style={{ marginBottom: '12px' }}>
-              <p style={{ color: '#dc2626' }}>Error: {errorEventosMensaje}</p>
-            </div>
+            <Alert variante="error">Error: {errorEventosMensaje}</Alert>
           ) : null}
           {!cargandoEventos && !errorEventos && eventos.length === 0 ? (
             <p aria-live='polite'>Este lapso no tiene eventos. Creá uno en la pantalla de Eventos.</p>
@@ -76,12 +76,16 @@ const AsistenciaPage = () => {
         <section>
           {cargandoPadron ? <p>Cargando padrón...</p> : null}
           {errorPadron && !cargandoPadron ? (
-            <div style={{ marginBottom: '12px' }}>
-              <p style={{ color: '#dc2626' }}>Error: {errorPadronMensaje}</p>
-              <button type='button' onClick={() => refetchPadron()}>
-                Reintentar
-              </button>
-            </div>
+            <Alert
+              variante="error"
+              acciones={
+                <Button variante="secondary" tamano="sm" onClick={() => refetchPadron()}>
+                  Reintentar
+                </Button>
+              }
+            >
+              Error: {errorPadronMensaje}
+            </Alert>
           ) : null}
           {!cargandoPadron && !errorPadron ? (
             <PadronAsistencia

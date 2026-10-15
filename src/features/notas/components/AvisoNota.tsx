@@ -16,9 +16,9 @@ const AvisoNota = ({ estado }: PropsAvisoNota) => {
         margin: '0 0 12px',
         borderRadius: '6px',
         fontSize: '0.9rem',
-        backgroundColor: provisional ? '#fffbeb' : '#f0fdf4',
-        color: provisional ? '#b45309' : '#15803d',
-        border: `1px solid ${provisional ? '#fde68a' : '#bbf7d0'}`,
+        backgroundColor: provisional ? 'rgba(251, 191, 36, 0.14)' : 'rgba(74, 222, 128, 0.14)',
+        color: provisional ? 'var(--color-aviso)' : 'var(--color-ok)',
+        border: `1px solid ${provisional ? 'rgba(251, 191, 36, 0.4)' : 'rgba(74, 222, 128, 0.4)'}`,
       }}
     >
       {textoEstadoNota(estado)}

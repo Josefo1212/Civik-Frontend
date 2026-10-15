@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
+import Alert from '../../../components/ui/Alert/Alert'
 import { DIAS_SEMANA, ETIQUETAS_DIA, NUMEROS_LAPSO } from '../constants'
 
 export type ValoresLapso = {
@@ -49,7 +50,7 @@ const FormularioLapso = ({ valorInicial, enviando, error, onSubmit }: PropsFormu
         gap: '12px',
         gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
         padding: '16px',
-        border: '1px solid #e2e8f0',
+        border: '1px solid var(--color-borde-fuerte)',
         borderRadius: '8px',
         marginBottom: '16px',
       }}
@@ -144,9 +145,7 @@ const FormularioLapso = ({ valorInicial, enviando, error, onSubmit }: PropsFormu
           {enviando ? 'Guardando...' : 'Crear lapso'}
         </button>
         {error ? (
-          <p style={{ color: '#dc2626', fontSize: '0.9rem' }} role='alert'>
-            {error}
-          </p>
+          <Alert variante="error">{error}</Alert>
         ) : null}
       </div>
     </form>

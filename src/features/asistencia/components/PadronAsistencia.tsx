@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { EstadoAsistencia } from '../../../domain/asistencia'
 import type { FilaConSync } from '../../../sync/fusionar'
+import Alert from '../../../components/ui/Alert/Alert'
 import ListaAsistencia from './ListaAsistencia'
 
 export type CambioPadron = {
@@ -50,9 +51,7 @@ const PadronAsistencia = ({ filas, enviando, error, onGuardar }: PropsPadronAsis
           {enviando ? 'Guardando...' : 'Guardar asistencia'}
         </button>
         {error ? (
-          <p style={{ color: '#dc2626', fontSize: '0.9rem' }} role='alert'>
-            {error}
-          </p>
+          <Alert variante="error">{error}</Alert>
         ) : null}
       </div>
     </div>

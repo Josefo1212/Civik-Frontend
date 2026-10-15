@@ -102,3 +102,30 @@
   - Validación visual en escritorio y móvil 375 px, consola limpia;
     `MEMORY.md` actualizado.
   - Hecho cuando: los cuatro comandos verdes y la validación registrada.
+
+## Cambio 2026-10-14 (c) — Paleta negro+morado, tabs deslizantes, inputs y errores
+
+- [x] **T17. Paleta negro + morado.** RF-12.
+  - Tokens en `global.css` (`--primario-rgb`, aurora morada, fondo negro,
+    error rosa-violeta); reemplazo de glows azules por
+    `rgba(var(--primario-rgb), …)` en todos los módulos; `theme-color` y
+    manifiesto a `#050308`.
+  - Hecho cuando: no queda azul/cian en los tokens ni en los módulos.
+
+- [x] **T18. Acabado de inputs y listas desplegables.** RF-13.
+  - Estilos base globales para `input`/`select`/`textarea` (incluidos los
+    que no usan el UI kit), chevron propio en selects; `TextField` con
+    error con ícono; `SelectField` con `error`/`ayuda`.
+  - Hecho cuando: todos los controles se ven consistentes en oscuro.
+
+- [x] **T19. Tabs con indicador deslizante.** RF-14.
+  - Hook `useIndicadorDeslizante`; `SegmentedControl` y nav de `AppShell`
+    con cápsula que se desliza; oculta en móvil; sin romper en `jsdom`.
+  - Hecho cuando: el indicador se mueve suave y no aparece/desaparece.
+
+- [x] **T20. Errores y cierre.** RF-15.
+  - `Alert` con ícono y barra de acento; errores de campo con ícono;
+    colores en línea de las pantallas sin migrar mapeados a tokens.
+  - `pnpm lint`, `pnpm typecheck`, `pnpm test:run` (132) y `pnpm build`
+    verdes; validación visual; `MEMORY.md` actualizado.
+  - Hecho cuando: los cuatro comandos verdes y la validación registrada.

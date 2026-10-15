@@ -12,37 +12,13 @@
 
 .control {
   width: 100%;
-  padding: 0.5rem 0.7rem;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent),
-    var(--vidrio-fondo);
-  border: 1px solid var(--vidrio-borde);
-  border-radius: var(--radio);
-  box-shadow: inset 0 1px 0 var(--vidrio-brillo);
-  font-size: var(--texto-sm);
-  backdrop-filter: var(--vidrio-filtro);
-  -webkit-backdrop-filter: var(--vidrio-filtro);
-  transition:
-    border-color var(--trans) var(--curva),
-    box-shadow var(--trans) var(--curva),
-    background-color var(--trans) var(--curva);
-}
-
-.control:hover {
-  border-color: var(--color-texto-tenue);
-}
-
-.control:focus-visible {
-  outline: none;
-  border-color: var(--color-primario);
-  box-shadow: var(--anillo-foco), 0 0 22px rgba(122, 169, 255, 0.25);
-}
-
-.control::placeholder {
-  color: var(--color-texto-tenue);
 }
 
 .conError {
   border-color: var(--color-error);
+  box-shadow:
+    0 0 0 3px rgba(251, 113, 133, 0.18),
+    inset 0 1px 0 var(--vidrio-brillo);
 }
 
 .ayuda {
@@ -52,8 +28,28 @@
 }
 
 .error {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
   margin: 0;
   font-size: var(--texto-xs);
-  font-weight: 500;
+  font-weight: 600;
   color: var(--color-error);
+  animation: aparecerError var(--trans-lenta) var(--curva-suave) backwards;
+}
+
+.error svg {
+  flex: none;
+}
+
+@keyframes aparecerError {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }

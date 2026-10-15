@@ -48,11 +48,11 @@ const TablaSecciones = ({
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Grado</th>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Subdivisión</th>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Turno</th>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Estado</th>
-            <th style={{ textAlign: 'right', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Acciones</th>
+            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid var(--color-borde-fuerte)' }}>Grado</th>
+            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid var(--color-borde-fuerte)' }}>Subdivisión</th>
+            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid var(--color-borde-fuerte)' }}>Turno</th>
+            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid var(--color-borde-fuerte)' }}>Estado</th>
+            <th style={{ textAlign: 'right', padding: '8px', borderBottom: '1px solid var(--color-borde-fuerte)' }}>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -63,15 +63,15 @@ const TablaSecciones = ({
 
             return (
               <tr key={seccion.id}>
-                <td style={{ padding: '8px', borderBottom: '1px solid #f1f5f9' }}>{seccion.grade_level}</td>
-                <td style={{ padding: '8px', borderBottom: '1px solid #f1f5f9' }}>{seccion.section}</td>
-                <td style={{ padding: '8px', borderBottom: '1px solid #f1f5f9' }}>
+                <td style={{ padding: '8px', borderBottom: '1px solid var(--vidrio-borde)' }}>{seccion.grade_level}</td>
+                <td style={{ padding: '8px', borderBottom: '1px solid var(--vidrio-borde)' }}>{seccion.section}</td>
+                <td style={{ padding: '8px', borderBottom: '1px solid var(--vidrio-borde)' }}>
                   {ETIQUETAS_TURNO[seccion.shift as keyof typeof ETIQUETAS_TURNO] ?? seccion.shift}
                 </td>
-                <td style={{ padding: '8px', borderBottom: '1px solid #f1f5f9' }}>
+                <td style={{ padding: '8px', borderBottom: '1px solid var(--vidrio-borde)' }}>
                   {activa ? 'Activa' : 'Dada de baja'}
                 </td>
-                <td style={{ padding: '8px', borderBottom: '1px solid #f1f5f9', textAlign: 'right' }}>
+                <td style={{ padding: '8px', borderBottom: '1px solid var(--vidrio-borde)', textAlign: 'right' }}>
                   <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
                     <button
                       type='button'

@@ -51,11 +51,30 @@ permanente, va a `AGENTS.md` o a la skill `civik-dominio-frontend`.
   debe refrescar **ambas**: una query secundaria en error es silenciosa y
   deja datos derivados (el rótulo) mal hasta una recarga completa.
 - Tema: **solo oscuro** (`color-scheme: dark`, tokens en `:root`). No hay
-  claro ni toggle; `index.html` fija `data-theme="dark"`. Look "liquid
+  claro ni toggle; `index.html` fija `data-theme="dark"`. Paleta **negro +
+  morado**: `--primario-rgb: 168, 85, 247` (los glows usan
+  `rgba(var(--primario-rgb), …)`, no hardcodear azul), fondo negro violáceo
+  `#050308`, aurora morada/fucsia/índigo, error rosa-violeta. Look "liquid
   glass": tokens `--vidrio-fondo/-borde/-desenfoque/-filtro`, `backdrop-
   filter` por componente (con `-webkit-`), y fondo con degradado para que
   el vidrio refracte. Fallback con `@supports not (backdrop-filter)` y
   `prefers-reduced-transparency`.
+- Controles de formulario: `global.css` estiliza `input`/`select`/`textarea`
+  (excepto checkbox/radio/range) para que **toda** pantalla, incluso las no
+  migradas, tenga el mismo vidrio, foco morado con resplandor y chevron en
+  selects. `TextField`/`SelectField` refinan encima (mismo look) y soportan
+  `error`/`ayuda`; el error de campo lleva ícono.
+- Tabs con **indicador deslizante**: `useIndicadorDeslizante` mide el
+  elemento activo (`getBoundingClientRect`, `ResizeObserver`, resize,
+  `document.fonts.ready`) y mueve la cápsula; usado por `SegmentedControl`
+  (selector `[data-activo="true"]`, mantiene `role="group"` +
+  `aria-pressed`) y por la nav de `AppShell` (selector
+  `a[aria-current="page"]`). Oculto en móvil. En `jsdom` no hay
+  `ResizeObserver` → se ignora.
+- Errores: `Alert` con ícono por variante, barra de acento lateral y
+  entrada animada (`role="alert"` en error). Los colores en línea de las
+  pantallas sin migrar (Eventos/Lapsos/Notas/Asistencia/Secciones) se
+  mapearon a tokens (`var(--color-*)`, `var(--vidrio-borde)`).
 - Fondo vivo (cambio 2026-10-14 b): `body::before` = aurora de degradados
   animada con `deriva` (26 s, solo `transform`, `z-index: -1`); `body::after`
   = grano SVG (`feTurbulence`) en `mix-blend-mode: overlay`. No intercepta
@@ -96,5 +115,7 @@ permanente, va a `AGENTS.md` o a la skill `civik-dominio-frontend`.
   (suite 135 → 132). Cambio 2026-10-14 (b): **pulido visual + animaciones**
   (fondo aurora animado, grano, borde especular del vidrio, entradas
   escalonadas, sheen en botones, resaltado en filas, rebote del switch,
-  latido del indicador, título con degradado). Validado en Chrome DevTools:
-  oscuro escritorio y móvil 375 px, consola limpia.
+  latido del indicador, título con degradado). Cambio 2026-10-14 (c):
+  **paleta negro+morado**, tabs con indicador deslizante, acabado global de
+  inputs/selects y errores con ícono. Validado en Chrome DevTools: oscuro
+  escritorio y móvil 375 px, consola limpia.

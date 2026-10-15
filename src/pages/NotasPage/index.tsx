@@ -6,6 +6,8 @@ import { useSecciones } from '../../features/secciones/hooks/useSecciones'
 import { useNotas } from '../../features/notas/hooks/useNotas'
 import AvisoNota from '../../features/notas/components/AvisoNota'
 import TablaNotas from '../../features/notas/components/TablaNotas'
+import Alert from '../../components/ui/Alert/Alert'
+import Button from '../../components/ui/Button/Button'
 
 const NotasPage = () => {
   const [lapsoId, setLapsoId] = useState<string | null>(null)
@@ -53,12 +55,16 @@ const NotasPage = () => {
           <AvisoNota estado={lapso.status} />
           {cargandoNotas ? <p>Cargando notas...</p> : null}
           {errorMensaje && !cargandoNotas ? (
-            <div style={{ marginBottom: '12px' }}>
-              <p style={{ color: '#dc2626' }}>Error: {errorMensaje}</p>
-              <button type='button' onClick={() => refetch()}>
-                Reintentar
-              </button>
-            </div>
+            <Alert
+              variante="error"
+              acciones={
+                <Button variante="secondary" tamano="sm" onClick={() => refetch()}>
+                  Reintentar
+                </Button>
+              }
+            >
+              Error: {errorMensaje}
+            </Alert>
           ) : null}
           {!cargandoNotas && !errorMensaje ? <TablaNotas filas={filas} /> : null}
         </section>

@@ -5,7 +5,7 @@ export type PropsTablaNotas = {
   filas: FilaNota[]
 }
 
-const celda = { padding: '10px 8px', borderBottom: '1px solid #f1f5f9' } as const
+const celda = { padding: '10px 8px', borderBottom: '1px solid var(--vidrio-borde)' } as const
 
 const TablaNotas = ({ filas }: PropsTablaNotas) => {
   if (filas.length === 0) {
@@ -21,8 +21,8 @@ const TablaNotas = ({ filas }: PropsTablaNotas) => {
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Estudiante</th>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid #e2e8f0' }}>Nota</th>
+            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid var(--color-borde-fuerte)' }}>Estudiante</th>
+            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid var(--color-borde-fuerte)' }}>Nota</th>
           </tr>
         </thead>
         <tbody>
@@ -31,7 +31,7 @@ const TablaNotas = ({ filas }: PropsTablaNotas) => {
               <td style={celda}>
                 {fila.last_name}, {fila.first_name}
               </td>
-              <td style={{ ...celda, color: fila.nota === null ? '#94a3b8' : undefined }}>
+              <td style={{ ...celda, color: fila.nota === null ? 'var(--color-texto-tenue)' : undefined }}>
                 {fila.nota ?? SIN_NOTA}
                 {fila.es_override ? (
                   <span
@@ -40,8 +40,8 @@ const TablaNotas = ({ filas }: PropsTablaNotas) => {
                       fontSize: '0.75rem',
                       padding: '1px 6px',
                       borderRadius: '9999px',
-                      backgroundColor: '#ede9fe',
-                      color: '#6d28d9',
+                      backgroundColor: 'rgba(168, 85, 247, 0.18)',
+                      color: '#c4b5fd',
                     }}
                   >
                     {MARCA_OVERRIDE}

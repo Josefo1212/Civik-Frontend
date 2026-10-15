@@ -5,6 +5,8 @@ import FiltroGrado from '../../features/secciones/components/FiltroGrado'
 import TablaSecciones from '../../features/secciones/components/TablaSecciones'
 import { useSecciones } from '../../features/secciones/hooks/useSecciones'
 import { useSeccionMutations } from '../../features/secciones/hooks/useSeccionMutations'
+import Alert from '../../components/ui/Alert/Alert'
+import Button from '../../components/ui/Button/Button'
 
 const SeccionesPage = () => {
   const [grado, setGrado] = useState<string>('todos')
@@ -150,12 +152,16 @@ const SeccionesPage = () => {
         <FiltroGrado grado={grado} onGradoChange={setGrado} />
         {isLoading ? <p>Cargando secciones...</p> : null}
         {error && !isLoading ? (
-          <div style={{ marginBottom: '12px' }}>
-            <p style={{ color: '#dc2626' }}>Error: {errorMensaje}</p>
-            <button type='button' onClick={() => refetch()}>
-              Reintentar
-            </button>
-          </div>
+          <Alert
+            variante="error"
+            acciones={
+              <Button variante="secondary" tamano="sm" onClick={() => refetch()}>
+                Reintentar
+              </Button>
+            }
+          >
+            Error: {errorMensaje}
+          </Alert>
         ) : null}
         {!isLoading && !error ? (
           <TablaSecciones

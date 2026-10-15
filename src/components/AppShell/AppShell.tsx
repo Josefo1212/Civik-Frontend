@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { NAVEGACION_PRINCIPAL, RUTAS } from '../../constants/routes'
+import { useIndicadorDeslizante } from '../../hooks/useIndicadorDeslizante'
 import ServerStatus from '../ServerStatus/ServerStatus'
 import SincronizarBoton from '../../sync/SincronizarBoton'
 import RegistrarSincronizacion from '../../sync/RegistrarSincronizacion'
@@ -60,39 +61,48 @@ const ICONOS: Record<string, ReactNode> = {
   [RUTAS.notas]: <IconoNotas />,
 }
 
-const AppShell = () => (
-  <div className={styles.shell}>
-    <header className={styles.encabezado}>
-      <span className={styles.marca}>
-        <span className={styles.logo} aria-hidden="true">
-          Ci
+const AppShell = () => {
+  const { pathname } = useLocation()
+  const { contenedorRef, indicadorRef } = useIndicadorDeslizante<HTMLElement>(
+    pathname,
+    'a[aria-current="page"]',
+  )
+
+  return (
+    <div className={styles.shell}>
+      <header className={styles.encabezado}>
+        <span className={styles.marca}>
+          <span className={styles.logo} aria-hidden="true">
+            Ci
+          </span>
+          Civik
         </span>
-        Civik
-      </span>
-      <nav className={styles.nav} aria-label="Navegación principal">
-        {NAVEGACION_PRINCIPAL.map(({ ruta, etiqueta }) => (
-          <NavLink
-            key={ruta}
-            to={ruta}
-            className={({ isActive }) =>
-              isActive ? `${styles.enlace} ${styles.activo}` : styles.enlace
-            }
-          >
-            <span className={styles.icono}>{ICONOS[ruta]}</span>
-            <span>{etiqueta}</span>
-          </NavLink>
-        ))}
-      </nav>
-      <div className={styles.acciones}>
-        <ServerStatus />
-        <SincronizarBoton />
-        <RegistrarSincronizacion />
-      </div>
-    </header>
-    <main className={styles.contenido}>
-      <Outlet />
-    </main>
-  </div>
-)
+        <nav ref={contenedorRef} className={styles.nav} aria-label="Navegación principal">
+          <span ref={indicadorRef} className={styles.indicador} aria-hidden="true" />
+          {NAVEGACION_PRINCIPAL.map(({ ruta, etiqueta }) => (
+            <NavLink
+              key={ruta}
+              to={ruta}
+              className={({ isActive }) =>
+                isActive ? `${styles.enlace} ${styles.activo}` : styles.enlace
+              }
+            >
+              <span className={styles.icono}>{ICONOS[ruta]}</span>
+              <span>{etiqueta}</span>
+            </NavLink>
+          ))}
+        </nav>
+        <div className={styles.acciones}>
+          <ServerStatus />
+          <SincronizarBoton />
+          <RegistrarSincronizacion />
+        </div>
+      </header>
+      <main className={styles.contenido}>
+        <Outlet />
+      </main>
+    </div>
+  )
+}
 
 export default AppShell
