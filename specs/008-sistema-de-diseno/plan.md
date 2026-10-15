@@ -122,3 +122,39 @@ Ninguna nueva. No cambia el contrato ni la lógica.
   labels y textos; correr la suite por tarea.
 - Contraste insuficiente en oscuro. Mitigación: paleta AA + validación visual.
 - Exceso de alcance: el resto de pantallas queda fuera de esta entrega.
+
+## Cambio 2026-10-14 — Tema oscuro único + Liquid Glass
+
+### Tema
+
+- `src/styles/global.css`: `:root` pasa a ser solo oscuro (`color-scheme:
+  dark`); se eliminan `[data-theme='dark']` y el `@media
+  (prefers-color-scheme: dark)`. Se agregan tokens de vidrio
+  (`--vidrio-fondo`, `--vidrio-borde`, `--vidrio-desenfoque`) y un fondo
+  con degradado.
+- Se eliminan `src/context/themeContext.ts`, `src/context/ThemeProvider.tsx`,
+  `src/hooks/useTheme.ts`, `src/hooks/useTheme.test.tsx` y
+  `src/components/ThemeToggle/*`. `providers.tsx` queda solo con
+  `QueryClientProvider`; `AppShell` pierde el toggle.
+- `index.html`: `data-theme="dark"` fijo, `theme-color` oscuro, sin script.
+- `vite.config.ts`: `theme_color`/`background_color` del manifiesto a oscuro.
+
+### Liquid glass
+
+- Material: `background` translúcido + `backdrop-filter: blur(...)
+  saturate(...)` + borde claro, aplicado por componente en su
+  `*.module.css` (compatible con Safari vía `-webkit-backdrop-filter`).
+- Afecta `Button` (secondary/ghost), `Card`, `Badge`, `Alert`,
+  `EmptyState`, `Switch`, `SegmentedControl`, `TextField`, `SelectField`,
+  `Table`, `AppShell` (encabezado y barra inferior), `ServerStatus` y
+  `NotFound`.
+- En móvil el encabezado no lleva `backdrop-filter` (contenedor de la nav
+  `fixed`); el vidrio vive en la barra inferior.
+- Alternativa descartada: utilidad global/clase compartida; se prefiere el
+  token por componente para mantener el aislamiento de CSS Modules.
+
+### Tests / validación
+
+- Se elimina `useTheme.test.tsx`; la suite baja a 132 tests (sin tocar
+  lógica). Validación visual en Chrome DevTools: oscuro escritorio y móvil
+  375 px, consola limpia.

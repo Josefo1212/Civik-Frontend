@@ -31,7 +31,10 @@
   width: 2.5rem;
   height: 1.4rem;
   border-radius: var(--radio-full);
-  background: var(--color-borde-fuerte);
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid var(--vidrio-borde);
+  backdrop-filter: var(--vidrio-filtro);
+  -webkit-backdrop-filter: var(--vidrio-filtro);
   transition: background-color var(--trans) var(--curva);
   flex: none;
 }
@@ -49,7 +52,7 @@
 }
 
 .input:checked + .control .pista {
-  background: var(--color-primario);
+  background: linear-gradient(120deg, var(--color-primario), var(--color-primario-fuerte));
 }
 
 .input:checked + .control .thumb {

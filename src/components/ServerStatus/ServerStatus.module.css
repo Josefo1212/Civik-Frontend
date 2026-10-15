@@ -3,13 +3,15 @@
   align-items: center;
   gap: var(--esp-2);
   padding: 0.3rem 0.7rem;
-  border: 1px solid var(--color-borde);
+  border: 1px solid var(--vidrio-borde);
   border-radius: var(--radio-full);
-  background: var(--color-superficie-2);
+  background: var(--vidrio-fondo);
   font-size: var(--texto-xs);
   font-weight: 600;
   color: var(--color-texto-suave);
   white-space: nowrap;
+  backdrop-filter: var(--vidrio-filtro);
+  -webkit-backdrop-filter: var(--vidrio-filtro);
 }
 
 .punto {

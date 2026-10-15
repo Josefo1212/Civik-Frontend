@@ -113,3 +113,22 @@ Resueltas en la clarificación del 2026-10-13:
 - **Tema**: claro y oscuro.
 - **Alcance de la primera entrega**: sistema + `AppShell` + pantalla
   Estudiantes; después se migra el resto.
+
+## Cambio 2026-10-14 — Tema oscuro único + Liquid Glass
+
+Aprobado por el usuario sobre la entrega anterior. Reemplaza RF-1 y suma
+RF-8 y RF-9.
+
+- RF-1 (reemplazado): EL SISTEMA usa un único tema oscuro. No hay tema
+  claro, ni control de tema, ni preferencia del sistema.
+- RF-8: EL SISTEMA aplica un material "liquid glass" (superficies
+  translúcidas con desenfoque y saturación del fondo) a toda la interfaz:
+  cáscara, navegación, tarjetas, botones, insignias, alertas, campos,
+  control segmentado y tablas.
+- RF-9: SI el navegador no soporta `backdrop-filter` o el usuario pide
+  menos transparencia, ENTONCES EL SISTEMA cae a superficies opacas
+  legibles.
+
+Criterios de finalización del cambio: los cuatro comandos verdes, la
+validación visual en oscuro y móvil (375 px), y `MEMORY.md` actualizado.
+El tema claro y sus tokens se eliminan (no se conserva el mecanismo).

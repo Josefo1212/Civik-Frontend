@@ -16,8 +16,8 @@ export default defineConfig(({ mode }) => ({
         short_name: 'Civik',
         description: 'Toma de asistencia para instrucción premilitar',
         lang: 'es',
-        theme_color: '#1d4ed8',
-        background_color: '#ffffff',
+        theme_color: '#05080f',
+        background_color: '#05080f',
         display: 'standalone',
         start_url: '/',
         icons: [

@@ -45,3 +45,32 @@
   - Validación visual con Chrome DevTools en claro, oscuro y móvil (375 px);
     spec y tareas a `implementada`; `MEMORY.md` actualizado.
   - Hecho cuando: los cuatro comandos verdes y la validación registrada.
+
+## Cambio 2026-10-14 — Tema oscuro único + Liquid Glass
+
+- [x] **T8. Tema oscuro único.** RF-1 (reemplazado).
+  - `global.css` solo oscuro; eliminar `ThemeToggle`, `ThemeProvider`,
+    `useTheme`, `themeContext` y el script de `index.html`; `providers.tsx`
+    y `AppShell` sin tema; manifiesto oscuro.
+  - Hecho cuando: la app arranca en oscuro y la suite sigue verde.
+
+- [x] **T9. Tokens y fondo de vidrio.** RF-8.
+  - Tokens `--vidrio-*` y fondo con degradado en `global.css`, con fallback
+    por `@supports not (backdrop-filter)` y `prefers-reduced-transparency`.
+  - Hecho cuando: el fondo se ve y el vidrio tiene con qué refractar.
+
+- [x] **T10. Vidrio en los componentes base.** RF-8.
+  - `Button` (secondary/ghost), `Card`, `Badge`, `Alert`, `EmptyState`,
+    `Switch`, `SegmentedControl`, `TextField`, `SelectField`, `Table`.
+  - Hecho cuando: los primitivos se ven translúcidos en oscuro.
+
+- [x] **T11. Vidrio en la cáscara y Estudiantes.** RF-8.
+  - `AppShell` (encabezado + barra inferior), `ServerStatus`, `NotFound` y
+    pantalla Estudiantes.
+  - Hecho cuando: toda la interfaz usa el material.
+
+- [x] **T12. Cierre del cambio.**
+  - `pnpm lint`, `pnpm typecheck`, `pnpm test:run` y `pnpm build` verdes.
+  - Validación visual en oscuro (escritorio y móvil 375 px); `MEMORY.md`
+    actualizado.
+  - Hecho cuando: los cuatro comandos verdes y la validación registrada.

@@ -12,25 +12,33 @@
 }
 
 .ok {
-  background: var(--color-ok-suave);
+  background: rgba(74, 222, 128, 0.14);
   color: var(--color-ok);
-  border-color: color-mix(in srgb, var(--color-ok) 30%, transparent);
+  border-color: rgba(74, 222, 128, 0.3);
+  backdrop-filter: var(--vidrio-filtro);
+  -webkit-backdrop-filter: var(--vidrio-filtro);
 }
 
 .danger {
-  background: var(--color-error-suave);
+  background: rgba(248, 113, 113, 0.16);
   color: var(--color-error);
-  border-color: color-mix(in srgb, var(--color-error) 30%, transparent);
+  border-color: rgba(248, 113, 113, 0.32);
+  backdrop-filter: var(--vidrio-filtro);
+  -webkit-backdrop-filter: var(--vidrio-filtro);
 }
 
 .neutral {
-  background: var(--color-superficie-2);
+  background: var(--vidrio-fondo);
   color: var(--color-texto-suave);
-  border-color: var(--color-borde);
+  border-color: var(--vidrio-borde);
+  backdrop-filter: var(--vidrio-filtro);
+  -webkit-backdrop-filter: var(--vidrio-filtro);
 }
 
 .info {
-  background: var(--color-info-suave);
+  background: rgba(122, 169, 255, 0.16);
   color: var(--color-info);
-  border-color: color-mix(in srgb, var(--color-info) 30%, transparent);
+  border-color: rgba(122, 169, 255, 0.32);
+  backdrop-filter: var(--vidrio-filtro);
+  -webkit-backdrop-filter: var(--vidrio-filtro);
 }

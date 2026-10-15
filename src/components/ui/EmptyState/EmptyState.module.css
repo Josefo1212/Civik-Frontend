@@ -15,9 +15,12 @@
   width: 3rem;
   height: 3rem;
   border-radius: var(--radio-full);
-  background: var(--color-superficie-2);
+  background: var(--vidrio-fondo);
+  border: 1px solid var(--vidrio-borde);
   color: var(--color-texto-tenue);
   font-size: var(--texto-xl);
+  backdrop-filter: var(--vidrio-filtro);
+  -webkit-backdrop-filter: var(--vidrio-filtro);
 }
 
 .mensaje {

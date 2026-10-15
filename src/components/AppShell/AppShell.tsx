@@ -2,7 +2,6 @@ import type { ReactNode } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import { NAVEGACION_PRINCIPAL, RUTAS } from '../../constants/routes'
 import ServerStatus from '../ServerStatus/ServerStatus'
-import ThemeToggle from '../ThemeToggle/ThemeToggle'
 import SincronizarBoton from '../../sync/SincronizarBoton'
 import RegistrarSincronizacion from '../../sync/RegistrarSincronizacion'
 import styles from './AppShell.module.css'
@@ -87,7 +86,6 @@ const AppShell = () => (
       <div className={styles.acciones}>
         <ServerStatus />
         <SincronizarBoton />
-        <ThemeToggle />
         <RegistrarSincronizacion />
       </div>
     </header>
