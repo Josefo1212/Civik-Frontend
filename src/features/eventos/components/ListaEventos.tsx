@@ -1,4 +1,5 @@
 import type { Evento } from '../../../domain/evento'
+import Button from '../../../components/ui/Button/Button'
 import { ETIQUETAS_ESTADO_EVENTO, ETIQUETAS_ORIGEN, ETIQUETAS_TIPO } from '../constants'
 import AccionCancelarEvento from './AccionCancelarEvento'
 
@@ -74,14 +75,15 @@ const ListaEventos = ({
                       onCancelar={onCancelarCancelar}
                     />
                   ) : (
-                    <button
-                      type='button'
+                    <Button
+                      variante='danger'
+                      tamano='sm'
                       aria-label={`cancelar-evento-${evento.id}`}
                       onClick={() => onIniciarCancelar(evento.id)}
                       disabled={operando}
                     >
                       Cancelar
-                    </button>
+                    </Button>
                   )}
                 </td>
               </tr>

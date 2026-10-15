@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import Alert from '../../../components/ui/Alert/Alert'
+import Button from '../../../components/ui/Button/Button'
 import { ETIQUETAS_TIPO, TIPOS_EVENTO } from '../constants'
 
 export type ValoresEvento = {
@@ -101,13 +102,14 @@ const FormularioEvento = ({ valorInicial, enviando, error, onSubmit }: PropsForm
       </div>
 
       <div style={{ gridColumn: '1 / -1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <button
+        <Button
           type='submit'
+          style={{ alignSelf: 'flex-start' }}
           aria-label='guardar-evento'
           disabled={enviando || estaIncompleto(valores)}
         >
           {enviando ? 'Guardando...' : 'Crear evento'}
-        </button>
+        </Button>
         {error ? (
           <Alert variante="error">{error}</Alert>
         ) : null}

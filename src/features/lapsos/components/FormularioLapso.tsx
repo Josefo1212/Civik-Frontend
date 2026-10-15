@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import Alert from '../../../components/ui/Alert/Alert'
+import Button from '../../../components/ui/Button/Button'
 import { DIAS_SEMANA, ETIQUETAS_DIA, NUMEROS_LAPSO } from '../constants'
 
 export type ValoresLapso = {
@@ -137,13 +138,14 @@ const FormularioLapso = ({ valorInicial, enviando, error, onSubmit }: PropsFormu
       </div>
 
       <div style={{ gridColumn: '1 / -1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <button
+        <Button
           type='submit'
+          style={{ alignSelf: 'flex-start' }}
           aria-label='guardar-lapso'
           disabled={enviando || estaIncompleto(valores)}
         >
           {enviando ? 'Guardando...' : 'Crear lapso'}
-        </button>
+        </Button>
         {error ? (
           <Alert variante="error">{error}</Alert>
         ) : null}

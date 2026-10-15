@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import Alert from '../../../components/ui/Alert/Alert'
+import Button from '../../../components/ui/Button/Button'
 import { GRADOS, TURNOS } from '../constants'
 
 export type ValoresFormulario = {
@@ -121,9 +122,9 @@ const FormularioSeccion = ({
       </div>
 
       <div style={{ gridColumn: '1 / -1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <button type='submit' disabled={enviando || esFormularioInvalido(valores)} aria-label='guardar-seccion'>
-          {enviando ? 'Guardando...' : 'Guardar'}
-        </button>
+        <Button type='submit' style={{ alignSelf: 'flex-start' }} disabled={enviando || esFormularioInvalido(valores)} aria-label='guardar-seccion'>
+          {enviando ? 'Guardando...' : 'Guardar sección'}
+        </Button>
         {error ? (
           <Alert variante="error">{error}</Alert>
         ) : null}

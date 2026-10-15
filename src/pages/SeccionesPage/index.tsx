@@ -141,9 +141,9 @@ const SeccionesPage = () => {
           onSubmit={manejarSubmit}
         />
         {seccionEditando !== null ? (
-          <button type='button' onClick={cancelarEdicion} style={{ marginBottom: '16px' }}>
+          <Button variante='secondary' onClick={cancelarEdicion} style={{ marginBottom: '16px' }}>
             Cancelar edición
-          </button>
+          </Button>
         ) : null}
       </section>
 

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Button from '../../../components/ui/Button/Button'
 
 export type PropsAccionCancelarEvento = {
   enviando: boolean
@@ -18,17 +19,17 @@ const AccionCancelarEvento = ({ enviando, onConfirmar, onCancelar }: PropsAccion
         onChange={(e) => setMotivo(e.target.value)}
         disabled={enviando}
       />
-      <button
-        type='button'
+      <Button
+        tamano='sm'
         aria-label='confirmar-cancelacion'
         onClick={() => onConfirmar(motivo.trim())}
         disabled={enviando || motivo.trim() === ''}
       >
         Confirmar
-      </button>
-      <button type='button' aria-label='deshacer-cancelacion' onClick={onCancelar} disabled={enviando}>
+      </Button>
+      <Button tamano='sm' variante='secondary' aria-label='deshacer-cancelacion' onClick={onCancelar} disabled={enviando}>
         Deshacer
-      </button>
+      </Button>
     </div>
   )
 }

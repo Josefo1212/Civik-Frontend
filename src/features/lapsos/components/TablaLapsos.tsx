@@ -1,4 +1,5 @@
 import type { Lapso } from '../../../domain/lapso'
+import Button from '../../../components/ui/Button/Button'
 import { ETIQUETAS_DIA, ETIQUETAS_ESTADO } from '../constants'
 
 export type PropsTablaLapsos = {
@@ -46,14 +47,14 @@ const TablaLapsos = ({ lapsos, onActivar, onCerrar, operandoId }: PropsTablaLaps
                 <td style={celda}>{ETIQUETAS_ESTADO[lapso.status]}</td>
                 <td style={{ ...celda, textAlign: 'right' }}>
                   {lapso.status === 'PLANNED' ? (
-                    <button type='button' onClick={() => onActivar(lapso.id)} disabled={operando}>
+                    <Button variante='secondary' tamano='sm' onClick={() => onActivar(lapso.id)} disabled={operando}>
                       Activar
-                    </button>
+                    </Button>
                   ) : null}
                   {lapso.status === 'ACTIVE' ? (
-                    <button type='button' onClick={() => onCerrar(lapso.id)} disabled={operando}>
+                    <Button variante='secondary' tamano='sm' onClick={() => onCerrar(lapso.id)} disabled={operando}>
                       Cerrar
-                    </button>
+                    </Button>
                   ) : null}
                 </td>
               </tr>

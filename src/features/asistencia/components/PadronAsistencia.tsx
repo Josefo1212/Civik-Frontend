@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { EstadoAsistencia } from '../../../domain/asistencia'
 import type { FilaConSync } from '../../../sync/fusionar'
 import Alert from '../../../components/ui/Alert/Alert'
+import Button from '../../../components/ui/Button/Button'
 import ListaAsistencia from './ListaAsistencia'
 
 export type CambioPadron = {
@@ -42,14 +43,14 @@ const PadronAsistencia = ({ filas, enviando, error, onGuardar }: PropsPadronAsis
     <div>
       <ListaAsistencia filas={filas} estados={estados} onCambiar={cambiar} />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '12px' }}>
-        <button
-          type='button'
+        <Button
+          style={{ alignSelf: 'flex-start' }}
           aria-label='guardar-asistencia'
           onClick={() => onGuardar(cambios)}
           disabled={enviando || !hayCambios}
         >
           {enviando ? 'Guardando...' : 'Guardar asistencia'}
-        </button>
+        </Button>
         {error ? (
           <Alert variante="error">{error}</Alert>
         ) : null}

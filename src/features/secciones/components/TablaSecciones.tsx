@@ -1,4 +1,5 @@
 import type { Seccion } from '../../../domain/seccion'
+import Button from '../../../components/ui/Button/Button'
 import { ETIQUETAS_TURNO } from '../constants'
 
 export type PropsTabla = {
@@ -73,45 +74,49 @@ const TablaSecciones = ({
                 </td>
                 <td style={{ padding: '8px', borderBottom: '1px solid var(--vidrio-borde)', textAlign: 'right' }}>
                   <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
-                    <button
-                      type='button'
+                    <Button
+                      variante='secondary'
+                      tamano='sm'
                       onClick={() => {
                         onEditar(seccion)
                       }}
                       disabled={operando}
                     >
                       Editar
-                    </button>
+                    </Button>
                     {activa ? (
-                      <button
-                        type='button'
+                      <Button
+                        variante='danger'
+                        tamano='sm'
                         onClick={() => {
                           onDarDeBaja(seccion)
                         }}
                         disabled={operando}
                       >
                         Dar de baja
-                      </button>
+                      </Button>
                     ) : (
-                      <button
-                        type='button'
+                      <Button
+                        variante='secondary'
+                        tamano='sm'
                         onClick={() => {
                           onReactivar(seccion)
                         }}
                         disabled={operando}
                       >
                         Reactivar
-                      </button>
+                      </Button>
                     )}
-                    <button
-                      type='button'
+                    <Button
+                      variante='danger'
+                      tamano='sm'
                       onClick={() => {
                         onEliminar(seccion)
                       }}
                       disabled={operando}
                     >
                       Eliminar
-                    </button>
+                    </Button>
                   </div>
                 </td>
               </tr>

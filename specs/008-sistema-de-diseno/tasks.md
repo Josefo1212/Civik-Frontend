@@ -129,3 +129,21 @@
   - `pnpm lint`, `pnpm typecheck`, `pnpm test:run` (132) y `pnpm build`
     verdes; validación visual; `MEMORY.md` actualizado.
   - Hecho cuando: los cuatro comandos verdes y la validación registrada.
+
+## Cambio 2026-10-14 (d) — Botones del UI kit y dropdowns oscuros
+
+- [x] **T21. Botones del UI kit en todas las pantallas.** RF-16.
+  - Migrados a `Button` los submit de `FormularioSeccion`, `FormularioEvento`,
+    `FormularioLapso` y `PadronAsistencia`, las acciones de `TablaSecciones`
+    y `TablaLapsos`, `ListaEventos`/`AccionCancelarEvento` y "Cancelar
+    edición" de `SeccionesPage`. Sin `<button>` nativos sin estilos.
+  - Nombres accesibles y variantes (primary/secondary/danger) preservados.
+  - Hecho cuando: todos los botones usan el UI kit y los tests siguen verdes.
+
+- [x] **T22. Dropdowns oscuros y cierre.** RF-17.
+  - `global.css`: `color-scheme: dark` en select/option/optgroup; opciones
+    con fondo negro violáceo, texto claro, padding y estados
+    seleccionado/deshabilitado.
+  - `pnpm lint`, `pnpm typecheck`, `pnpm test:run` (132) y `pnpm build`
+    verdes; validación visual; `MEMORY.md` actualizado.
+  - Hecho cuando: los cuatro comandos verdes y la validación registrada.

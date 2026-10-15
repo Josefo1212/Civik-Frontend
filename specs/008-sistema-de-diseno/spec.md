@@ -203,3 +203,33 @@ Restricciones del cambio:
 Criterios de finalización del cambio: los cuatro comandos verdes,
 validación visual en escritorio y móvil (375 px), consola sin errores y
 `MEMORY.md` actualizado.
+
+## Cambio 2026-10-14 (d) — Botones del UI kit en todas partes y dropdowns oscuros
+
+Aprobado por el usuario ("los botones de guardar, crear lapso siguen
+viéndose mal, mejorálos", "cuando despliego la lista de grado no me gusta
+cómo se ve, mejorala"). Suma RF-16 y RF-17.
+
+- RF-16: TODOS los botones de la aplicación usan el componente `Button`
+  del UI kit (o el `button` estilizado del `SegmentedControl`), con sus
+  variantes y tamaños; no queda ningún `<button>` nativo sin estilos —
+  incluye los de guardar/crear de los formularios y los de acción de las
+  tablas (Editar, Dar de baja, Reactivar, Eliminar, Activar, Cerrar,
+  Cancelar, Confirmar, Deshacer, Cancelar edición).
+- RF-17: las listas desplegables (`select`) se ven oscuras y coherentes:
+  `color-scheme: dark` en el select y sus opciones, opciones con fondo
+  negro violáceo, texto claro, padding y opción seleccionada/deshabilitada
+  diferenciadas.
+
+Restricciones del cambio:
+
+- Se preservan los nombres accesibles de todos los botones (texto o
+  `aria-label`) y los roles (`combobox`, `button`); los tests que usan
+  `getByRole('button', { name })` y `selectOptions` no cambian.
+- No se reemplaza el `select` nativo por un listbox propio (rompería las
+  pruebas de integración y la accesibilidad nativa); solo se estiliza lo
+  que la plataforma permite.
+
+Criterios de finalización del cambio: los cuatro comandos verdes,
+validación visual en escritorio y móvil (375 px), consola sin errores y
+`MEMORY.md` actualizado.

@@ -75,6 +75,14 @@ permanente, va a `AGENTS.md` o a la skill `civik-dominio-frontend`.
   entrada animada (`role="alert"` en error). Los colores en línea de las
   pantallas sin migrar (Eventos/Lapsos/Notas/Asistencia/Secciones) se
   mapearon a tokens (`var(--color-*)`, `var(--vidrio-borde)`).
+- Botones: **todos** los botones de la app usan el componente `Button`
+  (variantes `primary`/`secondary`/`danger`, tamaños `sm`/`md`); no quedan
+  `<button>` nativos sin estilos (ni en tablas ni en formularios). Se
+  preservan texto/`aria-label` para los tests.
+- Dropdowns: `global.css` fuerza `color-scheme: dark` en `select`/`option`
+  y estiliza las opciones (fondo negro violáceo, texto claro, padding,
+  `:checked` morado, `:disabled` tenue). No se cambia el `select` nativo
+  por un listbox propio (rompería los tests con `selectOptions`).
 - Fondo vivo (cambio 2026-10-14 b): `body::before` = aurora de degradados
   animada con `deriva` (26 s, solo `transform`, `z-index: -1`); `body::after`
   = grano SVG (`feTurbulence`) en `mix-blend-mode: overlay`. No intercepta
@@ -117,5 +125,7 @@ permanente, va a `AGENTS.md` o a la skill `civik-dominio-frontend`.
   escalonadas, sheen en botones, resaltado en filas, rebote del switch,
   latido del indicador, título con degradado). Cambio 2026-10-14 (c):
   **paleta negro+morado**, tabs con indicador deslizante, acabado global de
-  inputs/selects y errores con ícono. Validado en Chrome DevTools: oscuro
-  escritorio y móvil 375 px, consola limpia.
+  inputs/selects y errores con ícono. Cambio 2026-10-14 (d): **todos los
+  botones con el componente `Button`** y dropdowns nativos oscuros.
+  Validado en Chrome DevTools: oscuro escritorio y móvil 375 px, consola
+  limpia.

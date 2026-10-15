@@ -220,6 +220,28 @@ select {
   background-position: right 0.7rem center;
 }
 
+select,
+select option,
+select optgroup {
+  color-scheme: dark;
+}
+
+select option,
+select optgroup {
+  padding: 0.45rem 0.7rem;
+  background-color: #180d28;
+  color: var(--color-texto);
+}
+
+select option:checked {
+  background-color: var(--color-primario);
+  color: var(--color-primario-contraste);
+}
+
+select option:disabled {
+  color: var(--color-texto-tenue);
+}
+
 input:not([type='checkbox']):not([type='radio']):not([type='range']):hover,
 select:hover,
 textarea:hover {
