@@ -52,10 +52,21 @@ permanente, va a `AGENTS.md` o a la skill `civik-dominio-frontend`.
   deja datos derivados (el rótulo) mal hasta una recarga completa.
 - Tema: **solo oscuro** (`color-scheme: dark`, tokens en `:root`). No hay
   claro ni toggle; `index.html` fija `data-theme="dark"`. Look "liquid
-  glass": tokens `--vidrio-fondo/-borde/-desenfoque`, `backdrop-filter:
-  blur() saturate()` por componente (con `-webkit-`), y fondo con degradado
-  para que el vidrio refracte. Fallback con `@supports not
-  (backdrop-filter)` y `prefers-reduced-transparency`.
+  glass": tokens `--vidrio-fondo/-borde/-desenfoque/-filtro`, `backdrop-
+  filter` por componente (con `-webkit-`), y fondo con degradado para que
+  el vidrio refracte. Fallback con `@supports not (backdrop-filter)` y
+  `prefers-reduced-transparency`.
+- Fondo vivo (cambio 2026-10-14 b): `body::before` = aurora de degradados
+  animada con `deriva` (26 s, solo `transform`, `z-index: -1`); `body::after`
+  = grano SVG (`feTurbulence`) en `mix-blend-mode: overlay`. No intercepta
+  clics. Los efectos de hover van bajo `@media (hover: hover)`. El borde
+  especular de `Card` usa `mask-composite: exclude` (con `-webkit-mask-
+  composite: xor`) y se oculta con `@supports not` si no hay soporte. El
+  título de página usa `background-clip: text` con fallback sólido.
+- Movimiento: solo `transform`/`opacity`. Keyframes de entrada (`subir` en
+  `Card`, `entrar`/`bajar`/`aparecer` en la cáscara) con `fill-mode:
+  backwards` para no pisar el `transform` del hover. `prefers-reduced-motion`
+  global (con `!important`, `iteration-count: 1`) apaga todo.
 - `backdrop-filter` en un ancestro crea containing block para `position:
   fixed`: en móvil la nav inferior se escapaba del viewport. Por eso el
   encabezado no lleva `backdrop-filter` en `≤640px`; el vidrio va en la
@@ -82,5 +93,8 @@ permanente, va a `AGENTS.md` o a la skill `civik-dominio-frontend`.
   nav inferior móvil, NotFound y Estudiantes rediseñada (labels/roles/
   textos preservados). Cambio 2026-10-14: **solo oscuro + liquid glass** en
   toda la interfaz; se eliminó el tema claro, el toggle y `useTheme`
-  (suite 135 → 132). Validado en Chrome DevTools: oscuro escritorio y móvil
-  375 px, consola limpia.
+  (suite 135 → 132). Cambio 2026-10-14 (b): **pulido visual + animaciones**
+  (fondo aurora animado, grano, borde especular del vidrio, entradas
+  escalonadas, sheen en botones, resaltado en filas, rebote del switch,
+  latido del indicador, título con degradado). Validado en Chrome DevTools:
+  oscuro escritorio y móvil 375 px, consola limpia.

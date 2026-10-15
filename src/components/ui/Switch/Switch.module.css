@@ -33,9 +33,12 @@
   border-radius: var(--radio-full);
   background: rgba(255, 255, 255, 0.14);
   border: 1px solid var(--vidrio-borde);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
   backdrop-filter: var(--vidrio-filtro);
   -webkit-backdrop-filter: var(--vidrio-filtro);
-  transition: background-color var(--trans) var(--curva);
+  transition:
+    background-color var(--trans) var(--curva),
+    box-shadow var(--trans) var(--curva);
   flex: none;
 }
 
@@ -47,16 +50,22 @@
   height: 1rem;
   border-radius: var(--radio-full);
   background: #fff;
-  box-shadow: var(--sombra-1);
-  transition: transform var(--trans) var(--curva);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+  transition: transform var(--trans-lenta) var(--curva-rebote);
 }
 
 .input:checked + .control .pista {
   background: linear-gradient(120deg, var(--color-primario), var(--color-primario-fuerte));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 0 0 3px rgba(122, 169, 255, 0.18);
 }
 
 .input:checked + .control .thumb {
   transform: translateX(1.1rem);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.45),
+    0 0 12px rgba(122, 169, 255, 0.6);
 }
 
 .input:focus-visible + .control .pista {
@@ -66,4 +75,10 @@
 .input:disabled + .control {
   opacity: 0.55;
   cursor: not-allowed;
+}
+
+@media (hover: hover) {
+  .control:hover .pista {
+    border-color: var(--color-borde-fuerte);
+  }
 }

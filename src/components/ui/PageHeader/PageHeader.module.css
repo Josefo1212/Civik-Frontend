@@ -5,7 +5,7 @@
   gap: var(--esp-4);
   flex-wrap: wrap;
   margin-bottom: var(--esp-5);
-  animation: aparecer var(--trans-lenta) var(--curva);
+  animation: aparecer var(--trans-entrada) var(--curva-suave) backwards;
 }
 
 .textos {
@@ -17,6 +17,16 @@
   font-size: var(--texto-2xl);
   font-weight: 800;
   letter-spacing: -0.01em;
+  color: var(--color-texto);
+  background: linear-gradient(
+    100deg,
+    #ffffff 0%,
+    #dbe6ff 45%,
+    var(--color-primario) 130%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .subtitulo {
@@ -36,11 +46,32 @@
 @keyframes aparecer {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(8px);
   }
 
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .titulo {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+  }
+}
+
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .titulo {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+  }
+}
+
+@media (forced-colors: active) {
+  .titulo {
+    background: none;
+    -webkit-text-fill-color: currentColor;
   }
 }

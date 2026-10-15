@@ -132,3 +132,35 @@ RF-8 y RF-9.
 Criterios de finalización del cambio: los cuatro comandos verdes, la
 validación visual en oscuro y móvil (375 px), y `MEMORY.md` actualizado.
 El tema claro y sus tokens se eliminan (no se conserva el mecanismo).
+
+## Cambio 2026-10-14 (b) — Pulido visual y animaciones
+
+Aprobado por el usuario sobre la entrega anterior ("se ve muy simple").
+Suma RF-10 y RF-11; refuerza RF-8.
+
+- RF-10: EL SISTEMA muestra un fondo vivo: aurora de degradados
+  (azul/violeta/cian) que deriva lentamente detrás del contenido más una
+  capa de grano sutil. El fondo no intercepta la interacción.
+- RF-11: EL SISTEMA da movimiento a la interfaz: entrada escalonada de
+  tarjetas y páginas (fundido + desplazamiento), elevación y brillo
+  (sheen) al pasar el mouse por botones, resaltado lateral en filas de
+  tabla, rebote en el control de interruptor y latido en el indicador de
+  servidor.
+- RF-8 (refuerzo): el vidrio gana un borde degradado especular (borde de
+  1 px de luz) y un brillo superior interno en tarjetas, tablas, campos
+  y cáscara.
+
+Restricciones del cambio:
+
+- Todo el movimiento usa solo `transform`/`opacity` (compositor).
+- NFR: con `prefers-reduced-motion: reduce` se desactiva todo el
+  movimiento y la animación del fondo (ya cubierto por la regla global).
+- Los efectos de hover se aplican solo en dispositivos con `hover: hover`
+  para no dejar estados pegados en pantallas táctiles.
+- El borde especular usa `mask-composite`; si no se soporta, se oculta.
+- Si el navegador no soporta `background-clip: text`, el título de página
+  pierde el degradado pero mantiene color sólido legible.
+
+Criterios de finalización del cambio: los cuatro comandos verdes,
+validación visual en escritorio y móvil (375 px), consola sin errores y
+`MEMORY.md` actualizado.

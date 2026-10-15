@@ -74,3 +74,31 @@
   - Validación visual en oscuro (escritorio y móvil 375 px); `MEMORY.md`
     actualizado.
   - Hecho cuando: los cuatro comandos verdes y la validación registrada.
+
+## Cambio 2026-10-14 (b) — Pulido visual y animaciones
+
+- [x] **T13. Fondo vivo.** RF-10.
+  - `global.css`: aurora de degradados en `body::before` con animación
+    `deriva` (26 s, solo `transform`) y capa de grano en `body::after`.
+  - Hecho cuando: el fondo deriva suave detrás del contenido sin
+    interceptar clics ni generar scroll.
+
+- [x] **T14. Profundidad del vidrio.** RF-8 (refuerzo).
+  - Borde degradado especular (borde de 1 px de luz) en `Card`; brillo
+    superior interno en `Card`, `Table`, `SegmentedControl`, campos y
+    `AppShell`.
+  - Hecho cuando: las superficies tienen relieve y el borde de luz no
+    aparece si el navegador no soporta `mask-composite`.
+
+- [x] **T15. Microinteracciones y movimiento.** RF-11.
+  - Entrada escalonada (`subir`/`entrar`/`bajar`), sheen al hover de
+    botones, resaltado lateral en filas, rebote del interruptor, latido del
+    indicador de servidor, títulos con degradado. Todo bajo `hover: hover`.
+  - Hecho cuando: los movimientos se sienten suaves y no se pegan en móvil.
+
+- [x] **T16. Cierre del cambio (b).**
+  - `pnpm lint`, `pnpm typecheck`, `pnpm test:run` (132) y `pnpm build`
+    verdes.
+  - Validación visual en escritorio y móvil 375 px, consola limpia;
+    `MEMORY.md` actualizado.
+  - Hecho cuando: los cuatro comandos verdes y la validación registrada.

@@ -7,7 +7,8 @@
   border: 1px solid transparent;
   border-radius: var(--radio);
   font-size: var(--texto-sm);
-  animation: aparecer var(--trans-lenta) var(--curva);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  animation: aparecer var(--trans-entrada) var(--curva-suave) backwards;
 }
 
 .mensaje {
@@ -23,7 +24,8 @@
 }
 
 .error {
-  background: rgba(248, 113, 113, 0.16);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent),
+    rgba(248, 113, 113, 0.16);
   color: var(--color-error);
   border-color: rgba(248, 113, 113, 0.35);
   backdrop-filter: var(--vidrio-filtro);
@@ -31,7 +33,8 @@
 }
 
 .info {
-  background: rgba(122, 169, 255, 0.16);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent),
+    rgba(122, 169, 255, 0.16);
   color: var(--color-info);
   border-color: rgba(122, 169, 255, 0.35);
   backdrop-filter: var(--vidrio-filtro);
@@ -39,7 +42,8 @@
 }
 
 .aviso {
-  background: rgba(251, 191, 36, 0.16);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent),
+    rgba(251, 191, 36, 0.16);
   color: var(--color-aviso);
   border-color: rgba(251, 191, 36, 0.35);
   backdrop-filter: var(--vidrio-filtro);
@@ -49,7 +53,7 @@
 @keyframes aparecer {
   from {
     opacity: 0;
-    transform: translateY(-4px);
+    transform: translateY(-6px);
   }
 
   to {

@@ -3,7 +3,9 @@
   overflow-x: auto;
   border: 1px solid var(--vidrio-borde);
   border-radius: var(--radio);
-  background: var(--vidrio-fondo);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent),
+    var(--vidrio-fondo);
+  box-shadow: inset 0 1px 0 var(--vidrio-brillo);
   backdrop-filter: var(--vidrio-filtro);
   -webkit-backdrop-filter: var(--vidrio-filtro);
 }
@@ -31,9 +33,14 @@
 
 .tabla tbody tr {
   border-top: 1px solid var(--vidrio-borde);
-  transition: background-color var(--trans) var(--curva);
+  transition:
+    background-color var(--trans) var(--curva),
+    box-shadow var(--trans) var(--curva);
 }
 
-.tabla tbody tr:hover {
-  background: rgba(255, 255, 255, 0.04);
+@media (hover: hover) {
+  .tabla tbody tr:hover {
+    background: linear-gradient(90deg, rgba(122, 169, 255, 0.12), transparent 60%);
+    box-shadow: inset 3px 0 0 var(--color-primario);
+  }
 }

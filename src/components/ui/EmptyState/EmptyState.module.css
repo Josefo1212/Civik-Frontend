@@ -12,15 +12,21 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 3rem;
-  height: 3rem;
+  width: 3.2rem;
+  height: 3.2rem;
   border-radius: var(--radio-full);
-  background: var(--vidrio-fondo);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent),
+    var(--vidrio-fondo);
   border: 1px solid var(--vidrio-borde);
+  box-shadow:
+    inset 0 1px 0 var(--vidrio-brillo),
+    0 12px 30px rgba(0, 0, 0, 0.35);
   color: var(--color-texto-tenue);
   font-size: var(--texto-xl);
   backdrop-filter: var(--vidrio-filtro);
   -webkit-backdrop-filter: var(--vidrio-filtro);
+  animation: flotar 4.5s var(--curva-suave) infinite;
 }
 
 .mensaje {
@@ -31,4 +37,15 @@
 .acciones {
   display: flex;
   gap: var(--esp-2);
+}
+
+@keyframes flotar {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
 }

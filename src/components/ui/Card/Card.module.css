@@ -1,14 +1,68 @@
 .card {
-  background: var(--vidrio-fondo);
-  border: 1px solid var(--vidrio-borde);
+  position: relative;
   border-radius: var(--radio-lg);
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 34%),
+    var(--vidrio-fondo);
+  border: 1px solid var(--vidrio-borde);
   box-shadow: var(--sombra-2);
   backdrop-filter: var(--vidrio-filtro);
   -webkit-backdrop-filter: var(--vidrio-filtro);
+  animation: subir var(--trans-entrada) var(--curva-suave) backwards;
   transition:
-    border-color var(--trans) var(--curva),
+    transform var(--trans-lenta) var(--curva-suave),
     box-shadow var(--trans) var(--curva),
-    background-color var(--trans) var(--curva);
+    border-color var(--trans) var(--curva);
+}
+
+@keyframes subir {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    150deg,
+    var(--vidrio-brillo),
+    rgba(255, 255, 255, 0) 38%,
+    rgba(255, 255, 255, 0.04) 76%,
+    rgba(255, 255, 255, 0.1)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-borde-fuerte);
+    box-shadow: var(--sombra-3);
+  }
+}
+
+@supports not ((mask-composite: exclude) or (-webkit-mask-composite: xor)) {
+  .card::before {
+    display: none;
+  }
 }
 
 .cabecera {

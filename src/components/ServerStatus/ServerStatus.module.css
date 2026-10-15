@@ -5,7 +5,10 @@
   padding: 0.3rem 0.7rem;
   border: 1px solid var(--vidrio-borde);
   border-radius: var(--radio-full);
-  background: var(--vidrio-fondo);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent),
+    var(--vidrio-fondo);
+  box-shadow: inset 0 1px 0 var(--vidrio-brillo);
   font-size: var(--texto-xs);
   font-weight: 600;
   color: var(--color-texto-suave);
@@ -15,6 +18,7 @@
 }
 
 .punto {
+  position: relative;
   width: 0.55rem;
   height: 0.55rem;
   border-radius: var(--radio-full);
@@ -27,6 +31,15 @@
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-ok) 20%, transparent);
 }
 
+.estado.online .punto::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  border: 1px solid var(--color-ok);
+  animation: latido 2.4s var(--curva-suave) infinite;
+}
+
 .estado.offline .punto {
   background: var(--color-error);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-error) 20%, transparent);
@@ -35,6 +48,19 @@
 .estado.loading .punto {
   background: var(--color-primario);
   animation: parpadeo 1s ease-in-out infinite;
+}
+
+@keyframes latido {
+  0% {
+    opacity: 0.8;
+    transform: scale(0.8);
+  }
+
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(2.4);
+  }
 }
 
 @keyframes parpadeo {
