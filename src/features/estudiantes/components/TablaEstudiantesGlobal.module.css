@@ -1,4 +1,12 @@
 .acciones {
   text-align: right;
   white-space: nowrap;
+  display: flex;
+  gap: var(--esp-2);
+  justify-content: flex-end;
+}
+
+.detalle {
+  padding: 0;
+  background: var(--surface);
 }

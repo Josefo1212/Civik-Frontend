@@ -22,7 +22,7 @@ rojo si hay lógica, código después, verdes, marcar y PARAR.
   - `FilaExpandible.test.tsx` cubre cada caso y está en verde.
   - RF-9, RF-10, RF-11, RF-12, RF-13, RF-14, RF-15, RF-16.
 
-- [ ] **T5. Fila expandible + preselección de lapso activo en Estudiantes.**
+- [x] **T5. Fila expandible + preselección de lapso activo en Estudiantes.**
   - Hecho cuando: al entrar a Estudiantes el lapso activo queda seleccionado si existe; hay selector de lapso; el botón de expandir en cada fila abre/cierra `FilaExpandible` sin romper buscador, toggles, modo por-sección/global ni los textos y roles accesibles existentes.
   - `pnpm test:run` en verde sin cambios en los tests de Estudiantes.
   - RF-7, RF-8.

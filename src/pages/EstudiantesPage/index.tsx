@@ -1,6 +1,9 @@
 import { useMemo, useState } from 'react'
 import type { Estudiante } from '../../domain/estudiante'
+import type { EstadoAsistencia } from '../../domain/asistencia'
 import SelectorSeccion from '../../features/estudiantes/components/SelectorSeccion'
+import SelectorLapso from '../../features/lapsos/components/SelectorLapso'
+import DetalleEstudiante from '../../features/estudiantes/components/DetalleEstudiante'
 import FormularioEstudiante, { type ValoresEstudiante } from '../../features/estudiantes/components/FormularioEstudiante'
 import TablaEstudiantes from '../../features/estudiantes/components/TablaEstudiantes'
 import TablaEstudiantesGlobal from '../../features/estudiantes/components/TablaEstudiantesGlobal'
@@ -9,6 +12,11 @@ import { useSecciones } from '../../features/secciones/hooks/useSecciones'
 import { useSeccionMutations } from '../../features/secciones/hooks/useSeccionMutations'
 import { useEstudiantes, useEstudiantesGlobal } from '../../features/estudiantes/hooks/useEstudiantes'
 import { useEstudianteMutations } from '../../features/estudiantes/hooks/useEstudianteMutations'
+import { useAsistenciaLapso } from '../../features/estudiantes/hooks/useAsistenciaLapso'
+import { useLapsos } from '../../features/lapsos/hooks/useLapsos'
+import { useEventos } from '../../features/eventos/hooks/useEventos'
+import { useGuardarAsistencia } from '../../features/asistencia/hooks/useGuardarAsistencia'
+import { lapsoActivo } from '../../features/lapsos/utils'
 import { etiquetaSeccion } from '../../features/secciones/utils'
 import { filtrarEstudiantes } from '../../features/estudiantes/utils'
 import Alert from '../../components/ui/Alert/Alert'
@@ -40,6 +48,8 @@ const EstudiantesPage = () => {
   const [operandoId, setOperandoId] = useState<string | null>(null)
   const [operandoSeccionId, setOperandoSeccionId] = useState<string | null>(null)
   const [claveFormulario, setClaveFormulario] = useState(0)
+  const [lapsoId, setLapsoId] = useState<string | null>(null)
+  const [filaExpandidaId, setFilaExpandidaId] = useState<string | null>(null)
 
   const { data: secciones = [], isLoading: cargandoSecciones } = useSecciones(undefined)
   const {
@@ -55,6 +65,13 @@ const EstudiantesPage = () => {
     refetch: refetchGlobal,
   } = useEstudiantesGlobal(incluirInactivosGlobal)
   const { crear, editar, baja, reactivar } = useEstudianteMutations()
+
+  const { data: lapsos = [] } = useLapsos()
+  const lapsoSeleccionado = lapsoId ?? lapsoActivo(lapsos)?.id ?? null
+  const { data: eventos = [] } = useEventos(lapsoSeleccionado)
+  const { porEstudiante } = useAsistenciaLapso(eventos)
+  const guardarAsistencia = useGuardarAsistencia()
+  const lapso = lapsos.find((l) => l.id === lapsoSeleccionado) ?? null
   const { reactivar: reactivarSeccion } = useSeccionMutations()
 
   const mapaSecciones = useMemo(
@@ -170,6 +187,27 @@ const EstudiantesPage = () => {
     refetchSeccionesGlobal()
   }
 
+  const alternarFila = (id: string) => {
+    setFilaExpandidaId((previo) => (previo === id ? null : id))
+  }
+
+  const corregirAsistencia = (idEvent: string, state: EstadoAsistencia) => {
+    if (filaExpandidaId === null) return
+    guardarAsistencia.mutate([{ id_event: idEvent, id_student: filaExpandidaId, state }])
+  }
+
+  const renderDetalle = (estudiante: Estudiante) => (
+    <DetalleEstudiante
+      estudiante={estudiante}
+      lapsoId={lapsoSeleccionado}
+      estadoLapso={lapso?.status ?? 'ACTIVE'}
+      eventos={eventos}
+      asistencia={porEstudiante.get(estudiante.id)}
+      onCorregir={corregirAsistencia}
+      enviando={guardarAsistencia.isPending}
+    />
+  )
+
   return (
     <>
       <PageHeader
@@ -187,7 +225,8 @@ const EstudiantesPage = () => {
 
       {modo === 'por-seccion' ? (
         <div className={styles.pila}>
-          <Card titulo="Seleccionar sección">
+          <Card titulo="Lapso y sección">
+            <SelectorLapso lapsos={lapsos} valor={lapsoSeleccionado} onCambiar={setLapsoId} />
             <SelectorSeccion secciones={secciones} valor={seccionId} onCambiar={setSeccionId} cargando={cargandoSecciones} />
           </Card>
 
@@ -239,6 +278,9 @@ const EstudiantesPage = () => {
                   onDarDeBaja={manejarBaja}
                   onReactivar={manejarReactivar}
                   operandoId={operandoId}
+                  expandidoId={filaExpandidaId}
+                  onExpandir={alternarFila}
+                  renderDetalle={renderDetalle}
                 />
               ) : null}
             </Card>
@@ -290,6 +332,9 @@ const EstudiantesPage = () => {
               onReactivar={manejarReactivar}
               mensajeVacio={mensajeVacio}
               operandoId={operandoId}
+              expandidoId={filaExpandidaId}
+              onExpandir={alternarFila}
+              renderDetalle={renderDetalle}
             />
           ) : null}
           {mostrarSeccionesBajas && !hayErrorPadron ? (
