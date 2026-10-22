@@ -12,7 +12,7 @@ rojo si hay lógica, código después, verdes, marcar y PARAR.
   - `DashboardPage.test.tsx` en verde.
   - RF-1, RF-2, RF-3, RF-4, RF-5, RF-6.
 
-- [ ] **T3. Hook `useAsistenciaLapso`.**
+- [x] **T3. Hook `useAsistenciaLapso`.**
   - Hecho cuando: dado un lapso y sus eventos, devuelve por estudiante el mapa `id_event → state` combinando `listarPadron` de cada evento con `listarPendientesDeEvento` (fusión con `fusionarPadron`); sin estado = pendiente para evento pasado; el test cubre N eventos, corrección encolada y conflicto.
   - `useAsistenciaLapso.test.tsx` en verde.
   - RF-9, RF-15, RF-16b.
