@@ -11,11 +11,13 @@ permanente, va a `AGENTS.md` o a la skill `civik-dominio-frontend`.
   002, eventos + lapsos 003, asistencia online 004, PWA + offline 005,
   notas 006). No quedan fases del "Orden de construcción". Spec 007
   (listado global de estudiantes + secciones dadas de baja) implementada
-   (revisión 2026-10-13 aplicada). Spec 008 (sistema de diseño: tokens, UI
+  (revisión 2026-10-13 aplicada). Spec 008 (sistema de diseño: tokens, UI
   kit, AppShell y pantalla Estudiantes de referencia) implementada; el
   cambio 2026-10-14 la dejó **solo oscura con efecto liquid glass**. El
-  resto de pantallas se migra reusando el sistema.
-- Suite: 132 tests verdes; `pnpm lint`, `pnpm typecheck` y `pnpm build`
+  resto de pantallas se migra reusando el sistema. Spec 009 (panel de
+  estudiantes: dashboard en `/`, fusión de Notas en Estudiantes con fila
+  expandible y corrección inline) **implementada**.
+- Suite: 155 tests verdes; `pnpm lint`, `pnpm typecheck` y `pnpm build`
   limpios (`build` genera `manifest.webmanifest` y `sw.js`).
 
 ## Decisiones (y por qué)
@@ -134,3 +136,12 @@ permanente, va a `AGENTS.md` o a la skill `civik-dominio-frontend`.
   labels en oración. Validado en Chrome DevTools: oscuro escritorio y móvil
   375 px, `prefers-reduced-motion`/`-transparency` respetados, consola
   limpia.
+- 009 panel de estudiantes: `/` pasa a dashboard (lapso activo + conteo de
+  activos por sección); se retira la ruta `/notas` y su entrada de nav; en
+  Estudiantes la fila es expandible y muestra, para el lapso seleccionado
+  (preselecciona el activo, derivado sin `setState` en effect), la
+  asistencia evento por evento (cancelados marcados con motivo; pendiente =
+  evento pasado sin registro) y la nota (provisional si no `CLOSED`,
+  override, "sin nota"). La corrección inline reusa `useGuardarAsistencia`
+  (mismo outbox/sync). `features/notas` conserva `utils`/`constants`/`api`/
+  `useNotas`; se borraron `AvisoNota`/`TablaNotas`.

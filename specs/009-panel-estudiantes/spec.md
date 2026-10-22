@@ -1,6 +1,6 @@
 # Spec 009 — Panel de estudiantes
 
-Estado: aprobada
+Estado: implementada
 
 ## Contexto y objetivo
 

@@ -32,7 +32,7 @@ rojo si hay lógica, código después, verdes, marcar y PARAR.
   - Test de lógica/render en verde cubriendo corrección y conflicto.
   - RF-17, RF-18, RF-19, RF-20.
 
-- [ ] **T7. Limpieza de `features/notas` y MEMORY.md.**
+- [x] **T7. Limpieza de `features/notas` y MEMORY.md.**
   - Hecho cuando: se eliminan `components/AvisoNota*` y `components/TablaNotas*` (y sus tests); se conservan `utils.ts`, `constants.ts`, `hooks/useNotas.ts`, `api.ts` y sus tests (los usa el panel); no quedan imports huérfanos; `MEMORY.md` refleja el cierre de la fase.
   - `pnpm lint`, `pnpm typecheck`, `pnpm test:run` y `pnpm build` en verde.
   - RF-21 (no regresión).
