@@ -27,7 +27,7 @@ rojo si hay lógica, código después, verdes, marcar y PARAR.
   - `pnpm test:run` en verde sin cambios en los tests de Estudiantes.
   - RF-7, RF-8.
 
-- [ ] **T6. Corrección inline de asistencia.**
+- [x] **T6. Corrección inline de asistencia.**
   - Hecho cuando: cambiar el estado en un evento `SCHEDULED` desde la fila llama a `useGuardarAsistencia.mutate` con `{ id_event, id_student, state }`; el ítem queda encolado con id de cliente (no se regenera) y, con conexión, dispara sync; el pendiente/error se refleja en la fila; un evento nunca se borra.
   - Test de lógica/render en verde cubriendo corrección y conflicto.
   - RF-17, RF-18, RF-19, RF-20.
