@@ -1,0 +1,163 @@
+.detalle {
+  padding: var(--esp-4) var(--esp-4) var(--esp-5);
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+}
+
+.bloqueNota {
+  display: flex;
+  align-items: baseline;
+  gap: var(--esp-3);
+  flex-wrap: wrap;
+  padding: var(--esp-3) var(--esp-2);
+  margin-bottom: var(--esp-3);
+}
+
+.notaEtiqueta {
+  font-family: var(--fuente-ui);
+  font-size: var(--texto-sm);
+  color: var(--ink-muted);
+}
+
+.notaValor {
+  font-size: var(--texto-lg);
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-2);
+}
+
+.marcaOverride {
+  font-family: var(--fuente-ui);
+  font-size: var(--texto-xs);
+  padding: 1px 8px;
+  border-radius: var(--radio-full);
+  color: var(--signal-glow);
+  background: var(--color-primario-suave);
+}
+
+.aviso {
+  font-size: var(--texto-xs);
+}
+
+.avisoProvisional {
+  color: var(--color-aviso);
+}
+
+.avisoDefinitiva {
+  color: var(--ok);
+}
+
+.contenedor {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radio);
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--texto-sm);
+}
+
+.tabla th {
+  padding: var(--esp-3);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  font-family: var(--fuente-ui);
+  font-weight: 500;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.tabla td {
+  padding: var(--esp-3);
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+  color: var(--ink);
+}
+
+.tabla tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.dato {
+  font-family: var(--fuente-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.fecha {
+  white-space: nowrap;
+  color: var(--ink-muted);
+}
+
+.nombreEvento {
+  color: var(--ink);
+}
+
+.tipo {
+  margin-left: var(--esp-2);
+  font-size: var(--texto-xs);
+  color: var(--ink-muted);
+}
+
+.marcaCancelado {
+  display: inline-block;
+  margin-top: var(--esp-1);
+  font-size: var(--texto-xs);
+  color: var(--danger);
+}
+
+.cancelado td {
+  opacity: 0.7;
+}
+
+.estadoAsistencia {
+  color: var(--ink);
+}
+
+.marcaSync {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--texto-xs);
+  color: var(--color-aviso);
+}
+
+.syncError {
+  color: var(--danger);
+}
+
+.opciones {
+  display: flex;
+  gap: var(--esp-3);
+  flex-wrap: wrap;
+}
+
+.opcion {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-1);
+  font-size: var(--texto-sm);
+  color: var(--ink-muted);
+}
+
+.sinCorreccion {
+  color: var(--ink-muted);
+}
+
+.vacio {
+  padding: var(--esp-5) var(--esp-4);
+  color: var(--ink-muted);
+  font-size: var(--texto-sm);
+}
+
+@media (max-width: 640px) {
+  .detalle {
+    padding: var(--esp-3);
+  }
+
+  .tabla th,
+  .tabla td {
+    padding: var(--esp-2);
+  }
+}

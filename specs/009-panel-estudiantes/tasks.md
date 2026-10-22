@@ -17,7 +17,7 @@ rojo si hay lógica, código después, verdes, marcar y PARAR.
   - `useAsistenciaLapso.test.tsx` en verde.
   - RF-9, RF-15, RF-16b.
 
-- [ ] **T4. Componente `FilaExpandible`.**
+- [x] **T4. Componente `FilaExpandible`.**
   - Hecho cuando: renderiza la tabla de eventos del lapso (fecha, nombre, tipo, estado), marca los cancelados con su motivo (sin control de corrección), marca los pendientes distinto de ausencia, muestra la nota con aviso provisional (`estado !== 'CLOSED'`), marca override y "sin nota"; con lapso sin eventos lo indica.
   - `FilaExpandible.test.tsx` cubre cada caso y está en verde.
   - RF-9, RF-10, RF-11, RF-12, RF-13, RF-14, RF-15, RF-16.
