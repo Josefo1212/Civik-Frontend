@@ -47,18 +47,11 @@ const IconoAsistencia = () => (
   </svg>
 )
 
-const IconoNotas = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" {...trazo} aria-hidden="true">
-    <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
-  </svg>
-)
-
 const ICONOS: Record<string, ReactNode> = {
   [RUTAS.secciones]: <IconoSecciones />,
   [RUTAS.estudiantes]: <IconoEstudiantes />,
   [RUTAS.eventos]: <IconoEventos />,
   [RUTAS.asistencia]: <IconoAsistencia />,
-  [RUTAS.notas]: <IconoNotas />,
 }
 
 const AppShell = () => {

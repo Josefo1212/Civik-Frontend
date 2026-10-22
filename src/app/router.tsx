@@ -5,7 +5,6 @@ import { RUTAS } from '../constants/routes'
 import AsistenciaPage from '../pages/AsistenciaPage'
 import EstudiantesPage from '../pages/EstudiantesPage'
 import EventosPage from '../pages/EventosPage'
-import NotasPage from '../pages/NotasPage'
 import SeccionesPage from '../pages/SeccionesPage'
 
 export const router = createBrowserRouter([
@@ -18,7 +17,6 @@ export const router = createBrowserRouter([
       { path: RUTAS.estudiantes, element: <EstudiantesPage /> },
       { path: RUTAS.eventos, element: <EventosPage /> },
       { path: RUTAS.asistencia, element: <AsistenciaPage /> },
-      { path: RUTAS.notas, element: <NotasPage /> },
       { path: '*', element: <NotFound /> },
     ],
   },
