@@ -1,44 +1,42 @@
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: var(--esp-1);
-  padding: 0.15rem 0.55rem;
-  border-radius: var(--radio-full);
-  border: 1px solid transparent;
+  gap: var(--esp-2);
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--radio-sm);
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-muted);
+  font-family: var(--fuente-ui);
   font-size: var(--texto-xs);
-  font-weight: 600;
-  line-height: 1.4;
+  font-weight: 500;
+  line-height: 1.5;
   white-space: nowrap;
 }
 
+.badge::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  flex: none;
+  background: currentColor;
+}
+
 .ok {
-  background: rgba(74, 222, 128, 0.14);
-  color: var(--color-ok);
-  border-color: rgba(74, 222, 128, 0.3);
-  backdrop-filter: var(--vidrio-filtro);
-  -webkit-backdrop-filter: var(--vidrio-filtro);
+  color: var(--ok);
+  border-color: rgba(76, 175, 114, 0.4);
 }
 
 .danger {
-  background: rgba(248, 113, 113, 0.16);
-  color: var(--color-error);
-  border-color: rgba(248, 113, 113, 0.32);
-  backdrop-filter: var(--vidrio-filtro);
-  -webkit-backdrop-filter: var(--vidrio-filtro);
+  color: var(--signal);
+  border-color: rgba(224, 55, 62, 0.4);
 }
 
 .neutral {
-  background: var(--vidrio-fondo);
-  color: var(--color-texto-suave);
-  border-color: var(--vidrio-borde);
-  backdrop-filter: var(--vidrio-filtro);
-  -webkit-backdrop-filter: var(--vidrio-filtro);
+  color: var(--ink-muted);
 }
 
 .info {
-  background: rgba(var(--primario-rgb), 0.16);
-  color: var(--color-info);
-  border-color: rgba(var(--primario-rgb), 0.32);
-  backdrop-filter: var(--vidrio-filtro);
-  -webkit-backdrop-filter: var(--vidrio-filtro);
+  color: var(--data);
+  border-color: rgba(79, 163, 209, 0.4);
 }

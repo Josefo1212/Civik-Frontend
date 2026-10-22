@@ -233,3 +233,49 @@ Restricciones del cambio:
 Criterios de finalización del cambio: los cuatro comandos verdes,
 validación visual en escritorio y móvil (375 px), consola sin errores y
 `MEMORY.md` actualizado.
+
+## Cambio 2026-10-14 (e) — Liquid glass + azul eléctrico, aplicado a Secciones
+
+Aprobado por el usuario ("Lee la skill design-system (actualizada:
+dirección liquid glass, azul eléctrico como acento). Aplícala a
+Secciones"). Suma RF-18 a RF-23. La skill
+`.opencode/skills/design-system/SKILL.md` se reescribió con esta dirección
+y es la referencia vigente.
+
+- RF-18: fondo de la app con dos blobs difusos fijos (`--signal` y
+  `--accent-2`), `blur(120px)`, opacidad baja y deriva muy lenta
+  (20-30 s, `ease-in-out`, loop) detrás del contenido.
+- RF-19: el chrome (barra de navegación, paneles de formulario, tarjetas)
+  usa el material `.glass-panel`: fondo translúcido, `backdrop-filter:
+  blur(20px) saturate(160%)`, borde claro, filo superior iluminado, sombra
+  de flotación y radio 16-20 px.
+- RF-20: las tablas de datos van sobre superficie sólida `--surface` (radio
+  8 px), SIN vidrio por fila; los datos numéricos/fechas en `IBM Plex Mono`
+  con `tabular-nums`.
+- RF-21: los labels de la interfaz van en minúscula/oración ("Grado", no
+  "GRADO"); se prohíbe `text-transform: uppercase` como decoración.
+- RF-22: `--signal` (azul eléctrico) es el único acento de acción (botón
+  primario, tab activo, foco); `--danger` (rojo) queda exclusivo de errores
+  reales y nunca se reutiliza como acento de marca.
+- RF-23: motion orquestado: indicador de nav que desliza (~200 ms,
+  `ease-out`), `scale(0.97)` al presionar el botón primario, un solo reveal
+  de entrada por panel; `prefers-reduced-motion` congela la deriva y el
+  reveal, y `prefers-reduced-transparency` hace caer `.glass-panel` a
+  `--surface` sólido sin `backdrop-filter`.
+
+Alcance de este cambio: solo la pantalla de **Secciones** (y el chrome
+compartido: `AppShell`, UI kit y tokens globales). Las demás pantallas no
+se tocan; heredan los tokens al re-tokenizar `global.css`.
+
+Restricciones del cambio:
+
+- Se preservan los nombres accesibles y roles que usan los tests
+  (`aria-label` de form/campos/botón, `role="alert"`, `role="group"`/
+  `aria-pressed`); la suite no cambia.
+- No se introduce un listbox propio: el `select` nativo se estiliza.
+- No se toca la lógica de negocio, sync, outbox ni Dexie.
+
+Criterios de finalización del cambio: los cuatro comandos verdes,
+validación visual en escritorio y móvil (375 px) con consola limpia,
+verificación de las dos media queries (`prefers-reduced-motion` y
+`prefers-reduced-transparency`) y `MEMORY.md` actualizado.

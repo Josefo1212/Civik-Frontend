@@ -1,51 +1,29 @@
 .boton {
-  position: relative;
-  overflow: hidden;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--esp-2);
   border: 1px solid transparent;
   border-radius: var(--radio);
-  font-weight: 600;
+  font-family: var(--fuente-ui);
+  font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
   text-decoration: none;
-  isolation: isolate;
   transition:
     background-color var(--trans) var(--curva),
     border-color var(--trans) var(--curva),
     color var(--trans) var(--curva),
-    box-shadow var(--trans) var(--curva),
-    transform var(--trans) var(--curva-rebote);
-}
-
-.boton::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 45%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.4),
-    transparent
-  );
-  transform: translateX(-160%) skewX(-18deg);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.boton:active:not(:disabled) {
-  transform: translateY(1px) scale(0.985);
+    transform var(--trans-rapida) var(--curva);
 }
 
 .boton:focus-visible {
   outline: none;
   box-shadow: var(--anillo-foco);
+}
+
+.boton:active:not(:disabled) {
+  transform: scale(0.97);
 }
 
 .boton:disabled {
@@ -59,89 +37,57 @@
 }
 
 .sm {
-  padding: 0.3rem 0.6rem;
+  padding: 0.3rem 0.65rem;
   font-size: var(--texto-xs);
 }
 
 .primary {
-  background: linear-gradient(120deg, var(--color-primario), var(--color-primario-fuerte));
+  background: var(--signal);
   color: var(--color-primario-contraste);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    0 8px 22px rgba(var(--primario-rgb), 0.32);
+  border-color: var(--signal);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 .secondary {
-  background: var(--vidrio-fondo);
-  color: var(--color-texto);
-  border-color: var(--vidrio-borde);
-  box-shadow: inset 0 1px 0 var(--vidrio-brillo);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ink);
+  border-color: var(--line);
   backdrop-filter: var(--vidrio-filtro);
   -webkit-backdrop-filter: var(--vidrio-filtro);
 }
 
 .ghost {
   background: transparent;
-  color: var(--color-texto-suave);
+  color: var(--ink-muted);
 }
 
 .danger {
-  background: rgba(248, 113, 113, 0.12);
-  color: var(--color-error);
-  border-color: rgba(248, 113, 113, 0.32);
-  backdrop-filter: var(--vidrio-filtro);
-  -webkit-backdrop-filter: var(--vidrio-filtro);
-}
-
-.danger:hover:not(:disabled) {
-  background: rgba(248, 113, 113, 0.2);
+  background: transparent;
+  color: var(--danger);
+  border-color: rgba(255, 69, 58, 0.45);
 }
 
 @media (hover: hover) {
-  .boton:hover:not(:disabled) {
-    transform: translateY(-1px);
-  }
-
   .primary:hover:not(:disabled) {
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.4),
-      0 14px 32px rgba(var(--primario-rgb), 0.5);
-  }
-
-  .boton:hover:not(:disabled)::after {
-    animation: brillo 850ms var(--curva-suave);
+    background: var(--signal-glow);
+    border-color: var(--signal-glow);
   }
 
   .secondary:hover:not(:disabled) {
-    background: color-mix(in srgb, var(--vidrio-fondo) 78%, rgba(255, 255, 255, 0.05));
     border-color: var(--color-borde-fuerte);
   }
 
   .ghost:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.08);
-    color: var(--color-texto);
-  }
-}
-
-@keyframes brillo {
-  from {
-    transform: translateX(-160%) skewX(-18deg);
-    opacity: 0;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--ink);
   }
 
-  40% {
-    opacity: 1;
-  }
-
-  to {
-    transform: translateX(240%) skewX(-18deg);
-    opacity: 0;
+  .danger:hover:not(:disabled) {
+    background: var(--color-error-suave);
   }
 }
 
 .etiqueta {
   display: inline-flex;
   align-items: center;
-  position: relative;
-  z-index: 2;
 }

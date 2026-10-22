@@ -127,5 +127,10 @@ permanente, va a `AGENTS.md` o a la skill `civik-dominio-frontend`.
   **paleta negro+morado**, tabs con indicador deslizante, acabado global de
   inputs/selects y errores con ícono. Cambio 2026-10-14 (d): **todos los
   botones con el componente `Button`** y dropdowns nativos oscuros.
-  Validado en Chrome DevTools: oscuro escritorio y móvil 375 px, consola
+  Cambio 2026-10-14 (e): la skill de diseño pasa a **liquid glass + azul
+  eléctrico** (`--signal #2E7CF6`, `--danger #FF453A` solo errores, blobs
+  de fondo `--signal`/`--accent-2`, `.glass-panel` en chrome, superficie
+  sólida en tablas) y se aplica **solo a Secciones** (+ chrome y UI kit);
+  labels en oración. Validado en Chrome DevTools: oscuro escritorio y móvil
+  375 px, `prefers-reduced-motion`/`-transparency` respetados, consola
   limpia.

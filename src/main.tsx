@@ -4,6 +4,7 @@ import { RouterProvider } from 'react-router-dom'
 import { registerSW } from 'virtual:pwa-register'
 import Providers from './app/providers'
 import { router } from './app/router'
+import './styles/fonts'
 import './styles/global.css'
 
 registerSW({ immediate: true })

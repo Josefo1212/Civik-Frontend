@@ -7,6 +7,8 @@ import { useSecciones } from '../../features/secciones/hooks/useSecciones'
 import { useSeccionMutations } from '../../features/secciones/hooks/useSeccionMutations'
 import Alert from '../../components/ui/Alert/Alert'
 import Button from '../../components/ui/Button/Button'
+import PageHeader from '../../components/ui/PageHeader/PageHeader'
+import styles from './SeccionesPage.module.css'
 
 const SeccionesPage = () => {
   const [grado, setGrado] = useState<string>('todos')
@@ -128,11 +130,23 @@ const SeccionesPage = () => {
   const errorMensaje = error instanceof Error ? error.message : errorGeneral
 
   return (
-    <main style={{ padding: '16px', maxWidth: '1000px', margin: '0 auto' }}>
-      <h1>Secciones</h1>
+    <div className={styles.pagina}>
+      <PageHeader
+        titulo='Secciones'
+        subtitulo='Grados, subdivisiones y turnos del grupo. El listado refleja lo que responde el servidor.'
+      />
 
-      <section>
-        <h2>{seccionEditando === null ? 'Crear sección' : 'Editar sección'}</h2>
+      <section className={`${styles.panelGlass} glass-panel`} aria-labelledby='titulo-formulario'>
+        <header className={styles.cabeceraGlass}>
+          <h2 className={styles.panelTitulo} id='titulo-formulario'>
+            {seccionEditando === null ? 'Crear sección' : 'Editar sección'}
+          </h2>
+          {seccionEditando !== null ? (
+            <Button variante='secondary' tamano='sm' onClick={cancelarEdicion}>
+              Cancelar edición
+            </Button>
+          ) : null}
+        </header>
         <FormularioSeccion
           key={seccionEditando?.id ?? 'nueva'}
           valorInicial={valorInicialFormulario}
@@ -140,43 +154,46 @@ const SeccionesPage = () => {
           error={errorMensaje}
           onSubmit={manejarSubmit}
         />
-        {seccionEditando !== null ? (
-          <Button variante='secondary' onClick={cancelarEdicion} style={{ marginBottom: '16px' }}>
-            Cancelar edición
-          </Button>
-        ) : null}
       </section>
 
-      <section>
-        <h2>Listado</h2>
-        <FiltroGrado grado={grado} onGradoChange={setGrado} />
-        {isLoading ? <p>Cargando secciones...</p> : null}
-        {error && !isLoading ? (
-          <Alert
-            variante="error"
-            acciones={
-              <Button variante="secondary" tamano="sm" onClick={() => refetch()}>
-                Reintentar
-              </Button>
-            }
-          >
-            Error: {errorMensaje}
-          </Alert>
-        ) : null}
-        {!isLoading && !error ? (
-          <TablaSecciones
-            secciones={secciones}
-            enBajaEnSesion={bajasEnSesion}
-            estaBajaEnSesion={estaBajaEnSesion}
-            onEditar={iniciarEdicion}
-            onDarDeBaja={manejarDarDeBaja}
-            onReactivar={manejarReactivar}
-            onEliminar={manejarEliminar}
-            operandoId={operandoId}
-          />
-        ) : null}
+      <section className={styles.panel}>
+        <header className={styles.panelCabecera}>
+          <h2 className={styles.panelTitulo}>Listado</h2>
+          <FiltroGrado grado={grado} onGradoChange={setGrado} />
+        </header>
+        <div className={styles.panelCuerpo}>
+          {isLoading ? (
+            <p className={styles.listadoCargando} aria-live='polite'>
+              Cargando secciones…
+            </p>
+          ) : null}
+          {error && !isLoading ? (
+            <Alert
+              variante='error'
+              acciones={
+                <Button variante='secondary' tamano='sm' onClick={() => refetch()}>
+                  Reintentar
+                </Button>
+              }
+            >
+              No se pudo cargar el listado. {errorMensaje}
+            </Alert>
+          ) : null}
+          {!isLoading && !error ? (
+            <TablaSecciones
+              secciones={secciones}
+              enBajaEnSesion={bajasEnSesion}
+              estaBajaEnSesion={estaBajaEnSesion}
+              onEditar={iniciarEdicion}
+              onDarDeBaja={manejarDarDeBaja}
+              onReactivar={manejarReactivar}
+              onEliminar={manejarEliminar}
+              operandoId={operandoId}
+            />
+          ) : null}
+        </div>
       </section>
-    </main>
+    </div>
   )
 }
 

@@ -147,3 +147,39 @@
   - `pnpm lint`, `pnpm typecheck`, `pnpm test:run` (132) y `pnpm build`
     verdes; validación visual; `MEMORY.md` actualizado.
   - Hecho cuando: los cuatro comandos verdes y la validación registrada.
+
+## Cambio 2026-10-14 (e) — Liquid glass + azul eléctrico en Secciones
+
+- [x] **T23. Tokens y material de vidrio.** RF-18, RF-19, RF-22.
+  - `global.css`: paleta liquid glass (`--bg`, `--surface`, `--line`,
+    `--ink`, `--ink-muted`, `--signal` azul, `--signal-glow`, `--accent-2`,
+    `--ok`, `--danger`), tokens de vidrio (`--glass-*`), radios (vidrio
+    20 px / superficie 8 px); clase `.glass-panel`; blobs `body::before`/
+    `::after` con deriva lenta; fallbacks `prefers-reduced-transparency` y
+    `@supports not (backdrop-filter)`.
+  - Hecho cuando: no queda morado ni rojo como acento; los tokens de la
+    skill resuelven a sus hex.
+
+- [x] **T24. Tipografía y labels en oración.** RF-20, RF-21.
+  - Fuentes `@fontsource/space-grotesk`, `ibm-plex-mono` e `inter`
+    (import en `src/styles/fonts.ts`); `.dato` en mono tabular; se quita
+    `text-transform: uppercase` de labels de formulario, filtro y
+    cabeceras de tabla.
+  - Hecho cuando: ningún label visible usa mayúsculas decorativas.
+
+- [x] **T25. Chrome: nav y panel de formulario como vidrio.** RF-19, RF-23.
+  - `AppShell`: encabezado y nav móvil con `.glass-panel`; indicador
+    deslizante como píldora `--signal`; tab activo en `--signal-glow` en
+    móvil. `SeccionesPage`: panel "Crear sección" con `.glass-panel` y
+    reveal de entrada; listado en superficie sólida.
+  - Hecho cuando: vidrio solo en chrome, nunca por fila.
+
+- [x] **T26. Botón primario azul, error rojo y cierre.** RF-22, RF-23.
+  - `Button` primary = `--signal` con `scale(0.97)` al presionar; `danger`
+    = `--danger`. `Alert.error` en `--danger`. Validación de
+    `prefers-reduced-motion` (blobs `animation: none`) y
+    `prefers-reduced-transparency` (`.glass-panel` → sólido).
+  - `pnpm lint`, `pnpm typecheck`, `pnpm test:run` (132) y `pnpm build`
+    verdes; validación visual escritorio y móvil 375 px; `MEMORY.md`
+    actualizado.
+  - Hecho cuando: los cuatro comandos verdes y la validación registrada.

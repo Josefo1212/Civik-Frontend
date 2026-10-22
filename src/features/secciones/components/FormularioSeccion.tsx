@@ -3,6 +3,7 @@ import type { FormEvent } from 'react'
 import Alert from '../../../components/ui/Alert/Alert'
 import Button from '../../../components/ui/Button/Button'
 import { GRADOS, TURNOS } from '../constants'
+import styles from './FormularioSeccion.module.css'
 
 export type ValoresFormulario = {
   grade_level: string
@@ -49,20 +50,8 @@ const FormularioSeccion = ({
   }
 
   return (
-    <form
-      onSubmit={enviar}
-      aria-label='formulario-seccion'
-      style={{
-        display: 'grid',
-        gap: '12px',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        padding: '16px',
-        border: '1px solid var(--color-borde-fuerte)',
-        borderRadius: '8px',
-        marginBottom: '16px',
-      }}
-    >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+    <form onSubmit={enviar} aria-label='formulario-seccion' className={styles.formulario}>
+      <div className={styles.campo}>
         <label htmlFor='grado'>Grado</label>
         <select
           id='grado'
@@ -84,7 +73,7 @@ const FormularioSeccion = ({
         </select>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+      <div className={styles.campo}>
         <label htmlFor='seccion'>Subdivisión</label>
         <input
           id='seccion'
@@ -99,7 +88,7 @@ const FormularioSeccion = ({
         />
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+      <div className={styles.campo}>
         <label htmlFor='turno'>Turno</label>
         <select
           id='turno'
@@ -121,13 +110,11 @@ const FormularioSeccion = ({
         </select>
       </div>
 
-      <div style={{ gridColumn: '1 / -1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <Button type='submit' style={{ alignSelf: 'flex-start' }} disabled={enviando || esFormularioInvalido(valores)} aria-label='guardar-seccion'>
+      <div className={styles.acciones}>
+        <Button type='submit' disabled={enviando || esFormularioInvalido(valores)} aria-label='guardar-seccion'>
           {enviando ? 'Guardando...' : 'Guardar sección'}
         </Button>
-        {error ? (
-          <Alert variante="error">{error}</Alert>
-        ) : null}
+        {error ? <Alert variante="error">{error}</Alert> : null}
       </div>
     </form>
   )

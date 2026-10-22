@@ -1,0 +1,26 @@
+.formulario {
+  display: grid;
+  gap: var(--esp-3);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+}
+
+.campo label {
+  font-family: var(--fuente-ui);
+  font-size: var(--texto-sm);
+  font-weight: 500;
+  color: var(--ink-muted);
+}
+
+.acciones {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  align-items: flex-start;
+}

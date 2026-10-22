@@ -2,9 +2,9 @@
   display: inline-block;
   width: 1rem;
   height: 1rem;
-  border: 2px solid rgba(255, 255, 255, 0.22);
+  border: 2px solid var(--line);
   border-top-color: currentColor;
-  border-radius: var(--radio-full);
+  border-radius: 50%;
   animation: girar 0.7s linear infinite;
   flex: none;
 }

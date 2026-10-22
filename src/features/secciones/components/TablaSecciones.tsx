@@ -1,6 +1,8 @@
 import type { Seccion } from '../../../domain/seccion'
+import Badge from '../../../components/ui/Badge/Badge'
 import Button from '../../../components/ui/Button/Button'
 import { ETIQUETAS_TURNO } from '../constants'
+import styles from './TablaSecciones.module.css'
 
 export type PropsTabla = {
   secciones: Seccion[]
@@ -38,22 +40,22 @@ const TablaSecciones = ({
 
   if (filas.length === 0) {
     return (
-      <p style={{ padding: '16px' }} aria-live='polite'>
+      <p className={styles.vacio} aria-live='polite'>
         No hay secciones para este filtro.
       </p>
     )
   }
 
   return (
-    <div style={{ overflowX: 'auto' }}>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+    <div className={styles.contenedor}>
+      <table className={styles.tabla}>
         <thead>
           <tr>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid var(--color-borde-fuerte)' }}>Grado</th>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid var(--color-borde-fuerte)' }}>Subdivisión</th>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid var(--color-borde-fuerte)' }}>Turno</th>
-            <th style={{ textAlign: 'left', padding: '8px', borderBottom: '1px solid var(--color-borde-fuerte)' }}>Estado</th>
-            <th style={{ textAlign: 'right', padding: '8px', borderBottom: '1px solid var(--color-borde-fuerte)' }}>Acciones</th>
+            <th>Grado</th>
+            <th>Subdivisión</th>
+            <th>Turno</th>
+            <th>Estado</th>
+            <th className={styles.numAlin}>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -64,16 +66,18 @@ const TablaSecciones = ({
 
             return (
               <tr key={seccion.id}>
-                <td style={{ padding: '8px', borderBottom: '1px solid var(--vidrio-borde)' }}>{seccion.grade_level}</td>
-                <td style={{ padding: '8px', borderBottom: '1px solid var(--vidrio-borde)' }}>{seccion.section}</td>
-                <td style={{ padding: '8px', borderBottom: '1px solid var(--vidrio-borde)' }}>
+                <td className={styles.dato}>{seccion.grade_level}</td>
+                <td className={styles.dato}>{seccion.section}</td>
+                <td className={styles.dato}>
                   {ETIQUETAS_TURNO[seccion.shift as keyof typeof ETIQUETAS_TURNO] ?? seccion.shift}
                 </td>
-                <td style={{ padding: '8px', borderBottom: '1px solid var(--vidrio-borde)' }}>
-                  {activa ? 'Activa' : 'Dada de baja'}
+                <td>
+                  <Badge variante={activa ? 'ok' : 'neutral'}>
+                    {activa ? 'Activa' : 'Dada de baja'}
+                  </Badge>
                 </td>
-                <td style={{ padding: '8px', borderBottom: '1px solid var(--vidrio-borde)', textAlign: 'right' }}>
-                  <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+                <td>
+                  <div className={styles.acciones}>
                     <Button
                       variante='secondary'
                       tamano='sm'

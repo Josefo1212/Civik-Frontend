@@ -1,0 +1,12 @@
+.filtro {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  font-family: var(--fuente-ui);
+  font-size: var(--texto-sm);
+  color: var(--ink-muted);
+}
+
+.filtro label {
+  font-weight: 500;
+}
