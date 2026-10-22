@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { Estudiante } from '../../domain/estudiante'
-import { filtrarEstudiantes, normalizar } from './utils'
+import { contarActivosPorSeccion, filtrarEstudiantes, normalizar } from './utils'
 
 const alumno = (first_name: string, last_name: string, id = first_name): Estudiante => ({
   id,
@@ -36,5 +36,24 @@ describe('filtrarEstudiantes', () => {
 
   it('sin coincidencias devuelve vacío', () => {
     expect(filtrarEstudiantes(lista, 'zzz')).toEqual([])
+  })
+})
+
+describe('contarActivosPorSeccion', () => {
+  it('cuenta solo los activos agrupados por sección', () => {
+    const listaMixta: Estudiante[] = [
+      { ...alumno('Ana', 'López', 'a1'), id_section: 's1', active: true },
+      { ...alumno('Luis', 'Pérez', 'a2'), id_section: 's1', active: false },
+      { ...alumno('Eva', 'Gómez', 'a3'), id_section: 's2', active: true },
+    ]
+    const conteo = contarActivosPorSeccion(listaMixta)
+    expect(conteo.get('s1')).toBe(1)
+    expect(conteo.get('s2')).toBe(1)
+  })
+
+  it('deja fuera a las secciones sin activos', () => {
+    const conteo = contarActivosPorSeccion([{ ...alumno('Beto', 'Ruiz', 'b1'), id_section: 's3', active: false }])
+    expect(conteo.has('s3')).toBe(false)
+    expect(conteo.get('s3') ?? 0).toBe(0)
   })
 })

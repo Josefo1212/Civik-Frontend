@@ -7,7 +7,7 @@ rojo si hay lógica, código después, verdes, marcar y PARAR.
   - Hecho cuando: `/notas` ya no existe en `router.tsx` ni en `RUTAS`/`NAVEGACION_PRINCIPAL`; `pages/NotasPage/` está borrada; `pnpm lint`, `pnpm typecheck` y `pnpm test:run` en verde (ajustando el test de nav/rutas si rompe).
   - RF-7.
 
-- [ ] **T2. Dashboard en `/`.**
+- [x] **T2. Dashboard en `/`.**
   - Hecho cuando: `/` renderiza `DashboardPage` (no redirige); muestra el lapso activo con fechas; sin lapso activo lo indica; lista cada sección activa con su conteo de estudiantes activos (incluidos los de conteo cero); error de carga muestra Alert con "Reintentar".
   - `DashboardPage.test.tsx` en verde.
   - RF-1, RF-2, RF-3, RF-4, RF-5, RF-6.

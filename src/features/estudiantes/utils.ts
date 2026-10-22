@@ -13,3 +13,12 @@ export const filtrarEstudiantes = (estudiantes: Estudiante[], texto: string): Es
     normalizar(`${estudiante.first_name} ${estudiante.last_name}`).includes(busqueda),
   )
 }
+
+export const contarActivosPorSeccion = (estudiantes: Estudiante[]): Map<string, number> => {
+  const conteo = new Map<string, number>()
+  for (const estudiante of estudiantes) {
+    if (!estudiante.active) continue
+    conteo.set(estudiante.id_section, (conteo.get(estudiante.id_section) ?? 0) + 1)
+  }
+  return conteo
+}
