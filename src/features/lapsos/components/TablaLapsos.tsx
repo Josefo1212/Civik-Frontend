@@ -6,12 +6,14 @@ export type PropsTablaLapsos = {
   lapsos: Lapso[]
   onActivar: (id: string) => void
   onCerrar: (id: string) => void
+  onEditar?: (lapso: Lapso) => void
+  onReprogramar?: (lapso: Lapso) => void
   operandoId?: string | null
 }
 
 const celda = { padding: '8px', borderBottom: '1px solid var(--vidrio-borde)' } as const
 
-const TablaLapsos = ({ lapsos, onActivar, onCerrar, operandoId }: PropsTablaLapsos) => {
+const TablaLapsos = ({ lapsos, onActivar, onCerrar, onEditar, onReprogramar, operandoId }: PropsTablaLapsos) => {
   if (lapsos.length === 0) {
     return (
       <p style={{ padding: '12px' }} aria-live='polite'>
@@ -36,6 +38,8 @@ const TablaLapsos = ({ lapsos, onActivar, onCerrar, operandoId }: PropsTablaLaps
         <tbody>
           {lapsos.map((lapso) => {
             const operando = operandoId === lapso.id
+            const puedeEditar = lapso.status === 'PLANNED' && onEditar
+            const puedeReprogramar = lapso.status === 'ACTIVE' && onReprogramar
             return (
               <tr key={lapso.id}>
                 <td style={celda}>{lapso.school_year}</td>
@@ -46,16 +50,28 @@ const TablaLapsos = ({ lapsos, onActivar, onCerrar, operandoId }: PropsTablaLaps
                 <td style={celda}>{ETIQUETAS_DIA[lapso.practice_day]}</td>
                 <td style={celda}>{ETIQUETAS_ESTADO[lapso.status]}</td>
                 <td style={{ ...celda, textAlign: 'right' }}>
-                  {lapso.status === 'PLANNED' ? (
-                    <Button variante='secondary' tamano='sm' onClick={() => onActivar(lapso.id)} disabled={operando}>
-                      Activar
-                    </Button>
-                  ) : null}
-                  {lapso.status === 'ACTIVE' ? (
-                    <Button variante='secondary' tamano='sm' onClick={() => onCerrar(lapso.id)} disabled={operando}>
-                      Cerrar
-                    </Button>
-                  ) : null}
+                  <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+                    {puedeEditar ? (
+                      <Button variante='secondary' tamano='sm' onClick={() => onEditar!(lapso)} disabled={operando}>
+                        Editar
+                      </Button>
+                    ) : null}
+                    {puedeReprogramar ? (
+                      <Button variante='secondary' tamano='sm' onClick={() => onReprogramar!(lapso)} disabled={operando}>
+                        Reprogramar día
+                      </Button>
+                    ) : null}
+                    {lapso.status === 'PLANNED' ? (
+                      <Button variante='primary' tamano='sm' onClick={() => onActivar(lapso.id)} disabled={operando}>
+                        Activar
+                      </Button>
+                    ) : null}
+                    {lapso.status === 'ACTIVE' ? (
+                      <Button variante='secondary' tamano='sm' onClick={() => onCerrar(lapso.id)} disabled={operando}>
+                        Cerrar
+                      </Button>
+                    ) : null}
+                  </div>
                 </td>
               </tr>
             )

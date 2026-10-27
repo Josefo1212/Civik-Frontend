@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import type { Lapso } from '../../domain/lapso'
 import SelectorLapso from '../../features/lapsos/components/SelectorLapso'
 import FormularioLapso, { type ValoresLapso } from '../../features/lapsos/components/FormularioLapso'
 import TablaLapsos from '../../features/lapsos/components/TablaLapsos'
 import { useLapsos } from '../../features/lapsos/hooks/useLapsos'
 import { useLapsoMutations } from '../../features/lapsos/hooks/useLapsoMutations'
 import { etiquetaLapso, lapsoActivo } from '../../features/lapsos/utils'
+import { DIAS_SEMANA, ETIQUETAS_DIA } from '../../features/lapsos/constants'
 import FormularioEvento, { type ValoresEvento } from '../../features/eventos/components/FormularioEvento'
 import ListaEventos from '../../features/eventos/components/ListaEventos'
 import { useEventos } from '../../features/eventos/hooks/useEventos'
@@ -27,14 +29,18 @@ const EventosPage = () => {
   const [claveFormularioEvento, setClaveFormularioEvento] = useState(0)
   const [mostrarAdministrarLapsos, setMostrarAdministrarLapsos] = useState(false)
   const [drawerEventoAbierto, setDrawerEventoAbierto] = useState(false)
+  const [drawerLapsoAbierto, setDrawerLapsoAbierto] = useState(false)
+  const [modoLapso, setModoLapso] = useState<'crear' | 'editar' | 'reprogramar'>('crear')
+  const [lapsoEditando, setLapsoEditando] = useState<Lapso | null>(null)
+  const [diaReprogramar, setDiaReprogramar] = useState<string>('MONDAY')
 
   const { data: lapsos = [], isLoading: cargandoLapsos, error: errorLapsos, refetch: refetchLapsos } = useLapsos()
-  const { crear: crearLapso, activar, cerrar } = useLapsoMutations()
+  const { crear: crearLapso, editar, activar, cerrar, reprogramar } = useLapsoMutations()
   const activo = lapsoActivo(lapsos)
   const lapsoSeleccionado = lapsoId ?? activo?.id ?? lapsos[0]?.id ?? null
   const { data: eventos = [], isLoading: cargandoEventos, error: errorEventos, refetch: refetchEventos } = useEventos(lapsoSeleccionado)
   const { crear: crearEvento, cancelar, generarAuto } = useEventoMutations()
-  const mostrarAdministrarLapsosEfectivo = mostrarAdministrarLapsos || (activo === null && lapsos.length === 0)
+  const mostrarAdministrarLapsosEfectivo = mostrarAdministrarLapsos || lapsos.length === 0
 
   const manejarCrearLapso = (valores: ValoresLapso) => {
     setErrorGeneral(null)
@@ -60,7 +66,6 @@ const EventosPage = () => {
       onSuccess: () => {
         setOperandoId(null)
         setLapsoId(id)
-        setMostrarAdministrarLapsos(false)
         generarAuto.mutate(id)
       },
       onError: (e) => {
@@ -80,6 +85,65 @@ const EventosPage = () => {
         setErrorGeneral(e instanceof Error ? e.message : 'No se pudo cerrar el lapso')
       },
     })
+  }
+
+  const abrirCrearLapso = () => {
+    setErrorGeneral(null)
+    setModoLapso('crear')
+    setLapsoEditando(null)
+    setClaveFormularioLapso((k) => k + 1)
+    setDrawerLapsoAbierto(true)
+  }
+
+  const abrirEditarLapso = (lapso: Lapso) => {
+    setErrorGeneral(null)
+    setModoLapso('editar')
+    setLapsoEditando(lapso)
+    setClaveFormularioLapso((k) => k + 1)
+    setDrawerLapsoAbierto(true)
+  }
+
+  const abrirReprogramarLapso = (lapso: Lapso) => {
+    setErrorGeneral(null)
+    setModoLapso('reprogramar')
+    setLapsoEditando(lapso)
+    setDiaReprogramar(lapso.practice_day)
+    setDrawerLapsoAbierto(true)
+  }
+
+  const manejarEditarLapso = (valores: ValoresLapso) => {
+    if (!lapsoEditando) return
+    setErrorGeneral(null)
+    editar.mutate(
+      { id: lapsoEditando.id, payload: valores },
+      {
+        onSuccess: () => {
+          setDrawerLapsoAbierto(false)
+          setLapsoEditando(null)
+        },
+        onError: (e) => {
+          setErrorGeneral(e instanceof Error ? e.message : 'No se pudo editar el lapso')
+        },
+      },
+    )
+  }
+
+  const manejarReprogramarLapso = () => {
+    if (!lapsoEditando) return
+    setErrorGeneral(null)
+    reprogramar.mutate(
+      { id: lapsoEditando.id, practice_day: diaReprogramar },
+      {
+        onSuccess: () => {
+          setDrawerLapsoAbierto(false)
+          setLapsoEditando(null)
+          generarAuto.mutate(lapsoEditando.id)
+        },
+        onError: (e) => {
+          setErrorGeneral(e instanceof Error ? e.message : 'No se pudo reprogramar el día de práctica')
+        },
+      },
+    )
   }
 
   const manejarCrearEvento = (valores: ValoresEvento) => {
@@ -154,9 +218,15 @@ const EventosPage = () => {
         <div className={styles.seccion}>
           <section className={`${styles.panelGlass} glass-panel`} aria-labelledby="titulo-lapsos">
             <header className={styles.cabeceraGlass}>
-              <h2 className={styles.panelTitulo} id="titulo-lapsos">
-                Lapsos
-              </h2>
+              <div>
+                <h2 className={styles.panelTitulo} id="titulo-lapsos">
+                  Lapsos
+                </h2>
+                <p className={styles.panelSubtitulo}>Crear, editar, activar, reprogramar o cerrar lapsos.</p>
+              </div>
+              <Button variante="primary" onClick={abrirCrearLapso}>
+                + Nuevo lapso
+              </Button>
             </header>
             {cargandoLapsos ? (
               <p className={styles.estado}>
@@ -180,18 +250,14 @@ const EventosPage = () => {
                 Todavía no hay lapsos. Creá el primero para empezar a programar eventos.
               </p>
             ) : null}
-            <FormularioLapso
-              key={claveFormularioLapso}
-              enviando={crearLapso.isPending}
-              error={errorGeneral}
-              onSubmit={manejarCrearLapso}
-            />
             {!cargandoLapsos && !errorLapsos && lapsos.length > 0 ? (
               <div className={styles.tablaWrapper}>
                 <TablaLapsos
                   lapsos={lapsos}
                   onActivar={manejarActivar}
                   onCerrar={manejarCerrar}
+                  onEditar={abrirEditarLapso}
+                  onReprogramar={abrirReprogramarLapso}
                   operandoId={operandoId}
                 />
               </div>
@@ -265,6 +331,93 @@ const EventosPage = () => {
           </div>
         </section>
       ) : null}
+
+      <Drawer
+        abierto={drawerLapsoAbierto}
+        titulo={modoLapso === 'crear' ? 'Nuevo lapso' : modoLapso === 'editar' ? 'Editar lapso' : 'Reprogramar día de práctica'}
+        subtitulo={
+          modoLapso === 'crear'
+            ? 'Configura año, número, fechas y día de práctica regular.'
+            : modoLapso === 'editar'
+              ? 'Solo editable mientras el lapso esté en PLANNED.'
+              : 'Cambia el día y se reubicarán las prácticas pendientes.'
+        }
+        onCerrar={() => {
+          setDrawerLapsoAbierto(false)
+          setLapsoEditando(null)
+        }}
+        pie={
+          modoLapso === 'reprogramar' ? (
+            <>
+              <Button variante="secondary" onClick={() => setDrawerLapsoAbierto(false)}>
+                Cancelar
+              </Button>
+              <Button variante="primary" disabled={reprogramar.isPending} onClick={manejarReprogramarLapso}>
+                {reprogramar.isPending ? 'Guardando…' : 'Guardar'}
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variante="secondary" onClick={() => setDrawerLapsoAbierto(false)}>
+                Cancelar
+              </Button>
+              <Button
+                form="formulario-lapso"
+                type="submit"
+                variante="primary"
+                disabled={crearLapso.isPending || editar.isPending}
+              >
+                {crearLapso.isPending || editar.isPending ? 'Guardando…' : 'Guardar'}
+              </Button>
+            </>
+          )
+        }
+      >
+        {modoLapso === 'reprogramar' && lapsoEditando ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <label style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <span style={{ fontSize: 'var(--texto-sm)', color: 'var(--ink-muted)' }}>Día de práctica regular</span>
+              <select
+                value={diaReprogramar}
+                onChange={(e) => setDiaReprogramar(e.target.value)}
+                style={{
+                  padding: '8px 10px',
+                  borderRadius: 'var(--radio)',
+                  border: '1px solid var(--line)',
+                  background: 'var(--surface)',
+                  color: 'var(--ink)',
+                }}
+              >
+                {DIAS_SEMANA.map((dia) => (
+                  <option key={dia} value={dia}>
+                    {ETIQUETAS_DIA[dia]}
+                  </option>
+                ))}
+              </select>
+            </label>
+            {errorGeneral ? <Alert variante="error">{errorGeneral}</Alert> : null}
+          </div>
+        ) : (
+          <FormularioLapso
+            idFormulario="formulario-lapso"
+            key={claveFormularioLapso}
+            enviando={crearLapso.isPending || editar.isPending}
+            error={errorGeneral}
+            valoresIniciales={
+              modoLapso === 'editar' && lapsoEditando
+                ? {
+                    school_year: String(lapsoEditando.school_year),
+                    lapse_number: String(lapsoEditando.lapse_number),
+                    start_date: lapsoEditando.start_date,
+                    end_date: lapsoEditando.end_date,
+                    practice_day: lapsoEditando.practice_day,
+                  }
+                : undefined
+            }
+            onSubmit={modoLapso === 'crear' ? manejarCrearLapso : manejarEditarLapso}
+          />
+        )}
+      </Drawer>
 
       <Drawer
         abierto={drawerEventoAbierto}

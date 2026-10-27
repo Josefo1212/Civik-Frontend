@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { activarLapso, cerrarLapso, crearLapso } from '../api'
-import type { CrearLapsoPayload } from '../api'
+import { activarLapso, cerrarLapso, crearLapso, editarLapso, generarPracticasLapso, reprogramarDiaPractica } from '../api'
+import type { CrearLapsoPayload, EditarLapsoPayload } from '../api'
 import { lapsosQueryKeys } from './useLapsos'
 
 export const useLapsoMutations = () => {
@@ -15,6 +15,11 @@ export const useLapsoMutations = () => {
     onSuccess: invalidarLapsos,
   })
 
+  const editar = useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: EditarLapsoPayload }) => editarLapso(id, payload),
+    onSuccess: invalidarLapsos,
+  })
+
   const activar = useMutation({
     mutationFn: (id: string) => activarLapso(id),
     onSuccess: invalidarLapsos,
@@ -25,5 +30,15 @@ export const useLapsoMutations = () => {
     onSuccess: invalidarLapsos,
   })
 
-  return { crear, activar, cerrar }
+  const reprogramar = useMutation({
+    mutationFn: ({ id, practice_day }: { id: string; practice_day: string }) => reprogramarDiaPractica(id, practice_day),
+    onSuccess: invalidarLapsos,
+  })
+
+  const generarAuto = useMutation({
+    mutationFn: (id: string) => generarPracticasLapso(id),
+    onSuccess: invalidarLapsos,
+  })
+
+  return { crear, editar, activar, cerrar, reprogramar, generarAuto }
 }

@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import Alert from '../../../components/ui/Alert/Alert'
-import Button from '../../../components/ui/Button/Button'
 import { DIAS_SEMANA, ETIQUETAS_DIA, NUMEROS_LAPSO } from '../constants'
 
 export type ValoresLapso = {
@@ -13,7 +12,9 @@ export type ValoresLapso = {
 }
 
 export type PropsFormularioLapso = {
+  idFormulario?: string
   valorInicial?: ValoresLapso
+  valoresIniciales?: Partial<ValoresLapso>
   enviando: boolean
   error?: string | null
   onSubmit: (valores: ValoresLapso) => void
@@ -30,8 +31,9 @@ const VACIO: ValoresLapso = {
 const estaIncompleto = (valores: ValoresLapso) =>
   Object.values(valores).some((valor) => valor.trim() === '')
 
-const FormularioLapso = ({ valorInicial, enviando, error, onSubmit }: PropsFormularioLapso) => {
-  const [valores, setValores] = useState<ValoresLapso>(valorInicial ?? VACIO)
+const FormularioLapso = ({ idFormulario = 'formulario-lapso', valorInicial, valoresIniciales, enviando, error, onSubmit }: PropsFormularioLapso) => {
+  const inicial = valorInicial ?? { ...VACIO, ...(valoresIniciales ?? {}) }
+  const [valores, setValores] = useState<ValoresLapso>(inicial)
 
   const actualizar = (campo: keyof ValoresLapso, valor: string) => {
     setValores((previos) => ({ ...previos, [campo]: valor }))
@@ -44,16 +46,13 @@ const FormularioLapso = ({ valorInicial, enviando, error, onSubmit }: PropsFormu
 
   return (
     <form
+      id={idFormulario}
       aria-label='formulario-lapso'
       onSubmit={enviar}
       style={{
         display: 'grid',
         gap: '12px',
         gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-        padding: '16px',
-        border: '1px solid var(--color-borde-fuerte)',
-        borderRadius: '8px',
-        marginBottom: '16px',
       }}
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
@@ -141,14 +140,9 @@ const FormularioLapso = ({ valorInicial, enviando, error, onSubmit }: PropsFormu
       </div>
 
       <div style={{ gridColumn: '1 / -1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <Button
-          type='submit'
-          style={{ alignSelf: 'flex-start' }}
-          aria-label='guardar-lapso'
-          disabled={enviando || estaIncompleto(valores)}
-        >
-          {enviando ? 'Guardando...' : 'Crear lapso'}
-        </Button>
+        <button type='submit' aria-label='guardar-lapso' disabled={enviando || estaIncompleto(valores)}>
+          Guardar
+        </button>
         {error ? (
           <Alert variante="error">{error}</Alert>
         ) : null}
