@@ -1,7 +1,7 @@
 .pila {
   display: flex;
   flex-direction: column;
-  gap: var(--esp-4);
+  gap: var(--esp-3);
 }
 
 .lapsoFila {
