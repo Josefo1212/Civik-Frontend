@@ -26,6 +26,7 @@ import { filtrarEstudiantes } from '../../features/estudiantes/utils'
 import Alert from '../../components/ui/Alert/Alert'
 import Button from '../../components/ui/Button/Button'
 import Card from '../../components/ui/Card/Card'
+import ConfirmModal from '../../components/ui/ConfirmModal/ConfirmModal'
 import PageHeader from '../../components/ui/PageHeader/PageHeader'
 import SegmentedControl from '../../components/ui/SegmentedControl/SegmentedControl'
 import Spinner from '../../components/ui/Spinner/Spinner'
@@ -146,13 +147,25 @@ const AlumnosYSeccionesPage = () => {
     )
   }
 
+  const [confirmarBajaEstudiante, setConfirmarBajaEstudiante] = useState<string | null>(null)
+
   const manejarBaja = (id: string) => {
     setErrorGeneral(null)
+    setConfirmarBajaEstudiante(id)
+  }
+
+  const confirmarBajaEstudianteAccion = () => {
+    if (confirmarBajaEstudiante === null) return
+    const id = confirmarBajaEstudiante
     setOperandoId(id)
     baja.mutate(id, {
-      onSuccess: () => setOperandoId(null),
+      onSuccess: () => {
+        setOperandoId(null)
+        setConfirmarBajaEstudiante(null)
+      },
       onError: (e) => {
         setOperandoId(null)
+        setConfirmarBajaEstudiante(null)
         setErrorGeneral(e instanceof Error ? e.message : 'No se pudo dar de baja')
       },
     })
@@ -218,6 +231,7 @@ const AlumnosYSeccionesPage = () => {
   const [bajasEnSesion, setBajasEnSesion] = useState<Seccion[]>([])
   const [errorGeneralSecciones, setErrorGeneralSecciones] = useState<string | null>(null)
   const [operandoIdSeccion, setOperandoIdSeccion] = useState<string | null>(null)
+  const [confirmarBajaSeccion, setConfirmarBajaSeccion] = useState<Seccion | null>(null)
 
   const { data: seccionesListado = [], isLoading: isLoadingSecciones, error: errorSeccionesListado, refetch: refetchSeccionesListado } = useSecciones(grado === 'todos' ? undefined : grado)
   const { crear: crearSeccion, editar: editarSeccion, darDeBaja: darDeBajaSeccion, reactivar: reactivarSeccionMut, eliminar: eliminarSeccion } = useSeccionMutations()
@@ -279,6 +293,12 @@ const AlumnosYSeccionesPage = () => {
 
   const manejarDarDeBajaSeccion = (seccion: Seccion) => {
     setErrorGeneralSecciones(null)
+    setConfirmarBajaSeccion(seccion)
+  }
+
+  const confirmarBajaSeccionAccion = () => {
+    if (confirmarBajaSeccion === null) return
+    const seccion = confirmarBajaSeccion
     setOperandoIdSeccion(seccion.id)
     darDeBajaSeccion.mutate(seccion.id, {
       onSuccess: () => {
@@ -287,9 +307,11 @@ const AlumnosYSeccionesPage = () => {
           return [...prev, { ...seccion, active: false }]
         })
         setOperandoIdSeccion(null)
+        setConfirmarBajaSeccion(null)
       },
       onError: (e: unknown) => {
         setOperandoIdSeccion(null)
+        setConfirmarBajaSeccion(null)
         const mensaje = e instanceof Error ? e.message : 'No se pudo dar de baja la sección'
         setErrorGeneralSecciones(mensaje)
       },
@@ -534,6 +556,33 @@ const AlumnosYSeccionesPage = () => {
           </section>
         </div>
       )}
+      <ConfirmModal
+        abierto={confirmarBajaEstudiante !== null}
+        titulo="Dar de baja alumno"
+        descripcion={
+          <p>
+            El alumno pasará a inactivo. Podrás reactivarlo después desde el listado.
+          </p>
+        }
+        textoConfirmar="Dar de baja"
+        onConfirmar={confirmarBajaEstudianteAccion}
+        onCancelar={() => setConfirmarBajaEstudiante(null)}
+        cargando={operandoId !== null && confirmarBajaEstudiante === operandoId}
+      />
+      <ConfirmModal
+        abierto={confirmarBajaSeccion !== null}
+        titulo="Dar de baja sección"
+        descripcion={
+          <p>
+            La sección pasará a inactiva. Los alumnos seguirán asociados, pero no aparecerán en las listas activas.
+            Podrás reactivarla después.
+          </p>
+        }
+        textoConfirmar="Dar de baja"
+        onConfirmar={confirmarBajaSeccionAccion}
+        onCancelar={() => setConfirmarBajaSeccion(null)}
+        cargando={operandoIdSeccion !== null && confirmarBajaSeccion?.id === operandoIdSeccion}
+      />
     </>
   )
 }
