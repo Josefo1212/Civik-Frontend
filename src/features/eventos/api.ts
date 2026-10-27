@@ -20,3 +20,7 @@ export const crearEvento = async (payload: CrearEventoPayload): Promise<Evento> 
 export const cancelarEvento = async (id: string, motivo: string): Promise<Evento> => {
   return await apiSend<Evento>(`/events/${id}/cancel`, 'POST', { motivo })
 }
+
+export const generarPracticasAuto = async (idLapse: string): Promise<Evento[]> => {
+  return await apiSend<Evento[]>(`/lapses/${idLapse}/generar-practicas`, 'POST')
+}

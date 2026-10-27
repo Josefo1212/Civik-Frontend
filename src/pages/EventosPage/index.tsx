@@ -33,7 +33,7 @@ const EventosPage = () => {
   const activo = lapsoActivo(lapsos)
   const lapsoSeleccionado = lapsoId ?? activo?.id ?? lapsos[0]?.id ?? null
   const { data: eventos = [], isLoading: cargandoEventos, error: errorEventos, refetch: refetchEventos } = useEventos(lapsoSeleccionado)
-  const { crear: crearEvento, cancelar } = useEventoMutations()
+  const { crear: crearEvento, cancelar, generarAuto } = useEventoMutations()
   const mostrarAdministrarLapsosEfectivo = mostrarAdministrarLapsos || (activo === null && lapsos.length === 0)
 
   const manejarCrearLapso = (valores: ValoresLapso) => {
@@ -44,6 +44,7 @@ const EventosPage = () => {
         setLapsoId(lapso.id)
         if (lapso.status === 'ACTIVE') {
           setMostrarAdministrarLapsos(false)
+          generarAuto.mutate(lapso.id)
         }
       },
       onError: (e) => {
@@ -60,6 +61,7 @@ const EventosPage = () => {
         setOperandoId(null)
         setLapsoId(id)
         setMostrarAdministrarLapsos(false)
+        generarAuto.mutate(id)
       },
       onError: (e) => {
         setOperandoId(null)
