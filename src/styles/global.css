@@ -3,59 +3,61 @@
 :root {
   color-scheme: dark;
 
-  /* Paleta canónica (skill design-system): dirección liquid glass */
-  --bg: #0b0f17;
-  --surface: #171d24;
-  --line: rgba(255, 255, 255, 0.1);
-  --ink: #f2f5f8;
-  --ink-muted: #9aa5b1;
-  --signal: #2e7cf6;
-  --signal-glow: #6fa8ff;
-  --accent-2: #34d1c4;
-  --ok: #32d74b;
+  /* Paleta canónica — Academic Operations Dark */
+  --bg: #0b0f14;
+  --surface: #111821;
+  --surface-elev: #192330;
+  --line: #303b49;
+  --ink: #e5eaf1;
+  --ink-muted: #9aa8b9;
+  --signal: #4f8cff;
+  --signal-glow: #6b9bff;
+  --accent-2: #35c98a;
+  --ok: #35c98a;
   --danger: #ff453a;
+  --warn: #ffd60a;
+  --info: #4f8cff;
 
-  /* Alias de compatibilidad: los componentes leen estos nombres */
+  /* Alias de compatibilidad */
   --color-fondo: var(--bg);
   --color-fondo-solido: var(--bg);
   --color-superficie: var(--surface);
-  --color-superficie-2: #1c232b;
+  --color-superficie-2: var(--surface-elev);
   --color-borde: var(--line);
-  --color-borde-fuerte: rgba(255, 255, 255, 0.18);
+  --color-borde-fuerte: rgba(154, 168, 185, 0.4);
 
   --color-texto: var(--ink);
   --color-texto-suave: var(--ink-muted);
-  --color-texto-tenue: #6b7682;
+  --color-texto-tenue: #7a8596;
 
   --color-ok: var(--ok);
-  --color-ok-suave: rgba(50, 215, 75, 0.14);
+  --color-ok-suave: rgba(53, 201, 138, 0.14);
   --color-error: var(--danger);
   --color-error-suave: rgba(255, 69, 58, 0.14);
-  --color-aviso: #ffd60a;
+  --color-aviso: var(--warn);
   --color-aviso-suave: rgba(255, 214, 10, 0.14);
-  --color-info: var(--accent-2);
-  --color-info-suave: rgba(52, 209, 196, 0.14);
-  --color-dato: var(--accent-2);
+  --color-info: var(--info);
+  --color-info-suave: rgba(79, 140, 255, 0.14);
+  --color-dato: var(--ink-muted);
 
-  /* Acento de acción = --signal (azul eléctrico) */
-  --primario-rgb: 46, 124, 246;
+  --primario-rgb: 79, 140, 255;
   --color-primario: var(--signal);
   --color-primario-fuerte: var(--signal-glow);
-  --color-primario-suave: rgba(46, 124, 246, 0.16);
+  --color-primario-suave: rgba(79, 140, 255, 0.18);
   --color-primario-contraste: #ffffff;
 
-  /* Vidrio (chrome: navegación, paneles de formulario, modales) */
-  --glass-bg: rgba(23, 29, 36, 0.55);
-  --glass-blur: blur(20px) saturate(160%);
-  --glass-border: 1px solid rgba(255, 255, 255, 0.12);
-  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  /* Superficies con transparencia sutil solo para chrome */
+  --glass-bg: rgba(17, 24, 33, 0.9);
+  --glass-blur: blur(12px) saturate(120%);
+  --glass-border: 1px solid var(--line);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.28);
 
-  /* Radios: vidrio = squircle; superficie sólida = 8px */
-  --radio-glass: 20px;
+  /* Radios */
+  --radio-glass: 12px;
   --radio-sm: 6px;
   --radio: 8px;
-  --radio-lg: 8px;
+  --radio-lg: 10px;
   --radio-full: 999px;
   --radio-borde: 8px;
 
@@ -100,54 +102,9 @@
   font-family: var(--fuente);
 }
 
-/* Fondo liquid: dos blobs difusos fijos detrás del contenido */
-body::before,
-body::after {
-  content: '';
-  position: fixed;
-  z-index: -1;
-  border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.35;
-  pointer-events: none;
-}
-
-body::before {
-  width: 480px;
-  height: 480px;
-  top: -100px;
-  left: -80px;
-  background: var(--signal);
-  animation: deriva-a 26s ease-in-out infinite alternate;
-}
-
-body::after {
-  width: 400px;
-  height: 400px;
-  bottom: -120px;
-  right: -60px;
-  background: var(--accent-2);
-  animation: deriva-b 30s ease-in-out infinite alternate;
-}
-
-@keyframes deriva-a {
-  from {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-
-  to {
-    transform: translate3d(60px, 40px, 0) scale(1.12);
-  }
-}
-
-@keyframes deriva-b {
-  from {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-
-  to {
-    transform: translate3d(-50px, -30px, 0) scale(1.15);
-  }
+/* Fondo sobrio sin degradado ambiental dominante */
+body {
+  background-image: radial-gradient(1200px 800px at 50% -10%, rgba(79, 140, 255, 0.08), transparent);
 }
 
 /* Material de vidrio: solo chrome y contenedores, nunca filas de datos */
@@ -173,11 +130,11 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: var(--color-fondo-solido);
-  color: var(--color-texto);
+  background-color: var(--bg);
+  color: var(--ink);
   font-family: var(--fuente);
   font-size: var(--texto-base);
-  line-height: 1.5;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -332,18 +289,14 @@ input[type='search']::-webkit-search-cancel-button {
   }
 }
 
-/* Sin movimiento: se congela la deriva de los blobs, se conservan los fades */
+/* Sin movimiento */
 @media (prefers-reduced-motion: reduce) {
-  body::before,
-  body::after {
-    animation: none;
-  }
-
   *,
   *::before,
   *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
   }
 }

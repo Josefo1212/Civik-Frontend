@@ -11,12 +11,10 @@
   display: flex;
   align-items: center;
   gap: var(--esp-4);
-  padding: var(--esp-3) var(--esp-5);
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border-bottom: 1px solid var(--glass-border);
-  box-shadow: var(--glass-highlight), 0 8px 32px rgba(0, 0, 0, 0.35);
+  padding: var(--esp-3) var(--esp-6);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), transparent), var(--surface);
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
 }
 
 .marca {
@@ -43,7 +41,7 @@
   font-family: var(--fuente-ui);
   font-size: var(--texto-sm);
   font-weight: 700;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .nav {
@@ -62,13 +60,13 @@
   z-index: 0;
   border-radius: var(--radio);
   background: var(--signal);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
   opacity: 0;
   pointer-events: none;
   transition:
-    transform var(--trans-lenta) var(--curva-suave),
-    width var(--trans-lenta) var(--curva-suave),
-    height var(--trans-lenta) var(--curva-suave);
+    transform var(--trans) var(--curva),
+    width var(--trans) var(--curva),
+    height var(--trans) var(--curva);
 }
 
 .enlace {
@@ -91,7 +89,7 @@
 }
 
 .enlace:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(154, 168, 185, 0.08);
   color: var(--ink);
 }
 

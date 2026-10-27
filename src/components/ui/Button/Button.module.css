@@ -44,16 +44,14 @@
 .primary {
   background: var(--signal);
   color: var(--color-primario-contraste);
-  border-color: var(--signal);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  border-color: rgba(107, 155, 255, 0.9);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .secondary {
-  background: rgba(255, 255, 255, 0.06);
+  background: transparent;
   color: var(--ink);
   border-color: var(--line);
-  backdrop-filter: var(--vidrio-filtro);
-  -webkit-backdrop-filter: var(--vidrio-filtro);
 }
 
 .ghost {
@@ -74,11 +72,12 @@
   }
 
   .secondary:hover:not(:disabled) {
-    border-color: var(--color-borde-fuerte);
+    background: rgba(154, 168, 185, 0.08);
+    border-color: rgba(154, 168, 185, 0.5);
   }
 
   .ghost:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(154, 168, 185, 0.08);
     color: var(--ink);
   }
 
