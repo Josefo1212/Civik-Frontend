@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import SelectorLapso from '../../features/lapsos/components/SelectorLapso'
 import FormularioLapso, { type ValoresLapso } from '../../features/lapsos/components/FormularioLapso'
 import TablaLapsos from '../../features/lapsos/components/TablaLapsos'
@@ -10,7 +9,6 @@ import FormularioEvento, { type ValoresEvento } from '../../features/eventos/com
 import ListaEventos from '../../features/eventos/components/ListaEventos'
 import { useEventos } from '../../features/eventos/hooks/useEventos'
 import { useEventoMutations } from '../../features/eventos/hooks/useEventoMutations'
-import { RUTAS } from '../../constants/routes'
 import Alert from '../../components/ui/Alert/Alert'
 import Button from '../../components/ui/Button/Button'
 import Card from '../../components/ui/Card/Card'
@@ -204,8 +202,8 @@ const EventosPage = () => {
         <section className={styles.panel}>
           <header className={styles.panelCabecera}>
             <div>
-              <h2 className={styles.panelTitulo}>Eventos del lapso</h2>
-              <p className={styles.panelSubtitulo}>Selecciona el lapso para ver, crear o cancelar eventos.</p>
+              <h2 className={styles.panelTitulo}>Eventos</h2>
+              <p className={styles.panelSubtitulo}>Lista cronológica por lapso seleccionado</p>
             </div>
             {lapsoSeleccionado !== null ? (
               <Button variante="primary" onClick={abrirNuevoEvento}>
@@ -214,12 +212,14 @@ const EventosPage = () => {
             ) : null}
           </header>
           <div className={styles.panelCuerpo}>
-            <SelectorLapso
-              lapsos={lapsos}
-              valor={lapsoSeleccionado}
-              onCambiar={setLapsoId}
-              cargando={cargandoLapsos}
-            />
+            <div className={styles.filtros}>
+              <SelectorLapso
+                lapsos={lapsos}
+                valor={lapsoSeleccionado}
+                onCambiar={setLapsoId}
+                cargando={cargandoLapsos}
+              />
+            </div>
             {lapsoSeleccionado !== null ? (
               <>
                 {cargandoEventos ? (
@@ -242,10 +242,8 @@ const EventosPage = () => {
                 {!cargandoEventos && !errorEventos && sinEventos ? (
                   <div className={styles.vacio}>
                     <EmptyState>Este lapso todavía no tiene eventos.</EmptyState>
-                    <p className={styles.vacioAyuda}>Creá el primer evento para empezar a tomar asistencia.</p>
-                    <Link to={RUTAS.asistencia}>
-                      <Button variante="secondary" tamano="sm">Ir a Asistencia</Button>
-                    </Link>
+                    <p className={styles.vacioAyuda}>Crea el primer evento para habilitar el registro de asistencia.</p>
+                    <Button variante="primary" onClick={abrirNuevoEvento}>Crear evento</Button>
                   </div>
                 ) : null}
                 {!cargandoEventos && !errorEventos && !sinEventos ? (
@@ -260,7 +258,7 @@ const EventosPage = () => {
                 ) : null}
               </>
             ) : (
-              <p className={styles.ayuda}>Seleccioná un lapso para administrar sus eventos.</p>
+              <p className={styles.ayuda}>Selecciona un lapso para administrar sus eventos.</p>
             )}
           </div>
         </section>
