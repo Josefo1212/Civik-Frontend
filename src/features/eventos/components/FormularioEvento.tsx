@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import Alert from '../../../components/ui/Alert/Alert'
-import Button from '../../../components/ui/Button/Button'
 import { ETIQUETAS_TIPO, TIPOS_EVENTO } from '../constants'
 
 export type ValoresEvento = {
@@ -15,6 +14,7 @@ export type PropsFormularioEvento = {
   enviando: boolean
   error?: string | null
   onSubmit: (valores: ValoresEvento) => void
+  idFormulario?: string
 }
 
 const VACIO: ValoresEvento = {
@@ -23,12 +23,7 @@ const VACIO: ValoresEvento = {
   event_name: '',
 }
 
-const estaIncompleto = (valores: ValoresEvento) =>
-  valores.event_date.trim() === '' ||
-  valores.type_event === '' ||
-  valores.event_name.trim() === ''
-
-const FormularioEvento = ({ valorInicial, enviando, error, onSubmit }: PropsFormularioEvento) => {
+const FormularioEvento = ({ valorInicial, enviando, error, onSubmit, idFormulario }: PropsFormularioEvento) => {
   const [valores, setValores] = useState<ValoresEvento>(valorInicial ?? VACIO)
 
   const actualizar = (campo: keyof ValoresEvento, valor: string) => {
@@ -43,15 +38,12 @@ const FormularioEvento = ({ valorInicial, enviando, error, onSubmit }: PropsForm
   return (
     <form
       aria-label='formulario-evento'
+      id={idFormulario}
       onSubmit={enviar}
       style={{
         display: 'grid',
         gap: '12px',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-        padding: '16px',
-        border: '1px solid var(--color-borde-fuerte)',
-        borderRadius: '8px',
-        marginBottom: '16px',
+        gridTemplateColumns: '1fr',
       }}
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
@@ -101,18 +93,8 @@ const FormularioEvento = ({ valorInicial, enviando, error, onSubmit }: PropsForm
         />
       </div>
 
-      <div style={{ gridColumn: '1 / -1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <Button
-          type='submit'
-          style={{ alignSelf: 'flex-start' }}
-          aria-label='guardar-evento'
-          disabled={enviando || estaIncompleto(valores)}
-        >
-          {enviando ? 'Guardando...' : 'Crear evento'}
-        </Button>
-        {error ? (
-          <Alert variante="error">{error}</Alert>
-        ) : null}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {error ? <Alert variante="error">{error}</Alert> : null}
       </div>
     </form>
   )

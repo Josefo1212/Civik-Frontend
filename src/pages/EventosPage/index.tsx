@@ -14,6 +14,7 @@ import { RUTAS } from '../../constants/routes'
 import Alert from '../../components/ui/Alert/Alert'
 import Button from '../../components/ui/Button/Button'
 import Card from '../../components/ui/Card/Card'
+import Drawer from '../../components/ui/Drawer/Drawer'
 import EmptyState from '../../components/ui/EmptyState/EmptyState'
 import PageHeader from '../../components/ui/PageHeader/PageHeader'
 import Spinner from '../../components/ui/Spinner/Spinner'
@@ -27,6 +28,7 @@ const EventosPage = () => {
   const [claveFormularioLapso, setClaveFormularioLapso] = useState(0)
   const [claveFormularioEvento, setClaveFormularioEvento] = useState(0)
   const [mostrarAdministrarLapsos, setMostrarAdministrarLapsos] = useState(false)
+  const [drawerEventoAbierto, setDrawerEventoAbierto] = useState(false)
 
   const { data: lapsos = [], isLoading: cargandoLapsos, error: errorLapsos, refetch: refetchLapsos } = useLapsos()
   const { crear: crearLapso, activar, cerrar } = useLapsoMutations()
@@ -86,12 +88,21 @@ const EventosPage = () => {
     crearEvento.mutate(
       { id_lapse: lapsoSeleccionado, ...valores },
       {
-        onSuccess: () => setClaveFormularioEvento((k) => k + 1),
+        onSuccess: () => {
+          setClaveFormularioEvento((k) => k + 1)
+          setDrawerEventoAbierto(false)
+        },
         onError: (e) => {
           setErrorGeneral(e instanceof Error ? e.message : 'No se pudo crear el evento')
         },
       },
     )
+  }
+
+  const abrirNuevoEvento = () => {
+    setErrorGeneral(null)
+    setClaveFormularioEvento((k) => k + 1)
+    setDrawerEventoAbierto(true)
   }
 
   const manejarConfirmarCancelar = (id: string, motivo: string) => {
@@ -196,6 +207,11 @@ const EventosPage = () => {
               <h2 className={styles.panelTitulo}>Eventos del lapso</h2>
               <p className={styles.panelSubtitulo}>Selecciona el lapso para ver, crear o cancelar eventos.</p>
             </div>
+            {lapsoSeleccionado !== null ? (
+              <Button variante="primary" onClick={abrirNuevoEvento}>
+                + Nuevo evento
+              </Button>
+            ) : null}
           </header>
           <div className={styles.panelCuerpo}>
             <SelectorLapso
@@ -206,15 +222,6 @@ const EventosPage = () => {
             />
             {lapsoSeleccionado !== null ? (
               <>
-                <div className={styles.formularioEvento}>
-                  <h3 className={styles.subtitulo}>Crear evento</h3>
-                  <FormularioEvento
-                    key={claveFormularioEvento}
-                    enviando={crearEvento.isPending}
-                    error={errorGeneral}
-                    onSubmit={manejarCrearEvento}
-                  />
-                </div>
                 {cargandoEventos ? (
                   <p className={styles.estado}>
                     <Spinner /> Cargando eventos…
@@ -258,6 +265,31 @@ const EventosPage = () => {
           </div>
         </section>
       ) : null}
+
+      <Drawer
+        abierto={drawerEventoAbierto}
+        titulo="Nuevo evento"
+        subtitulo="Agrega una práctica o presentación al lapso seleccionado."
+        onCerrar={() => setDrawerEventoAbierto(false)}
+        pie={
+          <>
+            <Button variante="secondary" onClick={() => setDrawerEventoAbierto(false)}>
+              Cancelar
+            </Button>
+            <Button form="formulario-evento" type="submit" variante="primary" disabled={crearEvento.isPending}>
+              {crearEvento.isPending ? 'Guardando…' : 'Guardar'}
+            </Button>
+          </>
+        }
+      >
+        <FormularioEvento
+          idFormulario="formulario-evento"
+          key={claveFormularioEvento}
+          enviando={crearEvento.isPending}
+          error={errorGeneral}
+          onSubmit={manejarCrearEvento}
+        />
+      </Drawer>
     </div>
   )
 }
