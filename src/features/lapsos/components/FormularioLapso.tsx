@@ -70,7 +70,7 @@ const FormularioLapso = ({ valorInicial, enviando, error, onSubmit }: PropsFormu
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-        <label htmlFor='lap-numero'>Número</label>
+        <label htmlFor='lap-numero'>Nro. de lapso</label>
         <select
           id='lap-numero'
           aria-label='lap-numero'
@@ -117,7 +117,7 @@ const FormularioLapso = ({ valorInicial, enviando, error, onSubmit }: PropsFormu
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-        <label htmlFor='lap-dia'>Día de práctica</label>
+        <label htmlFor='lap-dia'>Día de práctica regular</label>
         <select
           id='lap-dia'
           aria-label='lap-dia'
@@ -135,6 +135,9 @@ const FormularioLapso = ({ valorInicial, enviando, error, onSubmit }: PropsFormu
             </option>
           ))}
         </select>
+        <small style={{ color: 'var(--ink-muted)' }}>
+          Define el día fijo en que se realizará la práctica regular de este lapso.
+        </small>
       </div>
 
       <div style={{ gridColumn: '1 / -1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
