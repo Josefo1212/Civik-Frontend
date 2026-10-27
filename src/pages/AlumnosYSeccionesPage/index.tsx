@@ -6,7 +6,6 @@ import SelectorSeccion from '../../features/estudiantes/components/SelectorSecci
 import SelectorLapso from '../../features/lapsos/components/SelectorLapso'
 import DetalleEstudiante from '../../features/estudiantes/components/DetalleEstudiante'
 import FormularioEstudiante, { type ValoresEstudiante } from '../../features/estudiantes/components/FormularioEstudiante'
-import TablaEstudiantes from '../../features/estudiantes/components/TablaEstudiantes'
 import TablaEstudiantesGlobal from '../../features/estudiantes/components/TablaEstudiantesGlobal'
 import ListaSeccionesInactivas from '../../features/secciones/components/ListaSeccionesInactivas'
 import FormularioSeccion, { type ValoresFormulario } from '../../features/secciones/components/FormularioSeccion'
@@ -14,7 +13,7 @@ import FiltroGrado from '../../features/secciones/components/FiltroGrado'
 import TablaSecciones from '../../features/secciones/components/TablaSecciones'
 import { useSecciones } from '../../features/secciones/hooks/useSecciones'
 import { useSeccionMutations } from '../../features/secciones/hooks/useSeccionMutations'
-import { useEstudiantes, useEstudiantesGlobal } from '../../features/estudiantes/hooks/useEstudiantes'
+import { useEstudiantesGlobal } from '../../features/estudiantes/hooks/useEstudiantes'
 import { useEstudianteMutations } from '../../features/estudiantes/hooks/useEstudianteMutations'
 import { useAsistenciaLapso } from '../../features/estudiantes/hooks/useAsistenciaLapso'
 import { useLapsos } from '../../features/lapsos/hooks/useLapsos'
@@ -27,6 +26,7 @@ import Alert from '../../components/ui/Alert/Alert'
 import Button from '../../components/ui/Button/Button'
 import Card from '../../components/ui/Card/Card'
 import ConfirmModal from '../../components/ui/ConfirmModal/ConfirmModal'
+import Drawer from '../../components/ui/Drawer/Drawer'
 import PageHeader from '../../components/ui/PageHeader/PageHeader'
 import SegmentedControl from '../../components/ui/SegmentedControl/SegmentedControl'
 import Spinner from '../../components/ui/Spinner/Spinner'
@@ -44,12 +44,12 @@ const OPCIONES_MODO: { valor: Modo; etiqueta: string }[] = [
 
 const AlumnosYSeccionesPage = () => {
   const [modo, setModo] = useState<Modo>('alumnos')
-  const [seccionId, setSeccionId] = useState<string | null>(null)
-  const [incluirInactivos, setIncluirInactivos] = useState(false)
+  const [filtroSeccionId, setFiltroSeccionId] = useState<string | null>(null)
   const [incluirInactivosGlobal, setIncluirInactivosGlobal] = useState(false)
   const [mostrarSeccionesBajas, setMostrarSeccionesBajas] = useState(false)
   const [textoBusqueda, setTextoBusqueda] = useState('')
   const [estudianteEditando, setEstudianteEditando] = useState<Estudiante | null>(null)
+  const [drawerAlumnoAbierto, setDrawerAlumnoAbierto] = useState(false)
   const [errorGeneral, setErrorGeneral] = useState<string | null>(null)
   const [operandoId, setOperandoId] = useState<string | null>(null)
   const [operandoSeccionId, setOperandoSeccionId] = useState<string | null>(null)
@@ -57,13 +57,13 @@ const AlumnosYSeccionesPage = () => {
   const [lapsoId, setLapsoId] = useState<string | null>(null)
   const [filaExpandidaId, setFilaExpandidaId] = useState<string | null>(null)
 
-  const { data: secciones = [], isLoading: cargandoSecciones } = useSecciones(undefined)
+  const { data: secciones = [] } = useSecciones(undefined)
+  void secciones
   const {
     data: seccionesGlobal = [],
     error: errorSeccionesGlobal,
     refetch: refetchSeccionesGlobal,
   } = useSecciones(undefined, true)
-  const { data: estudiantes = [], isLoading, error, refetch } = useEstudiantes(seccionId, incluirInactivos)
   const {
     data: estudiantesGlobal = [],
     isLoading: cargandoGlobal,
@@ -92,7 +92,10 @@ const AlumnosYSeccionesPage = () => {
   }
 
   const seccionesInactivas = seccionesGlobal.filter((seccion) => !seccion.active)
-  const estudiantesFiltrados = filtrarEstudiantes(estudiantesGlobal, textoBusqueda)
+  const estudiantesPorFiltro = filtroSeccionId
+    ? estudiantesGlobal.filter((estudiante) => estudiante.id_section === filtroSeccionId)
+    : estudiantesGlobal
+  const estudiantesFiltrados = filtrarEstudiantes(estudiantesPorFiltro, textoBusqueda)
   const mensajeVacio =
     textoBusqueda.trim() === ''
       ? 'No hay estudiantes para mostrar.'
@@ -119,6 +122,7 @@ const AlumnosYSeccionesPage = () => {
           onSuccess: () => {
             setEstudianteEditando(null)
             setOperandoId(null)
+            setDrawerAlumnoAbierto(false)
           },
           onError: (e) => {
             setOperandoId(null)
@@ -128,17 +132,18 @@ const AlumnosYSeccionesPage = () => {
       )
       return
     }
-    if (seccionId === null) {
+    if (valores.id_seccion === '') {
       setErrorGeneral('Debes seleccionar una sección')
       return
     }
     setOperandoId(null)
     crear.mutate(
-      { seccionId, payload: { apellido: valores.apellido, nombre: valores.nombre, telefono } },
+      { seccionId: valores.id_seccion, payload: { apellido: valores.apellido, nombre: valores.nombre, telefono } },
       {
         onSuccess: () => {
           setEstudianteEditando(null)
           setClaveFormulario((k) => k + 1)
+          setDrawerAlumnoAbierto(false)
         },
         onError: (e) => {
           setErrorGeneral(e instanceof Error ? e.message : 'No se pudo crear')
@@ -153,6 +158,7 @@ const AlumnosYSeccionesPage = () => {
     setErrorGeneral(null)
     setConfirmarBajaEstudiante(id)
   }
+  void manejarBaja
 
   const confirmarBajaEstudianteAccion = () => {
     if (confirmarBajaEstudiante === null) return
@@ -195,8 +201,24 @@ const AlumnosYSeccionesPage = () => {
     })
   }
 
-  const cancelarEdicion = () => setEstudianteEditando(null)
-  const errorMensaje = error instanceof Error ? error.message : errorGeneral
+  const cancelarEdicion = () => {
+    setEstudianteEditando(null)
+    setDrawerAlumnoAbierto(false)
+  }
+
+  const abrirNuevoAlumno = () => {
+    setEstudianteEditando(null)
+    setErrorGeneral(null)
+    setClaveFormulario((k) => k + 1)
+    setDrawerAlumnoAbierto(true)
+  }
+
+  const abrirEditarAlumno = (estudiante: Estudiante) => {
+    setEstudianteEditando(estudiante)
+    setErrorGeneral(null)
+    setDrawerAlumnoAbierto(true)
+  }
+  const errorMensaje = errorGlobal instanceof Error ? errorGlobal.message : errorGeneral
   const errorPadron = errorGlobal ?? errorSeccionesGlobal
   const hayErrorPadron = errorPadron != null
   const errorGlobalMensaje = errorPadron instanceof Error ? errorPadron.message : 'No se pudo cargar el padrón'
@@ -368,85 +390,39 @@ const AlumnosYSeccionesPage = () => {
 
       {modo === 'alumnos' ? (
         <div className={styles.pila}>
-          <Card titulo="Lapso y sección">
-            <SelectorLapso lapsos={lapsos} valor={lapsoSeleccionado} onCambiar={setLapsoId} />
-            <SelectorSeccion secciones={secciones} valor={seccionId} onCambiar={setSeccionId} cargando={cargandoSecciones} />
+          <Card titulo="Lapso y asistencia">
+            <div className={styles.lapsoFila}>
+              <SelectorLapso lapsos={lapsos} valor={lapsoSeleccionado} onCambiar={setLapsoId} />
+            </div>
           </Card>
 
-          {seccionId !== null ? (
-            <Card
-              titulo={estudianteEditando === null ? 'Alta de alumno' : 'Editar alumno'}
-              acciones={
-                estudianteEditando !== null ? (
-                  <Button variante="ghost" tamano="sm" onClick={cancelarEdicion}>
-                    Cancelar edición
-                  </Button>
-                ) : undefined
-              }
-            >
-              <FormularioEstudiante
-                key={estudianteEditando?.id ?? `nuevo-${claveFormulario}`}
-                secciones={secciones}
-                valorInicial={valorInicial}
-                enviando={crear.isPending || editar.isPending}
-                error={errorMensaje}
-                onSubmit={manejarSubmit}
-              />
-              <div className={styles.switchFila}>
-                <Switch id="incluir-inactivos" checked={incluirInactivos} onChange={setIncluirInactivos}>
+          <Card>
+            <div className={styles.cabeceraListado}>
+              <div>
+                <h2 className={styles.tituloSeccion}>Alumnos</h2>
+                <p className={styles.subtituloSeccion}>Gestiona el padrón con filtro por sección y acceso rápido al detalle.</p>
+              </div>
+              <Button variante="primary" onClick={abrirNuevoAlumno}>
+                + Nuevo alumno
+              </Button>
+            </div>
+            <div className={styles.barraFiltros}>
+              <div className={styles.filtroBusqueda}>
+                <TextField
+                  id="buscar-estudiante"
+                  type="search"
+                  aria-label="buscar-estudiante"
+                  placeholder="Buscar por nombre o apellido"
+                  value={textoBusqueda}
+                  onChange={(evento) => setTextoBusqueda(evento.target.value)}
+                />
+              </div>
+              <SelectorSeccion secciones={seccionesGlobal} valor={filtroSeccionId} onCambiar={setFiltroSeccionId} cargando={cargandoGlobal} />
+              <div className={styles.switches}>
+                <Switch id="incluir-inactivos-global" checked={incluirInactivosGlobal} onChange={setIncluirInactivosGlobal}>
                   Mostrar inactivos
                 </Switch>
               </div>
-              {isLoading ? (
-                <p className={styles.cargando}>
-                  <Spinner /> Cargando…
-                </p>
-              ) : null}
-              {error && !isLoading ? (
-                <Alert
-                  variante="error"
-                  acciones={
-                    <Button variante="secondary" tamano="sm" onClick={() => refetch()}>
-                      Reintentar
-                    </Button>
-                  }
-                >
-                  {errorMensaje}
-                </Alert>
-              ) : null}
-              {!isLoading && !error ? (
-                <TablaEstudiantes
-                  estudiantes={estudiantes}
-                  incluirInactivos={incluirInactivos}
-                  onDarDeBaja={manejarBaja}
-                  onReactivar={manejarReactivar}
-                  operandoId={operandoId}
-                  expandidoId={filaExpandidaId}
-                  onExpandir={alternarFila}
-                  renderDetalle={renderDetalle}
-                />
-              ) : null}
-            </Card>
-          ) : null}
-
-          <Card titulo="Todos los estudiantes">
-            <div className={styles.busqueda}>
-              <TextField
-                id="buscar-estudiante"
-                type="search"
-                aria-label="buscar-estudiante"
-                placeholder="Buscar por nombre o apellido"
-                value={textoBusqueda}
-                onChange={(evento) => setTextoBusqueda(evento.target.value)}
-              />
-            </div>
-            <div className={styles.controles}>
-              <Switch id="incluir-inactivos-global" checked={incluirInactivosGlobal} onChange={setIncluirInactivosGlobal}>
-                Mostrar inactivos
-              </Switch>
-              <Switch id="mostrar-secciones-bajas" checked={mostrarSeccionesBajas} onChange={setMostrarSeccionesBajas}>
-                Mostrar secciones dadas de baja
-              </Switch>
             </div>
             {cargandoGlobal ? (
               <p className={styles.cargando}>
@@ -472,6 +448,7 @@ const AlumnosYSeccionesPage = () => {
                 etiquetaPorSeccion={etiquetaPorSeccion}
                 incluirInactivos={incluirInactivosGlobal}
                 onReactivar={manejarReactivar}
+                onEditar={abrirEditarAlumno}
                 mensajeVacio={mensajeVacio}
                 operandoId={operandoId}
                 expandidoId={filaExpandidaId}
@@ -479,11 +456,25 @@ const AlumnosYSeccionesPage = () => {
                 renderDetalle={renderDetalle}
               />
             ) : null}
-            {mostrarSeccionesBajas && !hayErrorPadron ? (
-              <div className={styles.bajas}>
-                <h3 className={styles.bajasTitulo}>Secciones dadas de baja</h3>
+          </Card>
+
+          <Card>
+            <button
+              type="button"
+              className={styles.acordeonCabecera}
+              onClick={() => setMostrarSeccionesBajas((v) => !v)}
+              aria-expanded={mostrarSeccionesBajas}
+            >
+              <div>
+                <h3 className={styles.tituloSeccion}>Secciones dadas de baja</h3>
+                <p className={styles.subtituloSeccion}>{seccionesInactivas.length} sección(es) inactiva(s)</p>
+              </div>
+              <span className={styles.acordeonIcono}>{mostrarSeccionesBajas ? '−' : '+'}</span>
+            </button>
+            {mostrarSeccionesBajas ? (
+              <div className={styles.acordeonContenido}>
                 {seccionesInactivas.length === 0 ? (
-                  <p>No hay secciones dadas de baja.</p>
+                  <p className={styles.sinBajas}>No hay secciones dadas de baja.</p>
                 ) : (
                   <ListaSeccionesInactivas
                     secciones={seccionesInactivas}
@@ -556,6 +547,33 @@ const AlumnosYSeccionesPage = () => {
           </section>
         </div>
       )}
+      <Drawer
+        abierto={drawerAlumnoAbierto}
+        titulo={estudianteEditando === null ? 'Nuevo alumno' : 'Editar alumno'}
+        subtitulo={estudianteEditando === null ? 'Completa los datos para dar de alta al alumno.' : 'Modifica los datos del alumno.'}
+        onCerrar={cancelarEdicion}
+        pie={
+          <>
+            <Button variante="secondary" onClick={cancelarEdicion}>
+              Cancelar
+            </Button>
+            <Button form="formulario-alumno" type="submit" variante="primary" disabled={crear.isPending || editar.isPending}>
+              {crear.isPending || editar.isPending ? 'Guardando…' : 'Guardar'}
+            </Button>
+          </>
+        }
+      >
+        <FormularioEstudiante
+          idFormulario="formulario-alumno"
+          key={estudianteEditando?.id ?? `nuevo-${claveFormulario}`}
+          secciones={seccionesGlobal}
+          valorInicial={valorInicial}
+          enviando={crear.isPending || editar.isPending}
+          error={errorMensaje}
+          onSubmit={manejarSubmit}
+        />
+      </Drawer>
+
       <ConfirmModal
         abierto={confirmarBajaEstudiante !== null}
         titulo="Dar de baja alumno"

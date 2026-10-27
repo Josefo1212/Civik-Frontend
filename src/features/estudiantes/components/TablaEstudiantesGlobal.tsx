@@ -17,6 +17,7 @@ export type PropsTablaEstudiantesGlobal = {
   expandidoId?: string | null
   onExpandir?: (id: string) => void
   renderDetalle?: (estudiante: Estudiante) => ReactNode
+  onEditar?: (estudiante: Estudiante) => void
 }
 
 const TablaEstudiantesGlobal = ({
@@ -29,6 +30,7 @@ const TablaEstudiantesGlobal = ({
   expandidoId = null,
   onExpandir,
   renderDetalle,
+  onEditar,
 }: PropsTablaEstudiantesGlobal) => {
   const filas = incluirInactivos ? estudiantes : estudiantes.filter((e) => e.active)
 
@@ -80,6 +82,11 @@ const TablaEstudiantesGlobal = ({
                       onClick={() => onExpandir(estudiante.id)}
                     >
                       {expandido ? 'Cerrar' : 'Ver detalle'}
+                    </Button>
+                  ) : null}
+                  {estudiante.active && onEditar !== undefined ? (
+                    <Button variante="ghost" tamano="sm" onClick={() => onEditar(estudiante)}>
+                      Editar
                     </Button>
                   ) : null}
                   {estudiante.active ? null : (

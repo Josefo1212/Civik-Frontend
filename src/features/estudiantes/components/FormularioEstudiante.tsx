@@ -20,6 +20,7 @@ export type PropsFormularioEst = {
   enviando: boolean
   error?: string | null
   onSubmit: (valores: ValoresEstudiante) => void
+  idFormulario?: string
 }
 
 const VACIO: ValoresEstudiante = {
@@ -29,7 +30,7 @@ const VACIO: ValoresEstudiante = {
   telefono: '',
 }
 
-const FormularioEstudiante = ({ secciones, valorInicial, enviando, error, onSubmit }: PropsFormularioEst) => {
+const FormularioEstudiante = ({ secciones, valorInicial, enviando, error, onSubmit, idFormulario }: PropsFormularioEst) => {
   const [valores, setValores] = useState<ValoresEstudiante>(valorInicial ?? VACIO)
   const activas = secciones.filter((s) => s.active)
 
@@ -50,7 +51,7 @@ const FormularioEstudiante = ({ secciones, valorInicial, enviando, error, onSubm
   const invalido = valores.id_seccion === '' || valores.apellido.trim() === '' || valores.nombre.trim() === ''
 
   return (
-    <form aria-label="formulario-estudiante" onSubmit={enviar} className={styles.formulario}>
+    <form aria-label="formulario-estudiante" id={idFormulario} onSubmit={enviar} className={styles.formulario}>
       <SelectField
         id="est-id-seccion"
         aria-label="est-id-seccion"

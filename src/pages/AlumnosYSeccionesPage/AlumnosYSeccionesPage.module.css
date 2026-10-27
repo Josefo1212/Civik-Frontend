@@ -1,45 +1,101 @@
 .pila {
   display: flex;
   flex-direction: column;
-  gap: var(--esp-5);
+  gap: var(--esp-4);
 }
 
-.switchFila {
-  margin-top: var(--esp-4);
+.lapsoFila {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+.cabeceraListado {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--esp-4);
+}
+
+.tituloSeccion {
+  margin: 0;
+  font-family: var(--fuente-ui);
+  font-size: var(--texto-lg);
+  font-weight: 600;
+}
+
+.subtituloSeccion {
+  margin: var(--esp-1) 0 0;
+  color: var(--ink-muted);
+  font-size: var(--texto-sm);
+}
+
+.barraFiltros {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(200px, 260px) auto;
+  gap: var(--esp-3);
+  align-items: end;
+  margin-bottom: var(--esp-4);
+}
+
+.filtroBusqueda {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+.switches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-3);
+  padding-bottom: var(--esp-1);
 }
 
 .cargando {
   display: flex;
   align-items: center;
   gap: var(--esp-2);
-  margin-top: var(--esp-4);
+  margin-top: var(--esp-3);
   color: var(--ink-muted);
   font-size: var(--texto-sm);
 }
 
-.busqueda {
+.acordeonCabecera {
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  gap: var(--esp-2);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  padding: var(--esp-4) var(--esp-5);
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
 }
 
-.controles {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--esp-4);
-  margin-top: var(--esp-3);
+.acordeonIcono {
+  font-size: var(--texto-lg);
+  color: var(--ink-muted);
 }
 
-.bajas {
+.acordeonContenido {
   display: flex;
   flex-direction: column;
   gap: var(--esp-3);
-  margin-top: var(--esp-5);
+  padding: 0 var(--esp-5) var(--esp-4);
 }
 
-.bajasTitulo {
+.sinBajas {
   margin: 0;
-  font-family: var(--fuente-ui);
-  font-size: var(--texto-lg);
-  font-weight: 600;
+  color: var(--ink-muted);
+  font-size: var(--texto-sm);
+}
+
+@media (max-width: 960px) {
+  .barraFiltros {
+    grid-template-columns: 1fr;
+  }
 }
