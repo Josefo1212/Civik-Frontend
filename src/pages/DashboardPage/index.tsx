@@ -67,78 +67,77 @@ const DashboardPage = () => {
         subtitulo="Sigue el flujo: crea tu lapso, agrega eventos y pasa asistencia."
       />
 
-      <section className={`${styles.panelGlass} glass-panel`} aria-label="Acción principal">
-        <div className={styles.accionPrincipal}>
-          <div className={styles.accionInfo}>
-            <h2 className={styles.panelTitulo}>Siguiente paso</h2>
-            {activo === null ? (
-              <p className={styles.lapsoVacio}>
-                No hay un lapso activo. Configura un lapso para poder crear eventos y tomar asistencia.
-              </p>
-            ) : !tieneEventos ? (
-              <p className={styles.lapsoVacio}>
-                Hay un lapso activo, pero aún no hay eventos. Crea eventos para poder tomar asistencia.
-              </p>
-            ) : (
-              <p className={styles.lapsoVacio}>
-                Hay un lapso activo con eventos. Ya puedes tomar asistencia desde la sección Asistencia.
-              </p>
-            )}
-          </div>
-          <div className={styles.accionBotones}>
-            {activo === null ? (
-              <Link to={RUTAS.eventos}>
-                <Button variante="primary">Configurar lapsos en Eventos</Button>
-              </Link>
-            ) : !tieneEventos ? (
-              <Link to={RUTAS.eventos}>
-                <Button variante="primary">Crear eventos</Button>
-              </Link>
-            ) : (
-              <Link to={RUTAS.asistencia}>
-                <Button variante="primary">Tomar asistencia</Button>
-              </Link>
-            )}
-          </div>
-        </div>
-      </section>
-
-      <section className={`${styles.panelGlass} glass-panel`} aria-label="Lapso activo">
-        <h2 className={styles.panelTitulo}>Lapso activo</h2>
-        {activo === null ? (
-          <p className={styles.lapsoVacio} aria-live="polite">
-            No hay un lapso activo. Activá uno en Eventos para ver el resumen del período.
-          </p>
-        ) : (
-          <p className={styles.lapso}>
-            <span className={styles.lapsoNombre}>{etiquetaLapso(activo)}</span>
-            <span className={styles.lapsoFechas}>
-              {activo.start_date} → {activo.end_date}
-            </span>
-          </p>
-        )}
-      </section>
-
-      <div className={styles.resumenGrid}>
-        <section className={styles.panel}>
+      <div className={styles.gridPrincipal}>
+        <section className={styles.panel} aria-label="Siguiente paso y lapso">
           <header className={styles.panelCabecera}>
-            <h2 className={styles.panelTitulo}>Resumen rápido</h2>
-          </header>
-          <div className={styles.resumenCuerpo}>
-            <div className={styles.resumenItem}>
-              <span className={styles.resumenEtiqueta}>Alumnos activos</span>
-              <span className={`${styles.resumenValor} dato`}>{totalActivos}</span>
+            <div>
+              <h2 className={styles.panelTitulo}>Operaciones del lapso</h2>
+              <p className={styles.panelSubtitulo}>Estado actual y acción recomendada</p>
             </div>
-            <div className={styles.resumenItem}>
-              <span className={styles.resumenEtiqueta}>Eventos en el lapso activo</span>
-              <span className={`${styles.resumenValor} dato`}>{eventos.length}</span>
+          </header>
+          <div className={styles.panelCuerpo}>
+            <div className={styles.lapsoResumen}>
+              <div>
+                <span className={styles.etiqueta}>Lapso</span>
+                {activo === null ? (
+                  <p className={styles.sinDato}>Sin lapso activo</p>
+                ) : (
+                  <p className={styles.lapsoInfo}>
+                    <span className={styles.lapsoNombre}>{etiquetaLapso(activo)}</span>
+                    <span className={styles.lapsoFechas}>
+                      {activo.start_date} → {activo.end_date}
+                    </span>
+                  </p>
+                )}
+              </div>
+              <div className={styles.accionFila}>
+                <p className={styles.accionTexto}>
+                  {activo === null
+                    ? 'Configura un lapso para crear eventos y tomar asistencia.'
+                    : !tieneEventos
+                      ? 'Crea eventos en este lapso para habilitar el registro de asistencia.'
+                      : 'Tienes eventos en el lapso activo. Puedes registrar asistencia.'}
+                </p>
+                {activo === null ? (
+                  <Link to={RUTAS.eventos}>
+                    <Button variante="primary">Configurar en Eventos</Button>
+                  </Link>
+                ) : !tieneEventos ? (
+                  <Link to={RUTAS.eventos}>
+                    <Button variante="primary">Crear evento</Button>
+                  </Link>
+                ) : (
+                  <Link to={RUTAS.asistencia}>
+                    <Button variante="primary">Tomar asistencia</Button>
+                  </Link>
+                )}
+              </div>
             </div>
           </div>
         </section>
 
-        <section className={styles.panel}>
+        <section className={styles.panel} aria-label="Resumen rápido">
           <header className={styles.panelCabecera}>
-            <h2 className={styles.panelTitulo}>Estudiantes activos por sección</h2>
+            <h2 className={styles.panelTitulo}>Indicadores</h2>
+          </header>
+          <div className={styles.indicadores}>
+            <div className={styles.indicadorItem}>
+              <span className={styles.indicadorEtiqueta}>Alumnos activos</span>
+              <span className={`${styles.indicadorValor} dato`}>{totalActivos}</span>
+            </div>
+            <div className={styles.indicadorItem}>
+              <span className={styles.indicadorEtiqueta}>Eventos en lapso activo</span>
+              <span className={`${styles.indicadorValor} dato`}>{eventos.length}</span>
+            </div>
+          </div>
+        </section>
+
+        <section className={styles.panel} aria-label="Distribución por sección">
+          <header className={styles.panelCabecera}>
+            <div>
+              <h2 className={styles.panelTitulo}>Alumnos activos por sección</h2>
+              <p className={styles.panelSubtitulo}>Distribución actual</p>
+            </div>
           </header>
           <div className={styles.panelCuerpo}>
             {cargando ? (
@@ -159,9 +158,7 @@ const DashboardPage = () => {
               </Alert>
             ) : null}
             {!cargando && errorMensaje === null && seccionesActivas.length === 0 ? (
-              <div aria-live="polite">
-                <EmptyState>No hay secciones activas para mostrar.</EmptyState>
-              </div>
+              <EmptyState>No hay secciones activas para mostrar.</EmptyState>
             ) : null}
             {!cargando && errorMensaje === null && seccionesActivas.length > 0 ? (
               <ul className={styles.lista}>

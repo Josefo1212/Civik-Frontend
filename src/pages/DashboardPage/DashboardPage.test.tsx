@@ -144,7 +144,7 @@ describe('DashboardPage', () => {
       refetch: refetchLapsosFn,
     } as unknown as ReturnType<typeof useLapsos>)
     renderConRouter()
-    expect(screen.getAllByText(/No hay un lapso activo/i).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(/Sin lapso activo|No hay un lapso activo/i).length).toBeGreaterThan(0)
   })
 
   it('muestra el error con reintento', async () => {
