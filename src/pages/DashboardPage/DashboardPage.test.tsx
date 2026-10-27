@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { Estudiante } from '../../domain/estudiante'
 import type { Lapso } from '../../domain/lapso'
@@ -7,13 +8,17 @@ import type { Seccion } from '../../domain/seccion'
 import { useLapsos } from '../../features/lapsos/hooks/useLapsos'
 import { useSecciones } from '../../features/secciones/hooks/useSecciones'
 import { useEstudiantesGlobal } from '../../features/estudiantes/hooks/useEstudiantes'
+import { useEventos } from '../../features/eventos/hooks/useEventos'
 import DashboardPage from './index'
+
+const renderConRouter = () => render(<DashboardPage />, { wrapper: MemoryRouter })
 
 vi.mock('../../features/lapsos/hooks/useLapsos', () => ({ useLapsos: vi.fn() }))
 vi.mock('../../features/secciones/hooks/useSecciones', () => ({ useSecciones: vi.fn() }))
 vi.mock('../../features/estudiantes/hooks/useEstudiantes', () => ({
   useEstudiantesGlobal: vi.fn(),
 }))
+vi.mock('../../features/eventos/hooks/useEventos', () => ({ useEventos: vi.fn() }))
 
 const lapsoActivo: Lapso = {
   id: 'l1',
@@ -93,17 +98,22 @@ beforeEach(() => {
     error: null,
     refetch: refetchEstudiantesFn,
   } as unknown as ReturnType<typeof useEstudiantesGlobal>)
+  vi.mocked(useEventos).mockReturnValue({
+    data: [],
+    isLoading: false,
+    error: null,
+  } as unknown as ReturnType<typeof useEventos>)
 })
 
 describe('DashboardPage', () => {
   it('muestra el lapso activo como contexto', () => {
-    render(<DashboardPage />)
+    renderConRouter()
     expect(screen.getByText(/2026 · Lapso 2/)).toBeInTheDocument()
     expect(screen.getByText(/Activo/)).toBeInTheDocument()
   })
 
   it('muestra el conteo de estudiantes activos por sección', () => {
-    render(<DashboardPage />)
+    renderConRouter()
     expect(screen.getByText('1ro A — Matutino')).toBeInTheDocument()
     expect(screen.getByText('2do B — Vespertino')).toBeInTheDocument()
     expect(screen.getByText('3')).toBeInTheDocument()
@@ -111,7 +121,7 @@ describe('DashboardPage', () => {
   })
 
   it('no lista las secciones dadas de baja', () => {
-    render(<DashboardPage />)
+    renderConRouter()
     expect(screen.queryByText('3ro C — Matutino')).not.toBeInTheDocument()
   })
 
@@ -122,7 +132,7 @@ describe('DashboardPage', () => {
       error: null,
       refetch: refetchEstudiantesFn,
     } as unknown as ReturnType<typeof useEstudiantesGlobal>)
-    render(<DashboardPage />)
+    renderConRouter()
     expect(screen.getAllByText('0').length).toBeGreaterThan(0)
   })
 
@@ -133,8 +143,8 @@ describe('DashboardPage', () => {
       error: null,
       refetch: refetchLapsosFn,
     } as unknown as ReturnType<typeof useLapsos>)
-    render(<DashboardPage />)
-    expect(screen.getByText(/No hay un lapso activo/i)).toBeInTheDocument()
+    renderConRouter()
+    expect(screen.getAllByText(/No hay un lapso activo/i).length).toBeGreaterThan(0)
   })
 
   it('muestra el error con reintento', async () => {
@@ -145,7 +155,7 @@ describe('DashboardPage', () => {
       refetch: refetchSeccionesFn,
     } as unknown as ReturnType<typeof useSecciones>)
     const usuario = userEvent.setup()
-    render(<DashboardPage />)
+    renderConRouter()
 
     expect(screen.getByText(/sin conexión/)).toBeInTheDocument()
     await usuario.click(screen.getByRole('button', { name: 'Reintentar' }))

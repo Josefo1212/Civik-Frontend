@@ -1,4 +1,5 @@
 export const RUTAS = {
+  inicio: '/',
   secciones: '/secciones',
   estudiantes: '/estudiantes',
   eventos: '/eventos',
@@ -6,8 +7,8 @@ export const RUTAS = {
 } as const
 
 export const NAVEGACION_PRINCIPAL = [
-  { ruta: RUTAS.secciones, etiqueta: 'Secciones' },
-  { ruta: RUTAS.estudiantes, etiqueta: 'Estudiantes' },
+  { ruta: RUTAS.inicio, etiqueta: 'Inicio' },
+  { ruta: RUTAS.estudiantes, etiqueta: 'Alumnos y secciones' },
   { ruta: RUTAS.eventos, etiqueta: 'Eventos' },
   { ruta: RUTAS.asistencia, etiqueta: 'Asistencia' },
 ] as const

@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, Navigate } from 'react-router-dom'
 import AppShell from '../components/AppShell/AppShell'
 import NotFound from '../components/NotFound'
 import { RUTAS } from '../constants/routes'
@@ -14,6 +14,7 @@ export const router = createBrowserRouter([
     element: <AppShell />,
     children: [
       { index: true, element: <DashboardPage /> },
+      { path: RUTAS.inicio, element: <Navigate to="/" replace /> },
       { path: RUTAS.secciones, element: <SeccionesPage /> },
       { path: RUTAS.estudiantes, element: <EstudiantesPage /> },
       { path: RUTAS.eventos, element: <EventosPage /> },

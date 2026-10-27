@@ -15,6 +15,13 @@ const trazo = {
   strokeLinejoin: 'round',
 } as const
 
+const IconoInicio = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" {...trazo} aria-hidden="true">
+    <path d="M3 10.5 12 4l9 6.5" />
+    <path d="M5.5 9.5V19a1 1 0 0 0 1 1h3.5v-5.5h4V20H18a1 1 0 0 0 1-1V9.5" />
+  </svg>
+)
+
 const IconoSecciones = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" {...trazo} aria-hidden="true">
     <rect x="3" y="3" width="7" height="7" rx="1.5" />
@@ -48,6 +55,7 @@ const IconoAsistencia = () => (
 )
 
 const ICONOS: Record<string, ReactNode> = {
+  [RUTAS.inicio]: <IconoInicio />,
   [RUTAS.secciones]: <IconoSecciones />,
   [RUTAS.estudiantes]: <IconoEstudiantes />,
   [RUTAS.eventos]: <IconoEventos />,

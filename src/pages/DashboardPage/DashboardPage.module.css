@@ -1,5 +1,5 @@
 .pagina {
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -17,6 +17,60 @@
 .panelGlass {
   padding: var(--esp-5);
   animation: revelar var(--trans-entrada) var(--curva) backwards;
+}
+
+.accionPrincipal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-4);
+}
+
+.accionInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+.accionBotones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+}
+
+.resumenGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--esp-5);
+}
+
+.resumenCuerpo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--esp-3);
+  padding: var(--esp-4) var(--esp-5);
+}
+
+.resumenItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  padding: var(--esp-3) var(--esp-4);
+  border-radius: var(--radio);
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+}
+
+.resumenEtiqueta {
+  color: var(--ink-muted);
+  font-size: var(--texto-sm);
+}
+
+.resumenValor {
+  font-size: var(--texto-xl);
+  color: var(--signal-glow);
 }
 
 .lapso {
@@ -124,6 +178,10 @@
   }
 
   .panelCabecera {
+    padding: var(--esp-3) var(--esp-4);
+  }
+
+  .resumenCuerpo {
     padding: var(--esp-3) var(--esp-4);
   }
 }
