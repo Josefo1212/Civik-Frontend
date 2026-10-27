@@ -4,6 +4,7 @@
   border: 1px solid var(--line);
   border-radius: var(--radio);
   background: var(--surface);
+  -webkit-overflow-scrolling: touch;
 }
 
 .tabla {

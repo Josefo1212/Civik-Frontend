@@ -10,6 +10,7 @@
   cursor: pointer;
   white-space: nowrap;
   text-decoration: none;
+  min-height: 2.25rem;
   transition:
     background-color var(--trans) var(--curva),
     border-color var(--trans) var(--curva),
@@ -37,8 +38,9 @@
 }
 
 .sm {
-  padding: 0.3rem 0.65rem;
+  padding: 0.35rem 0.7rem;
   font-size: var(--texto-xs);
+  min-height: 2rem;
 }
 
 .primary {
