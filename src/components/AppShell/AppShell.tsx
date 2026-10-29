@@ -73,9 +73,7 @@ const AppShell = () => {
     <div className={styles.shell}>
       <header className={styles.encabezado}>
         <span className={styles.marca}>
-          <span className={styles.logo} aria-hidden="true">
-            Ci
-          </span>
+          <img className={styles.logo} src="/captain-general.png" alt="" />
           Civik
         </span>
         <nav ref={contenedorRef} className={styles.nav} aria-label="Navegación principal">

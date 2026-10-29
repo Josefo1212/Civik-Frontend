@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => ({
       disable: mode === 'test',
       registerType: 'autoUpdate',
       injectRegister: false,
-      includeAssets: ['favicon.svg', 'icon.svg'],
+      includeAssets: ['captain-general.png'],
       manifest: {
         name: 'Civik — Asistencia',
         short_name: 'Civik',
@@ -21,8 +21,7 @@ export default defineConfig(({ mode }) => ({
         display: 'standalone',
         start_url: '/',
         icons: [
-          { src: 'icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
-          { src: 'icon-maskable.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'maskable' },
+          { src: 'captain-general.png', sizes: '1200x1200', type: 'image/png', purpose: 'any' },
         ],
       },
       workbox: {
