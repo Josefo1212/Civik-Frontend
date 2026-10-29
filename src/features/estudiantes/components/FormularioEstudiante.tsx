@@ -94,9 +94,6 @@ const FormularioEstudiante = ({ secciones, valorInicial, enviando, error, onSubm
         disabled={enviando}
       />
       <div className={styles.acciones}>
-        <button type="submit" aria-label="guardar-estudiante" disabled={enviando}>
-          Guardar
-        </button>
         {error ? <Alert variante="error">{error}</Alert> : null}
       </div>
     </form>

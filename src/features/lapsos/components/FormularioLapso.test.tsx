@@ -14,7 +14,7 @@ describe('FormularioLapso', () => {
     fireEvent.change(screen.getByLabelText('lap-inicio'), { target: { value: '2026-09-01' } })
     fireEvent.change(screen.getByLabelText('lap-fin'), { target: { value: '2026-09-30' } })
     await usuario.selectOptions(screen.getByRole('combobox', { name: 'lap-dia' }), 'THURSDAY')
-    await usuario.click(screen.getByRole('button', { name: 'guardar-lapso' }))
+    fireEvent.submit(screen.getByRole('form', { name: 'formulario-lapso' }))
 
     expect(onSubmit).toHaveBeenCalledWith({
       school_year: '2026',
@@ -28,7 +28,7 @@ describe('FormularioLapso', () => {
   it('deshabilita guardar con campos incompletos y muestra el error', () => {
     render(<FormularioLapso enviando={false} error='El lapso se solapa' onSubmit={() => {}} />)
 
-    expect(screen.getByRole('button', { name: 'guardar-lapso' })).toBeDisabled()
+    expect(screen.queryByRole('button', { name: 'guardar-lapso' })).not.toBeInTheDocument()
     expect(screen.getByRole('alert')).toHaveTextContent('El lapso se solapa')
   })
 })

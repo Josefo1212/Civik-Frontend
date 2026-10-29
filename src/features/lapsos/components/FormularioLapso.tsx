@@ -28,9 +28,6 @@ const VACIO: ValoresLapso = {
   practice_day: '',
 }
 
-const estaIncompleto = (valores: ValoresLapso) =>
-  Object.values(valores).some((valor) => valor.trim() === '')
-
 const FormularioLapso = ({ idFormulario = 'formulario-lapso', valorInicial, valoresIniciales, enviando, error, onSubmit }: PropsFormularioLapso) => {
   const inicial = valorInicial ?? { ...VACIO, ...(valoresIniciales ?? {}) }
   const [valores, setValores] = useState<ValoresLapso>(inicial)
@@ -140,9 +137,6 @@ const FormularioLapso = ({ idFormulario = 'formulario-lapso', valorInicial, valo
       </div>
 
       <div style={{ gridColumn: '1 / -1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <button type='submit' aria-label='guardar-lapso' disabled={enviando || estaIncompleto(valores)}>
-          Guardar
-        </button>
         {error ? (
           <Alert variante="error">{error}</Alert>
         ) : null}
