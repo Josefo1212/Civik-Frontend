@@ -35,7 +35,7 @@ const EventosPage = () => {
   const [diaReprogramar, setDiaReprogramar] = useState<string>('MONDAY')
 
   const { data: lapsos = [], isLoading: cargandoLapsos, error: errorLapsos, refetch: refetchLapsos } = useLapsos()
-  const { crear: crearLapso, editar, activar, cerrar, reprogramar } = useLapsoMutations()
+  const { crear: crearLapso, editar, activar, cerrar, reprogramar, generarAuto: generarAutoLapso } = useLapsoMutations()
   const activo = lapsoActivo(lapsos)
   const lapsoSeleccionado = lapsoId ?? activo?.id ?? lapsos[0]?.id ?? null
   const { data: eventos = [], isLoading: cargandoEventos, error: errorEventos, refetch: refetchEventos } = useEventos(lapsoSeleccionado)
@@ -93,6 +93,22 @@ const EventosPage = () => {
       onError: (e) => {
         setOperandoId(null)
         setErrorGeneral(e instanceof Error ? e.message : 'No se pudo cerrar el lapso')
+      },
+    })
+  }
+
+  const manejarGenerarPracticas = (id: string) => {
+    setErrorGeneral(null)
+    setOperandoId(id)
+    generarAutoLapso.mutate(id, {
+      onSuccess: () => {
+        setOperandoId(null)
+        refetchEventos()
+        refetchLapsos()
+      },
+      onError: (e) => {
+        setOperandoId(null)
+        setErrorGeneral(e instanceof Error ? e.message : 'No se pudieron generar las prácticas')
       },
     })
   }
@@ -273,6 +289,7 @@ const EventosPage = () => {
                   onCerrar={manejarCerrar}
                   onEditar={abrirEditarLapso}
                   onReprogramar={abrirReprogramarLapso}
+                  onGenerarPracticas={manejarGenerarPracticas}
                   operandoId={operandoId}
                 />
               </div>

@@ -8,12 +8,13 @@ export type PropsTablaLapsos = {
   onCerrar: (id: string) => void
   onEditar?: (lapso: Lapso) => void
   onReprogramar?: (lapso: Lapso) => void
+  onGenerarPracticas?: (id: string) => void
   operandoId?: string | null
 }
 
 const celda = { padding: '8px', borderBottom: '1px solid var(--vidrio-borde)' } as const
 
-const TablaLapsos = ({ lapsos, onActivar, onCerrar, onEditar, onReprogramar, operandoId }: PropsTablaLapsos) => {
+const TablaLapsos = ({ lapsos, onActivar, onCerrar, onEditar, onReprogramar, onGenerarPracticas, operandoId }: PropsTablaLapsos) => {
   if (lapsos.length === 0) {
     return (
       <p style={{ padding: '12px' }} aria-live='polite'>
@@ -40,6 +41,7 @@ const TablaLapsos = ({ lapsos, onActivar, onCerrar, onEditar, onReprogramar, ope
             const operando = operandoId === lapso.id
             const puedeEditar = lapso.status === 'PLANNED' && onEditar
             const puedeReprogramar = lapso.status === 'ACTIVE' && onReprogramar
+            const puedeGenerar = lapso.status === 'ACTIVE' && onGenerarPracticas
             return (
               <tr key={lapso.id}>
                 <td style={celda}>{lapso.school_year}</td>
@@ -59,6 +61,11 @@ const TablaLapsos = ({ lapsos, onActivar, onCerrar, onEditar, onReprogramar, ope
                     {puedeReprogramar ? (
                       <Button variante='secondary' tamano='sm' onClick={() => onReprogramar!(lapso)} disabled={operando}>
                         Reprogramar día
+                      </Button>
+                    ) : null}
+                    {puedeGenerar ? (
+                      <Button variante='secondary' tamano='sm' onClick={() => onGenerarPracticas!(lapso.id)} disabled={operando}>
+                        Generar prácticas
                       </Button>
                     ) : null}
                     {lapso.status === 'PLANNED' ? (
