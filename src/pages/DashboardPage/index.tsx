@@ -77,42 +77,27 @@ const DashboardPage = () => {
             </div>
           </header>
           <div className={styles.panelCuerpo}>
-            <div className={styles.lapsoResumen}>
-              <div>
-                <span className={styles.etiqueta}>Lapso</span>
-                {activo === null ? (
-                  <p className={styles.sinDato}>Sin lapso activo</p>
-                ) : (
-                  <p className={styles.lapsoInfo}>
-                    <span className={styles.lapsoNombre}>{etiquetaLapso(activo)}</span>
-                    <span className={styles.lapsoFechas}>
-                      {activo.start_date} → {activo.end_date}
-                    </span>
-                  </p>
-                )}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                <span style={{ fontSize: 'var(--texto-sm)', color: 'var(--ink-muted)' }}>Lapso</span>
+                <span style={{ fontFamily: 'var(--fuente-ui)', fontWeight: 600 }}>
+                  {activo === null ? 'Sin lapso activo' : etiquetaLapso(activo)}
+                </span>
+                {activo ? <span style={{ fontSize: 'var(--texto-xs)', color: 'var(--ink-muted)' }}>{activo.start_date} → {activo.end_date}</span> : null}
               </div>
-              <div className={styles.accionFila}>
-                <p className={styles.accionTexto}>
-                  {activo === null
-                    ? 'Configura un lapso para crear eventos y tomar asistencia.'
-                    : !tieneEventos
-                      ? 'Crea eventos en este lapso para habilitar el registro de asistencia.'
-                      : 'Tienes eventos en el lapso activo. Puedes registrar asistencia.'}
-                </p>
-                {activo === null ? (
-                  <Link to={RUTAS.eventos}>
-                    <Button variante="primary">Configurar en Eventos</Button>
-                  </Link>
-                ) : !tieneEventos ? (
-                  <Link to={RUTAS.eventos}>
-                    <Button variante="primary">Crear evento</Button>
-                  </Link>
-                ) : (
-                  <Link to={RUTAS.asistencia}>
-                    <Button variante="primary">Tomar asistencia</Button>
-                  </Link>
-                )}
-              </div>
+              {activo === null ? (
+                <Link to={RUTAS.eventos}>
+                  <Button variante="primary" tamano="sm">Configurar en Eventos</Button>
+                </Link>
+              ) : !tieneEventos ? (
+                <Link to={RUTAS.eventos}>
+                  <Button variante="primary" tamano="sm">Crear evento</Button>
+                </Link>
+              ) : (
+                <Link to={RUTAS.asistencia}>
+                  <Button variante="primary" tamano="sm">Tomar asistencia</Button>
+                </Link>
+              )}
             </div>
           </div>
         </section>

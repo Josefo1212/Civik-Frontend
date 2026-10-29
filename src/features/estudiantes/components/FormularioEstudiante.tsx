@@ -2,7 +2,6 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 import type { Seccion } from '../../../domain/seccion'
 import Alert from '../../../components/ui/Alert/Alert'
-import Button from '../../../components/ui/Button/Button'
 import SelectField from '../../../components/ui/SelectField/SelectField'
 import TextField from '../../../components/ui/TextField/TextField'
 import styles from './FormularioEstudiante.module.css'
@@ -47,8 +46,6 @@ const FormularioEstudiante = ({ secciones, valorInicial, enviando, error, onSubm
       telefono: valores.telefono.trim(),
     })
   }
-
-  const invalido = valores.id_seccion === '' || valores.apellido.trim() === '' || valores.nombre.trim() === ''
 
   return (
     <form aria-label="formulario-estudiante" id={idFormulario} onSubmit={enviar} className={styles.formulario}>
@@ -97,9 +94,9 @@ const FormularioEstudiante = ({ secciones, valorInicial, enviando, error, onSubm
         disabled={enviando}
       />
       <div className={styles.acciones}>
-        <Button type="submit" aria-label="guardar-estudiante" disabled={enviando || invalido} cargando={enviando}>
-          {enviando ? 'Guardando...' : 'Guardar'}
-        </Button>
+        <button type="submit" aria-label="guardar-estudiante" disabled={enviando}>
+          Guardar
+        </button>
         {error ? <Alert variante="error">{error}</Alert> : null}
       </div>
     </form>

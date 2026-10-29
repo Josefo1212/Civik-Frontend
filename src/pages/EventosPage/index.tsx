@@ -13,7 +13,6 @@ import { useEventos } from '../../features/eventos/hooks/useEventos'
 import { useEventoMutations } from '../../features/eventos/hooks/useEventoMutations'
 import Alert from '../../components/ui/Alert/Alert'
 import Button from '../../components/ui/Button/Button'
-import Card from '../../components/ui/Card/Card'
 import Drawer from '../../components/ui/Drawer/Drawer'
 import EmptyState from '../../components/ui/EmptyState/EmptyState'
 import PageHeader from '../../components/ui/PageHeader/PageHeader'
@@ -234,22 +233,16 @@ const EventosPage = () => {
       />
 
       {lapsos.length > 0 ? (
-        <Card>
-          <div className={styles.resumenLapso}>
-            <div>
-              <p className={styles.resumenEtiqueta}>{activo ? 'Lapso activo' : 'Lapsos'}</p>
-              <p className={styles.resumenValor}>{activo ? etiquetaLapso(activo) : 'Gestionar lapsos'}</p>
-              {activo ? (
-                <p className={styles.resumenFechas}>{activo.start_date} → {activo.end_date}</p>
-              ) : (
-                <p className={styles.resumenFechas}>Hay {lapsos.length} lapso(s) registrado(s)</p>
-              )}
-            </div>
-            <Button variante="secondary" tamano="sm" onClick={() => setMostrarAdministrarLapsos(true)}>
-              Administrar lapsos
-            </Button>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap', padding: '10px 14px', border: '1px solid var(--line)', borderRadius: 'var(--radio)', background: 'var(--surface)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            <span style={{ fontSize: 'var(--texto-sm)', color: 'var(--ink-muted)' }}>{activo ? 'Lapso activo' : 'Lapsos'}</span>
+            <span style={{ fontFamily: 'var(--fuente-ui)', fontWeight: 600 }}>{activo ? etiquetaLapso(activo) : `${lapsos.length} lapso(s) registrado(s)`}</span>
+            {activo ? <span style={{ fontSize: 'var(--texto-xs)', color: 'var(--ink-muted)' }}>{activo.start_date} → {activo.end_date}</span> : null}
           </div>
-        </Card>
+          <Button variante="secondary" tamano="sm" onClick={() => setMostrarAdministrarLapsos((v) => !v)}>
+            {mostrarAdministrarLapsosEfectivo ? 'Ocultar lapsos' : 'Administrar lapsos'}
+          </Button>
+        </div>
       ) : null}
 
       {mostrarAdministrarLapsosEfectivo ? (
