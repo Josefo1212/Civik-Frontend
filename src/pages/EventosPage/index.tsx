@@ -230,13 +230,17 @@ const EventosPage = () => {
         subtitulo="Gestiona lapsos y eventos para poder tomar asistencia."
       />
 
-      {activo !== null && !mostrarAdministrarLapsosEfectivo ? (
+      {lapsos.length > 0 ? (
         <Card>
           <div className={styles.resumenLapso}>
             <div>
-              <p className={styles.resumenEtiqueta}>Lapso activo</p>
-              <p className={styles.resumenValor}>{etiquetaLapso(activo)}</p>
-              <p className={styles.resumenFechas}>{activo.start_date} → {activo.end_date}</p>
+              <p className={styles.resumenEtiqueta}>{activo ? 'Lapso activo' : 'Lapsos'}</p>
+              <p className={styles.resumenValor}>{activo ? etiquetaLapso(activo) : 'Gestionar lapsos'}</p>
+              {activo ? (
+                <p className={styles.resumenFechas}>{activo.start_date} → {activo.end_date}</p>
+              ) : (
+                <p className={styles.resumenFechas}>Hay {lapsos.length} lapso(s) registrado(s)</p>
+              )}
             </div>
             <Button variante="secondary" tamano="sm" onClick={() => setMostrarAdministrarLapsos(true)}>
               Administrar lapsos
