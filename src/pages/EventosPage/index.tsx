@@ -50,7 +50,12 @@ const EventosPage = () => {
         setLapsoId(lapso.id)
         if (lapso.status === 'ACTIVE') {
           setMostrarAdministrarLapsos(false)
-          generarAuto.mutate(lapso.id)
+          generarAuto.mutate(lapso.id, {
+            onSuccess: () => {
+              refetchEventos()
+              refetchLapsos()
+            },
+          })
         }
       },
       onError: (e) => {
@@ -66,7 +71,12 @@ const EventosPage = () => {
       onSuccess: () => {
         setOperandoId(null)
         setLapsoId(id)
-        generarAuto.mutate(id)
+        generarAuto.mutate(id, {
+          onSuccess: () => {
+            refetchEventos()
+            refetchLapsos()
+          },
+        })
       },
       onError: (e) => {
         setOperandoId(null)
@@ -137,7 +147,12 @@ const EventosPage = () => {
         onSuccess: () => {
           setDrawerLapsoAbierto(false)
           setLapsoEditando(null)
-          generarAuto.mutate(lapsoEditando.id)
+          generarAuto.mutate(lapsoEditando.id, {
+            onSuccess: () => {
+              refetchEventos()
+              refetchLapsos()
+            },
+          })
         },
         onError: (e) => {
           setErrorGeneral(e instanceof Error ? e.message : 'No se pudo reprogramar el día de práctica')
