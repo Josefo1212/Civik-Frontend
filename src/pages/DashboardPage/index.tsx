@@ -108,10 +108,6 @@ const DashboardPage = () => {
           </header>
           <div className={styles.indicadores}>
             <div className={styles.indicadorItem}>
-              <span className={styles.indicadorEtiqueta}>Alumnos activos</span>
-              <span className={`${styles.indicadorValor} dato`}>{totalActivos}</span>
-            </div>
-            <div className={styles.indicadorItem}>
               <span className={styles.indicadorEtiqueta}>Eventos en lapso activo</span>
               <span className={`${styles.indicadorValor} dato`}>{eventos.length}</span>
             </div>
@@ -121,7 +117,7 @@ const DashboardPage = () => {
         <section className={styles.panel} aria-label="Distribución por sección">
           <header className={styles.panelCabecera}>
             <div>
-              <h2 className={styles.panelTitulo}>Alumnos activos por sección</h2>
+              <h2 className={styles.panelTitulo}>Alumnos activos por sección ({totalActivos})</h2>
               <p className={styles.panelSubtitulo}>Distribución actual</p>
             </div>
             {!cargando && errorMensaje === null && seccionesActivas.length > 0 ? (
