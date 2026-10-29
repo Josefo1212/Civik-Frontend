@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import type { ReactNode } from 'react'
 import { db } from './db'
 import { encolar } from './outbox'
-import { refrescarPendientes } from './syncManager'
+import { refrescarPendientes, setEnLinea } from './syncManager'
 import SincronizarBoton from './SincronizarBoton'
 
 const envoltorio = ({ children }: { children: ReactNode }) => (
@@ -14,18 +14,17 @@ const envoltorio = ({ children }: { children: ReactNode }) => (
 beforeEach(async () => {
   await db.outbox.clear()
   await refrescarPendientes()
+  setEnLinea(true)
 })
 
 describe('SincronizarBoton', () => {
-  it('queda deshabilitado sin pendientes', () => {
+  it('no se muestra cuando hay conexión', () => {
     render(<SincronizarBoton />, { wrapper: envoltorio })
-
-    const boton = screen.getByRole('button', { name: 'sincronizar' })
-    expect(boton).toBeDisabled()
-    expect(boton).toHaveTextContent('Sincronizar')
+    expect(screen.queryByRole('button', { name: 'sincronizar' })).not.toBeInTheDocument()
   })
 
-  it('muestra el contador de pendientes', async () => {
+  it('muestra el contador de pendientes solo sin conexión', async () => {
+    setEnLinea(false)
     await encolar([{ id_event: 'e1', id_student: 's1', state: 'PRESENTE' }])
     await refrescarPendientes()
 
@@ -34,5 +33,6 @@ describe('SincronizarBoton', () => {
     const boton = screen.getByRole('button', { name: 'sincronizar' })
     expect(boton).toBeEnabled()
     expect(boton).toHaveTextContent('(1)')
+    setEnLinea(true)
   })
 })

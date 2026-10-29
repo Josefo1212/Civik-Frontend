@@ -8,6 +8,10 @@ const SincronizarBoton = () => {
   const { pendientes, sincronizando, conflictos, ultimoError, enLinea } = useSyncEstado()
   const sincronizar = useSincronizar()
 
+  if (enLinea) {
+    return null
+  }
+
   const etiqueta = sincronizando
     ? 'Sincronizando...'
     : pendientes > 0
