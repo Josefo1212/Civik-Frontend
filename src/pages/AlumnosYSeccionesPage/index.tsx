@@ -391,7 +391,6 @@ const AlumnosYSeccionesPage = () => {
       {modo === 'alumnos' ? (
         <div className={styles.pila}>
           <div className={styles.barraLapso}>
-            <span className={styles.etiquetaLapso}>Lapso</span>
             <SelectorLapso lapsos={lapsos} valor={lapsoSeleccionado} onCambiar={setLapsoId} />
           </div>
 
