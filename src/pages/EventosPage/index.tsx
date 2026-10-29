@@ -86,6 +86,9 @@ const EventosPage = () => {
   }
 
   const manejarCerrar = (id: string) => {
+    if (!window.confirm('¿Estás seguro de cerrar este lapso? Una vez cerrado no se podrá editar.')) {
+      return
+    }
     setErrorGeneral(null)
     setOperandoId(id)
     cerrar.mutate(id, {

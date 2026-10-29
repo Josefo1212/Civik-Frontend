@@ -457,33 +457,31 @@ const AlumnosYSeccionesPage = () => {
             ) : null}
           </Card>
 
-          <Card>
-            <button
-              type="button"
-              className={styles.acordeonCabecera}
-              onClick={() => setMostrarSeccionesBajas((v) => !v)}
-              aria-expanded={mostrarSeccionesBajas}
-            >
-              <div>
-                <h3 className={styles.tituloSeccion}>Secciones dadas de baja</h3>
-                <p className={styles.subtituloSeccion}>{seccionesInactivas.length} sección(es) inactiva(s)</p>
-              </div>
-              <span className={styles.acordeonIcono}>{mostrarSeccionesBajas ? '−' : '+'}</span>
-            </button>
-            {mostrarSeccionesBajas ? (
-              <div className={styles.acordeonContenido}>
-                {seccionesInactivas.length === 0 ? (
-                  <p className={styles.sinBajas}>No hay secciones dadas de baja.</p>
-                ) : (
+          {seccionesInactivas.length > 0 ? (
+            <Card>
+              <button
+                type="button"
+                className={styles.acordeonCabecera}
+                onClick={() => setMostrarSeccionesBajas((v) => !v)}
+                aria-expanded={mostrarSeccionesBajas}
+              >
+                <div>
+                  <h3 className={styles.tituloSeccion}>Secciones dadas de baja</h3>
+                  <p className={styles.subtituloSeccion}>{seccionesInactivas.length} sección(es) inactiva(s)</p>
+                </div>
+                <span className={styles.acordeonIcono}>{mostrarSeccionesBajas ? '−' : '+'}</span>
+              </button>
+              {mostrarSeccionesBajas ? (
+                <div className={styles.acordeonContenido}>
                   <ListaSeccionesInactivas
                     secciones={seccionesInactivas}
                     onReactivar={manejarReactivarSeccion}
                     operandoId={operandoSeccionId}
                   />
-                )}
-              </div>
-            ) : null}
-          </Card>
+                </div>
+              ) : null}
+            </Card>
+          ) : null}
         </div>
       ) : (
         <div className={estilosSecciones.pagina}>

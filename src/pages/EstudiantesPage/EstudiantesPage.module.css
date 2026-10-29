@@ -40,9 +40,26 @@
   flex-direction: column;
   gap: var(--esp-3);
   margin-top: var(--esp-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radio);
+  overflow: hidden;
+}
+
+.bajasCabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--esp-3) var(--esp-4);
+  background: var(--surface);
+  border: none;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
 }
 
 .bajasTitulo {
   margin: 0;
   font-size: var(--texto-base);
+  font-family: var(--fuente-ui);
 }

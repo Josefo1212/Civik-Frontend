@@ -39,7 +39,7 @@ const TablaLapsos = ({ lapsos, onActivar, onCerrar, onEditar, onReprogramar, onG
         <tbody>
           {lapsos.map((lapso) => {
             const operando = operandoId === lapso.id
-            const puedeEditar = lapso.status === 'PLANNED' && onEditar
+            const puedeEditar = (lapso.status === 'PLANNED' || lapso.status === 'ACTIVE') && onEditar
             const puedeReprogramar = lapso.status === 'ACTIVE' && onReprogramar
             const puedeGenerar = lapso.status === 'ACTIVE' && onGenerarPracticas
             return (

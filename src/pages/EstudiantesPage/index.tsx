@@ -302,9 +302,6 @@ const EstudiantesPage = () => {
             <Switch id="incluir-inactivos-global" checked={incluirInactivosGlobal} onChange={setIncluirInactivosGlobal}>
               Mostrar inactivos
             </Switch>
-            <Switch id="mostrar-secciones-bajas" checked={mostrarSeccionesBajas} onChange={setMostrarSeccionesBajas}>
-              Mostrar secciones dadas de baja
-            </Switch>
           </div>
           {cargandoGlobal ? (
             <p className={styles.cargando}>
@@ -337,18 +334,24 @@ const EstudiantesPage = () => {
               renderDetalle={renderDetalle}
             />
           ) : null}
-          {mostrarSeccionesBajas && !hayErrorPadron ? (
+          {seccionesInactivas.length > 0 && !hayErrorPadron ? (
             <div className={styles.bajas}>
-              <h3 className={styles.bajasTitulo}>Secciones dadas de baja</h3>
-              {seccionesInactivas.length === 0 ? (
-                <p>No hay secciones dadas de baja.</p>
-              ) : (
+              <button
+                type="button"
+                className={styles.bajasCabecera}
+                onClick={() => setMostrarSeccionesBajas((v) => !v)}
+                aria-expanded={mostrarSeccionesBajas}
+              >
+                <h3 className={styles.bajasTitulo}>Secciones dadas de baja</h3>
+                <span>{mostrarSeccionesBajas ? '−' : '+'}</span>
+              </button>
+              {mostrarSeccionesBajas ? (
                 <ListaSeccionesInactivas
                   secciones={seccionesInactivas}
                   onReactivar={manejarReactivarSeccion}
                   operandoId={operandoSeccionId}
                 />
-              )}
+              ) : null}
             </div>
           ) : null}
         </Card>

@@ -112,8 +112,10 @@ describe('DashboardPage', () => {
     expect(screen.getByText(/Activo/)).toBeInTheDocument()
   })
 
-  it('muestra el conteo de estudiantes activos por sección', () => {
+  it('muestra el conteo de estudiantes activos por sección', async () => {
+    const usuario = userEvent.setup()
     renderConRouter()
+    await usuario.click(screen.getByRole('button', { name: /ver por sección/i }))
     expect(screen.getByText('1ro A — Matutino')).toBeInTheDocument()
     expect(screen.getByText('2do B — Vespertino')).toBeInTheDocument()
     expect(screen.getByText('3')).toBeInTheDocument()
@@ -125,7 +127,8 @@ describe('DashboardPage', () => {
     expect(screen.queryByText('3ro C — Matutino')).not.toBeInTheDocument()
   })
 
-  it('muestra una sección sin estudiantes activos con conteo cero', () => {
+  it('muestra una sección sin estudiantes activos con conteo cero', async () => {
+    const usuario = userEvent.setup()
     vi.mocked(useEstudiantesGlobal).mockReturnValue({
       data: [],
       isLoading: false,
@@ -133,6 +136,7 @@ describe('DashboardPage', () => {
       refetch: refetchEstudiantesFn,
     } as unknown as ReturnType<typeof useEstudiantesGlobal>)
     renderConRouter()
+    await usuario.click(screen.getByRole('button', { name: /ver por sección/i }))
     expect(screen.getAllByText('0').length).toBeGreaterThan(0)
   })
 

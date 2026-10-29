@@ -276,7 +276,7 @@ describe('EstudiantesPage', () => {
     render(<EstudiantesPage />)
     await cambiarATodos(usuario)
 
-    await usuario.click(screen.getByLabelText('Mostrar secciones dadas de baja'))
+    await usuario.click(await screen.findByText('Secciones dadas de baja'))
     expect(screen.getByText('2do B — Vespertino')).toBeInTheDocument()
 
     await usuario.click(screen.getByRole('button', { name: 'reactivar-seccion-sec2' }))

@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useLapsos } from '../../features/lapsos/hooks/useLapsos'
 import { useSecciones } from '../../features/secciones/hooks/useSecciones'
@@ -39,6 +39,7 @@ const DashboardPage = () => {
   const conteo = useMemo(() => contarActivosPorSeccion(estudiantes), [estudiantes])
   const seccionesActivas = secciones.filter((seccion) => seccion.active)
   const { data: eventos = [], isLoading: cargandoEventos } = useEventos(activo?.id ?? null)
+  const [mostrarPorSeccion, setMostrarPorSeccion] = useState(false)
 
   const cargando = cargandoLapsos || cargandoSecciones || cargandoEstudiantes || cargandoEventos
   const error = errorLapsos ?? errorSecciones ?? errorEstudiantes
@@ -138,6 +139,11 @@ const DashboardPage = () => {
               <h2 className={styles.panelTitulo}>Alumnos activos por sección</h2>
               <p className={styles.panelSubtitulo}>Distribución actual</p>
             </div>
+            {!cargando && errorMensaje === null && seccionesActivas.length > 0 ? (
+              <Button variante="secondary" tamano="sm" onClick={() => setMostrarPorSeccion((v) => !v)}>
+                {mostrarPorSeccion ? 'Ocultar' : 'Ver por sección'}
+              </Button>
+            ) : null}
           </header>
           <div className={styles.panelCuerpo}>
             {cargando ? (
@@ -160,7 +166,7 @@ const DashboardPage = () => {
             {!cargando && errorMensaje === null && seccionesActivas.length === 0 ? (
               <EmptyState>No hay secciones activas para mostrar.</EmptyState>
             ) : null}
-            {!cargando && errorMensaje === null && seccionesActivas.length > 0 ? (
+            {!cargando && errorMensaje === null && seccionesActivas.length > 0 && mostrarPorSeccion ? (
               <ul className={styles.lista}>
                 {seccionesActivas.map((seccion) => (
                   <li key={seccion.id} className={styles.fila}>
