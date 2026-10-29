@@ -1,0 +1,14 @@
+.git
+.github
+.opencode
+.vscode
+node_modules
+dist
+coverage
+*.log
+.env
+.env.*
+!.env.example
+graphify-out
+specs
+test-results

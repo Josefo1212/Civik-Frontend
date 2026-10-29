@@ -94,3 +94,17 @@ specs en [`specs/`](./specs).
 El backend solo permite CORS desde el dominio de producción de Vercel (los
 previews no están permitidos). Al desplegar como SPA hace falta un rewrite
 de todas las rutas a `index.html`.
+
+### Imagen Docker de producción
+
+La imagen multi-stage compila la PWA con Node y la sirve con nginx. Por
+defecto compila con `VITE_API_URL=/api`; nginx sirve la SPA y redirige
+`/api/*` al servicio Docker `api` en el puerto `3000`.
+
+```bash
+docker build -t josefo1212/civik-frontend:1.0.1 .
+docker run --rm -p 8080:80 josefo1212/civik-frontend:1.0.1
+```
+
+En Docker Compose, el servicio del backend debe llamarse `api` para que el
+proxy interno de nginx pueda resolver `http://api:3000`.
