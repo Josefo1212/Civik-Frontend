@@ -102,6 +102,10 @@
   display: none;
 }
 
+.etiquetaCorta {
+  display: none;
+}
+
 .acciones {
   display: flex;
   align-items: center;
@@ -155,7 +159,25 @@
   }
 
   .indicador {
+    display: block;
+    border-radius: var(--radio-sm);
+    background: linear-gradient(180deg, rgba(111, 168, 255, 0.26), rgba(79, 140, 255, 0.08));
+    border: 1px solid rgba(111, 168, 255, 0.34);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.14),
+      0 4px 16px rgba(79, 140, 255, 0.22);
+    transition:
+      transform var(--trans-lenta) var(--curva),
+      width var(--trans-lenta) var(--curva),
+      height var(--trans-lenta) var(--curva);
+  }
+
+  .etiquetaLarga {
     display: none;
+  }
+
+  .etiquetaCorta {
+    display: inline;
   }
 
   .activo,
@@ -163,6 +185,10 @@
     background: transparent;
     color: var(--signal-glow);
     box-shadow: none;
+  }
+
+  .activo .icono {
+    filter: drop-shadow(0 0 6px rgba(111, 168, 255, 0.45));
   }
 
   .icono {

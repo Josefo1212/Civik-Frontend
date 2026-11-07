@@ -78,7 +78,7 @@ const AppShell = () => {
         </span>
         <nav ref={contenedorRef} className={styles.nav} aria-label="Navegación principal">
           <span ref={indicadorRef} className={styles.indicador} aria-hidden="true" />
-          {NAVEGACION_PRINCIPAL.map(({ ruta, etiqueta }) => (
+          {NAVEGACION_PRINCIPAL.map(({ ruta, etiqueta, etiquetaCorta }) => (
             <NavLink
               key={ruta}
               to={ruta}
@@ -87,7 +87,8 @@ const AppShell = () => {
               }
             >
               <span className={styles.icono}>{ICONOS[ruta]}</span>
-              <span>{etiqueta}</span>
+              <span className={styles.etiquetaLarga}>{etiqueta}</span>
+              <span className={styles.etiquetaCorta}>{etiquetaCorta}</span>
             </NavLink>
           ))}
         </nav>

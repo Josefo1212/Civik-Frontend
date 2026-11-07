@@ -7,6 +7,7 @@ export type PropsListaEventos = {
   eventos: Evento[]
   eventoCancelandoId: string | null
   operandoId?: string | null
+  errorCancelacion?: string | null
   onIniciarCancelar: (id: string) => void
   onCancelarCancelar: () => void
   onConfirmarCancelar: (id: string, motivo: string) => void
@@ -24,6 +25,7 @@ const ListaEventos = ({
   eventos,
   eventoCancelandoId,
   operandoId,
+  errorCancelacion,
   onIniciarCancelar,
   onCancelarCancelar,
   onConfirmarCancelar,
@@ -71,6 +73,7 @@ const ListaEventos = ({
                   {cancelado ? null : eventoCancelandoId === evento.id ? (
                     <AccionCancelarEvento
                       enviando={operando}
+                      error={errorCancelacion}
                       onConfirmar={(motivo) => onConfirmarCancelar(evento.id, motivo)}
                       onCancelar={onCancelarCancelar}
                     />

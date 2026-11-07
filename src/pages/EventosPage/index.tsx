@@ -24,6 +24,7 @@ const EventosPage = () => {
   const [errorGeneral, setErrorGeneral] = useState<string | null>(null)
   const [operandoId, setOperandoId] = useState<string | null>(null)
   const [eventoCancelandoId, setEventoCancelandoId] = useState<string | null>(null)
+  const [errorCancelacion, setErrorCancelacion] = useState<string | null>(null)
   const [claveFormularioLapso, setClaveFormularioLapso] = useState(0)
   const [claveFormularioEvento, setClaveFormularioEvento] = useState(0)
   const [mostrarAdministrarLapsos, setMostrarAdministrarLapsos] = useState(false)
@@ -203,7 +204,7 @@ const EventosPage = () => {
   }
 
   const manejarConfirmarCancelar = (id: string, motivo: string) => {
-    setErrorGeneral(null)
+    setErrorCancelacion(null)
     setOperandoId(id)
     cancelar.mutate(
       { id, motivo },
@@ -211,13 +212,25 @@ const EventosPage = () => {
         onSuccess: () => {
           setOperandoId(null)
           setEventoCancelandoId(null)
+          setErrorCancelacion(null)
         },
         onError: (e) => {
           setOperandoId(null)
-          setErrorGeneral(e instanceof Error ? e.message : 'No se pudo cancelar el evento')
+          setErrorCancelacion(e instanceof Error ? e.message : 'No se pudo cancelar el evento')
+          void refetchEventos()
         },
       },
     )
+  }
+
+  const iniciarCancelacion = (id: string) => {
+    setErrorCancelacion(null)
+    setEventoCancelandoId(id)
+  }
+
+  const cerrarCancelacion = () => {
+    setErrorCancelacion(null)
+    setEventoCancelandoId(null)
   }
 
   const errorLapsosMensaje = errorLapsos instanceof Error ? errorLapsos.message : errorGeneral
@@ -316,7 +329,10 @@ const EventosPage = () => {
               <SelectorLapso
                 lapsos={lapsos}
                 valor={lapsoSeleccionado}
-                onCambiar={setLapsoId}
+                onCambiar={(id) => {
+                  setLapsoId(id)
+                  setErrorCancelacion(null)
+                }}
                 cargando={cargandoLapsos}
               />
             </div>
@@ -351,8 +367,9 @@ const EventosPage = () => {
                     eventos={eventos}
                     eventoCancelandoId={eventoCancelandoId}
                     operandoId={operandoId}
-                    onIniciarCancelar={setEventoCancelandoId}
-                    onCancelarCancelar={() => setEventoCancelandoId(null)}
+                    errorCancelacion={errorCancelacion}
+                    onIniciarCancelar={iniciarCancelacion}
+                    onCancelarCancelar={cerrarCancelacion}
                     onConfirmarCancelar={manejarConfirmarCancelar}
                   />
                 ) : null}
