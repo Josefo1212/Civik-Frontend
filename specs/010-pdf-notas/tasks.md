@@ -43,7 +43,7 @@ primero en rojo si hay lógica, código después, verdes, marcar y PARAR.
     separado del bundle inicial.
   - RF-5, RF-6, RF-7, RF-8, RF-9, RF-10, RF-11, RF-12, RF-13, RF-14, RF-18.
 
-- [ ] **T5. Hook `useNotasPdf` + tests.**
+- [x] **T5. Hook `useNotasPdf` + tests.**
   - Crear `src/features/notas/hooks/useNotasPdf.ts` con `fetchQuery` por
     sección, `Promise.all`, validación de alcance vacío y estados
     `generando`/`error`.
