@@ -38,6 +38,14 @@
   z-index: 1;
 }
 
+@media (hover: hover) {
+  .contenedor .botonPdf:hover:not(:disabled) {
+    background: var(--signal);
+    border-color: var(--signal);
+    color: var(--color-primario-contraste);
+  }
+}
+
 @media (max-width: 640px) {
   .barra {
     width: 100%;

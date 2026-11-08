@@ -49,6 +49,7 @@ const BarraPdf = ({
       </SelectField>
       <Button
         variante='secondary'
+        className={styles.botonPdf}
         cargando={generando}
         disabled={deshabilitado}
         title={motivoDeshabilitado}
