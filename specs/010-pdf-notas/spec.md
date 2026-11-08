@@ -1,6 +1,6 @@
 # Spec 010 — PDF de notas
 
-Estado: aprobada
+Estado: implementada
 
 ## Contexto y objetivo
 

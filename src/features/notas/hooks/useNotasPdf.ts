@@ -55,6 +55,7 @@ export const useNotasPdf = ({ lapso, secciones, seccionId }: OpcionesNotasPdf) =
         anioEscolar: lapso.school_year,
         lapso: lapso.lapse_number,
         provisional: esNotaProvisional(lapso.status),
+        unaSeccion: seccionId !== null,
         grupos,
       })
 

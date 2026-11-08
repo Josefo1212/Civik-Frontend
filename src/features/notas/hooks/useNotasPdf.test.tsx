@@ -79,6 +79,7 @@ describe('useNotasPdf', () => {
     expect(opciones.anioEscolar).toBe(2026)
     expect(opciones.lapso).toBe(2)
     expect(opciones.provisional).toBe(true)
+    expect(opciones.unaSeccion).toBe(true)
     expect(opciones.grupos.map((grupo) => grupo.idSeccion)).toEqual(['s2'])
   })
 
@@ -104,6 +105,7 @@ describe('useNotasPdf', () => {
       ['l2', 's5'],
     ])
     const opciones = generarDocumentoPdfMock.mock.calls[0][0]
+    expect(opciones.unaSeccion).toBe(false)
     expect(opciones.grupos.map((grupo) => grupo.idSeccion)).toEqual(['s1a', 's1b', 's5'])
   })
 

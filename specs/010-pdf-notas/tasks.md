@@ -73,7 +73,7 @@ primero en rojo si hay lógica, código después, verdes, marcar y PARAR.
     verde.
   - RF-1, RF-3, RF-4, RF-5.
 
-- [ ] **T8. Validación end-to-end y cierre.**
+- [x] **T8. Validación end-to-end y cierre.**
   - Chrome DevTools: descargar el PDF de una sección y de "Todas las
     secciones"; abrirlo y verificar encabezado, lapso, aviso
     provisional/definitiva, columnas, orden 1ro A → 5to, "Sin nota", `*` de

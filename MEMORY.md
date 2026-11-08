@@ -16,8 +16,9 @@ permanente, va a `AGENTS.md` o a la skill `civik-dominio-frontend`.
   cambio 2026-10-14 la dejó **solo oscura con efecto liquid glass**. El
   resto de pantallas se migra reusando el sistema. Spec 009 (panel de
   estudiantes: dashboard en `/`, fusión de Notas en Estudiantes con fila
-  expandible y corrección inline) **implementada**.
-- Suite: 155 tests verdes; `pnpm lint`, `pnpm typecheck` y `pnpm build`
+  expandible y corrección inline) **implementada**. Spec 010 (PDF de notas
+  por sección o todas las activas, generado en el cliente) **implementada**.
+- Suite: 188 tests verdes; `pnpm lint`, `pnpm typecheck` y `pnpm build`
   limpios (`build` genera `manifest.webmanifest` y `sw.js`).
 
 ## Decisiones (y por qué)
@@ -34,6 +35,11 @@ permanente, va a `AGENTS.md` o a la skill `civik-dominio-frontend`.
 - Lectura offline network-first con respaldo en Dexie (`conRespaldo`); el
   cache solo se usa sin red, nunca pisa datos frescos. La nota se muestra
   tal cual: no se recalcula ni formatea (#1).
+- PDF de notas en el cliente con `jspdf` + `jspdf-autotable` (API
+  `autoTable(doc, opciones)`). La librería entra por `await import()`
+  dentro de `documento.ts` y queda en chunks aparte (~430 kB) sin tocar el
+  bundle inicial. El alcance (una sección vs todas) se pasa explícito al
+  documento; no se infiere de los grupos con filas.
 
 ## Aprendizajes y errores a evitar
 
@@ -145,3 +151,12 @@ permanente, va a `AGENTS.md` o a la skill `civik-dominio-frontend`.
   override, "sin nota"). La corrección inline reusa `useGuardarAsistencia`
   (mismo outbox/sync). `features/notas` conserva `utils`/`constants`/`api`/
   `useNotas`; se borraron `AvisoNota`/`TablaNotas`.
+- 010 PDF de notas: barra junto al selector de lapso con alcance (una
+  sección o todas las activas) y botón "Generar PDF". `useNotasPdf` pide
+  las notas al backend bajo demanda (`fetchQuery` por sección, misma
+  `queryKey` que `useNotas`) y `Promise.all` aborta si una falla; orden
+  canónico 1ro→5to en `armado.ts`; `documento.ts` dibuja A4 con encabezado
+  repetido, "Sin nota", `*` de override con leyenda, aviso provisional y
+  "Página X de Y". El selector del PDF es independiente del filtro del
+  listado. Validado en Chrome DevTools (escritorio y 375 px): descarga,
+  contenido, error de sección vacía y consola limpia.

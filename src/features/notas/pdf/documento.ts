@@ -14,6 +14,7 @@ export type OpcionesDocumentoPdf = {
   anioEscolar: number
   lapso: number
   provisional: boolean
+  unaSeccion: boolean
   grupos: GrupoPdf[]
 }
 
@@ -38,9 +39,11 @@ export const construirDocumentoPdf = async (
     import('jspdf-autotable'),
   ])
 
-  const { anioEscolar, lapso, provisional, grupos } = opciones
+  const { anioEscolar, lapso, provisional, unaSeccion, grupos } = opciones
   const gruposConFilas = grupos.filter((grupo) => grupo.filas.length > 0)
-  const seccionUnica = gruposConFilas.length === 1 ? gruposConFilas[0] : undefined
+  const seccionUnica =
+    unaSeccion && gruposConFilas.length === 1 ? gruposConFilas[0] : undefined
+  const mostrarSubtitulo = !unaSeccion
 
   const doc = new Constructor({ orientation: 'portrait', unit: 'mm', format: 'a4' })
   const anchoPagina = doc.internal.pageSize.getWidth()
@@ -89,7 +92,7 @@ export const construirDocumentoPdf = async (
       }
     }
 
-    if (gruposConFilas.length > 1) {
+    if (mostrarSubtitulo) {
       doc.setFont('helvetica', 'bold')
       doc.setFontSize(10)
       doc.setTextColor(30, 40, 55)
