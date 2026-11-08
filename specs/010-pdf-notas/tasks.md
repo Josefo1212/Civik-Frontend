@@ -14,7 +14,7 @@ primero en rojo si hay lógica, código después, verdes, marcar y PARAR.
     cuando ya existe el import dinámico.
   - RF-5, RNF-3, RNF-4.
 
-- [ ] **T2. Módulo puro de armado + tests.**
+- [x] **T2. Módulo puro de armado + tests.**
   - Crear `src/features/notas/pdf/armado.ts` con `FilaPdf`, `GrupoPdf`,
     `ordenarSecciones`, `armarGruposPdf` y `nombreArchivoPdf`.
   - `armado.test.ts` en rojo primero: orden `5to a`, `1ro b`, `1ro a`, `3ro`
