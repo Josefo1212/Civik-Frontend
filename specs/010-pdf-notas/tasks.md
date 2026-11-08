@@ -54,7 +54,7 @@ primero en rojo si hay lógica, código después, verdes, marcar y PARAR.
   - Hecho cuando: el test del hook en verde y `pnpm typecheck` limpio.
   - RF-15, RF-16, RF-17, RF-19.
 
-- [ ] **T6. Componente `BarraPdf` + CSS + tests.**
+- [x] **T6. Componente `BarraPdf` + CSS + tests.**
   - Crear `src/features/notas/components/BarraPdf.tsx` y
     `BarraPdf.module.css` con `SelectField`, `Button` y `Alert`.
   - `BarraPdf.test.tsx` en rojo primero: opciones "Todas las secciones" +
