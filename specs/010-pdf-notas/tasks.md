@@ -23,7 +23,7 @@ primero en rojo si hay lógica, código después, verdes, marcar y PARAR.
   - Hecho cuando: `pnpm test:run -- armado` en verde y `pnpm typecheck` limpio.
   - RF-9, RF-10, RF-11, RF-12, RF-13, RF-18.
 
-- [ ] **T3. Constantes del documento.**
+- [x] **T3. Constantes del documento.**
   - Crear `src/features/notas/pdf/constants.ts` con `tituloDocumento(anio)`,
     `COLUMNAS_PDF` y `LEYENDA_OVERRIDE`; reutilizar `AVISO_PROVISIONAL` y
     `SIN_NOTA` de `features/notas/constants.ts`.
