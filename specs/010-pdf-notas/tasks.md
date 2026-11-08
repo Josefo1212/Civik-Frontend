@@ -64,7 +64,7 @@ primero en rojo si hay lógica, código después, verdes, marcar y PARAR.
     barra del lapso (vidrio, alineación al fondo).
   - RF-1, RF-2, RF-3, RF-4, RF-16.
 
-- [ ] **T7. Integrar en `AlumnosYSeccionesPage`.**
+- [x] **T7. Integrar en `AlumnosYSeccionesPage`.**
   - Estado `seccionPdfId` derivado contra las secciones activas, `useNotasPdf`
     y `BarraPdf` junto a `SelectorLapso`; contenedor flex en el CSS.
   - `index.pdf.test.tsx` en rojo primero: la barra aparece, el botón se

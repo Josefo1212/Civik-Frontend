@@ -4,6 +4,13 @@
   gap: var(--esp-3);
 }
 
+.barraLapsoPdf {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--esp-3);
+}
+
 .barraLapso {
   position: relative;
   display: flex;

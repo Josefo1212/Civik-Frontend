@@ -19,6 +19,8 @@ import { useAsistenciaLapso } from '../../features/estudiantes/hooks/useAsistenc
 import { useLapsos } from '../../features/lapsos/hooks/useLapsos'
 import { useEventos } from '../../features/eventos/hooks/useEventos'
 import { useGuardarAsistencia } from '../../features/asistencia/hooks/useGuardarAsistencia'
+import { useNotasPdf } from '../../features/notas/hooks/useNotasPdf'
+import BarraPdf from '../../features/notas/components/BarraPdf'
 import { lapsoActivo } from '../../features/lapsos/utils'
 import { etiquetaSeccion } from '../../features/secciones/utils'
 import { filtrarEstudiantes } from '../../features/estudiantes/utils'
@@ -56,9 +58,9 @@ const AlumnosYSeccionesPage = () => {
   const [claveFormulario, setClaveFormulario] = useState(0)
   const [lapsoId, setLapsoId] = useState<string | null>(null)
   const [filaExpandidaId, setFilaExpandidaId] = useState<string | null>(null)
+  const [seccionPdfId, setSeccionPdfId] = useState<string | null>(null)
 
   const { data: secciones = [] } = useSecciones(undefined)
-  void secciones
   const {
     data: seccionesGlobal = [],
     error: errorSeccionesGlobal,
@@ -79,6 +81,19 @@ const AlumnosYSeccionesPage = () => {
   const guardarAsistencia = useGuardarAsistencia()
   const lapso = lapsos.find((l) => l.id === lapsoSeleccionado) ?? null
   const { reactivar: reactivarSeccion } = useSeccionMutations()
+
+  const seccionesActivas = secciones.filter((seccion) => seccion.active)
+  const seccionPdfValida =
+    seccionPdfId !== null && seccionesActivas.some((seccion) => seccion.id === seccionPdfId)
+      ? seccionPdfId
+      : null
+  const notasPdf = useNotasPdf({ lapso, secciones: seccionesActivas, seccionId: seccionPdfValida })
+  const motivoPdfDeshabilitado =
+    lapso === null
+      ? 'Elige un lapso'
+      : seccionesActivas.length === 0
+        ? 'No hay secciones activas'
+        : undefined
 
   const mapaSecciones = useMemo(
     () => new Map(seccionesGlobal.map((seccion) => [seccion.id, seccion])),
@@ -390,8 +405,20 @@ const AlumnosYSeccionesPage = () => {
 
       {modo === 'alumnos' ? (
         <div className={styles.pila}>
-          <div className={styles.barraLapso}>
-            <SelectorLapso lapsos={lapsos} valor={lapsoSeleccionado} onCambiar={setLapsoId} />
+          <div className={styles.barraLapsoPdf}>
+            <div className={styles.barraLapso}>
+              <SelectorLapso lapsos={lapsos} valor={lapsoSeleccionado} onCambiar={setLapsoId} />
+            </div>
+            <BarraPdf
+              secciones={seccionesActivas}
+              valor={seccionPdfValida}
+              onCambiar={setSeccionPdfId}
+              onGenerar={() => void notasPdf.generar()}
+              generando={notasPdf.generando}
+              deshabilitado={motivoPdfDeshabilitado !== undefined}
+              motivoDeshabilitado={motivoPdfDeshabilitado}
+              error={notasPdf.error}
+            />
           </div>
 
           <Card>
