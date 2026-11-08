@@ -102,8 +102,8 @@ defecto compila con `VITE_API_URL=/api`; nginx sirve la SPA y redirige
 `/api/*` al servicio Docker `api` en el puerto `3000`.
 
 ```bash
-docker build -t josefo1212/civik-frontend:1.0.1 .
-docker run --rm -p 8080:80 josefo1212/civik-frontend:1.0.1
+docker build -t josefo1212/civik-frontend:1.1.1 .
+docker run --rm -p 8080:80 josefo1212/civik-frontend:1.1.1
 ```
 
 En Docker Compose, el servicio del backend debe llamarse `api` para que el

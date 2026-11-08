@@ -27,6 +27,11 @@ export default defineConfig(({ mode }) => ({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,webmanifest}'],
         navigateFallback: '/index.html',
+        // Con injectRegister: false el plugin no activa solo el SW nuevo: queda
+        // en "waiting" y la PWA sigue sirviendo la versión anterior hasta que
+        // se cierran todas las pestañas. Estas dos opciones completan autoUpdate.
+        skipWaiting: true,
+        clientsClaim: true,
       },
     }),
   ],
