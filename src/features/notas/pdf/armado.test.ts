@@ -74,6 +74,7 @@ describe('armarGruposPdf', () => {
 
     const [grupo] = armarGruposPdf(secciones, notas)
 
+    expect(grupo.etiqueta).toBe('1ro a — Matutino')
     expect(grupo.filas).toEqual([
       { apellido: 'Pérez', nombre: 'Ana', anio: '1ro', seccion: 'a', nota: '18.50', esOverride: true },
       { apellido: 'Núñez', nombre: 'Luis', anio: '1ro', seccion: 'a', nota: null, esOverride: false },

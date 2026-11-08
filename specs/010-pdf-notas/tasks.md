@@ -32,7 +32,7 @@ primero en rojo si hay lógica, código después, verdes, marcar y PARAR.
     escolar".
   - RF-6, RF-13, RF-14.
 
-- [ ] **T4. Generador del documento PDF.**
+- [x] **T4. Generador del documento PDF.**
   - Crear `src/features/notas/pdf/documento.ts` con `generarDocumentoPdf`:
     import dinámico, A4, encabezado repetido, tabla por sección, `Sin nota`,
     `*` de override + leyenda, aviso provisional, `Página X de Y` y

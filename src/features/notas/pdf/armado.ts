@@ -1,6 +1,7 @@
 import type { FilaNota } from '../../../domain/nota'
 import type { Seccion } from '../../../domain/seccion'
 import { GRADOS } from '../../secciones/constants'
+import { etiquetaSeccion } from '../../secciones/utils'
 
 export type FilaPdf = {
   apellido: string
@@ -16,6 +17,7 @@ export type GrupoPdf = {
   anio: string
   seccion: string
   turno: string
+  etiqueta: string
   filas: FilaPdf[]
 }
 
@@ -40,6 +42,7 @@ export const armarGruposPdf = (
     anio: seccion.grade_level,
     seccion: seccion.section,
     turno: seccion.shift,
+    etiqueta: etiquetaSeccion(seccion),
     filas: (notasPorSeccion.get(seccion.id) ?? []).map((fila) => ({
       apellido: fila.last_name,
       nombre: fila.first_name,
